@@ -237,10 +237,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../assets/scss/constants/color';
-@import '../assets/scss/constants/font';
-@import '../assets/scss/functions/mixins';
-
 :root {
   --viewportHeight: 100vh;
 }

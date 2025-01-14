@@ -129,6 +129,8 @@ export default {
 
   styleResources: {
     scss: [
+      '~/assets/scss/constants/*.scss',
+      '~/assets/scss/functions/*.scss',
       '~/assets/scss/single.scss'
     ]
   },
@@ -154,12 +156,18 @@ export default {
         use: ['raw-loader', 'glslify-loader']
       })
     },
+    postcss: {
+      preset: {
+        autoprefixer: {
+          grid: true
+        }
+      }
+    },
     loaders: {
       scss: {
         implementation: require('sass'),
         sassOptions: {
-          fiber: false,
-          includePaths: ['./assets/scss/']
+          fiber: false
         }
       }
     },
