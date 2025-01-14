@@ -18,12 +18,17 @@ RUN npm run generate && \
 # Production stage
 FROM nginx:alpine
 
+WORKDIR /app
+
 # Copy nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d/
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy static files from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Verify files are copied correctly
+RUN ls -la /etc/nginx/conf.d/ && \
+    ls -la /usr/share/nginx/html/
 
 # Expose port
 EXPOSE 80
