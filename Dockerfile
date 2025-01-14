@@ -8,19 +8,38 @@ COPY package*.json ./
 RUN npm cache clean --force && \
     HUSKY=0 NPM_CONFIG_IGNORE_SCRIPTS=true npm ci
 
-# Copy source
+# Copy source files first, ensuring data directory is included
 COPY . .
 
-# Generate static files with error checking
+# Verify data directory exists
 RUN set -e && \
-    echo "Running nuxt generate..." && \
-    npm run generate && \
+    echo "Verifying data directory..." && \
+    if [ ! -d "data" ]; then echo "data directory not found!"; exit 1; fi && \
+    echo "Contents of data directory:" && \
+    ls -la data/
+
+# Set environment variables for static generation
+ENV NODE_ENV=production
+ENV NUXT_TELEMETRY_DISABLED=1
+
+# Generate static files with error checking and verbose output
+RUN set -e && \
+    echo "Running nuxt generate with verbose output..." && \
+    NODE_OPTIONS=--max_old_space_size=4096 npm run generate --verbose && \
     echo "Verifying dist directory exists..." && \
     if [ ! -d "dist" ]; then echo "dist directory not found!"; exit 1; fi && \
     echo "Verifying dist directory contents:" && \
     ls -la dist/ && \
-    echo "Verifying index.html exists..." && \
-    if [ ! -f "dist/index.html" ]; then echo "index.html not found!"; exit 1; fi && \
+    echo "Checking for index.html..." && \
+    if [ ! -f "dist/index.html" ]; then \
+        echo "index.html not found! Contents of dist:"; \
+        ls -la dist/; \
+        echo "Contents of dist/_nuxt:"; \
+        ls -la dist/_nuxt/; \
+        echo "Contents of 200.html for debugging:"; \
+        cat dist/200.html | head -n 20; \
+        exit 1; \
+    fi && \
     echo "Checking index.html content:" && \
     cat dist/index.html | head -n 5
 

@@ -140,6 +140,7 @@ export default {
   },
 
   env: {
+    GAID: process.env.GAID || ''
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -199,12 +200,14 @@ export default {
   },
 
   generate: {
+    fallback: '404.html',
     routes() {
-      // Map project data to routes
-      const routes = defaultProjectData.map(project => ({
-        route: `works/${project.id}`
-      }))
-      
+      // Include root route and project routes
+      const routes = [
+        '/',
+        '/archive',
+        ...defaultProjectData.map(project => `/works/${project.id}`)
+      ]
       return routes
     }
   }
