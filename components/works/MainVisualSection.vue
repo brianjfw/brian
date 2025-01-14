@@ -160,17 +160,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/scss/constants/break-points' as *;
-@use '../assets/scss/constants/color' as *;
-@use '../assets/scss/constants/font' as *;
-@use '../assets/scss/functions/mixins' as *;
+@use "~/assets/scss/constants/break-points" as *;
+@use "~/assets/scss/constants/color" as *;
+@use "~/assets/scss/constants/font" as *;
+@use "~/assets/scss/functions/mixins" as *;
 
 :root {
   --viewportWidth: 100vw;
   --viewportHeight: 100vh;
 }
 
-/////////////////////// PC STYLE //////////////////////////
 .hero-bg {
   position: relative;
   height: var(--viewportHeight, 100vh);
@@ -192,21 +191,21 @@ export default {
   height: 100%;
   pointer-events: none;
   user-select: none;
+}
 
-  & picture,
-  & img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.hero-img-picture,
+.hero-img-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+
+  @include tab-vertical() {
+    object-position: right;
+  }
+
+  @include sp() {
     object-position: center;
-
-    @include tab-vertical() {
-      object-position: right;
-    }
-
-    @include sp() {
-      object-position: center;
-    }
   }
 }
 
@@ -252,9 +251,7 @@ export default {
   font-size: 12px;
   font-family: $helvetica;
 }
-///////////////////////////////////////////////////////////
 
-/////////////////////// SP STYLE //////////////////////////
 .hero-title-sp {
   margin: 0 0 23px 0;
   font-size: vw_sp(120);
@@ -271,10 +268,10 @@ export default {
 .hero-title-wrapper-sp {
   display: block;
   white-space: nowrap;
+}
 
-  &:first-of-type {
-    text-align: right;
-  }
+.hero-title-wrapper-sp-first {
+  text-align: right;
 }
 
 .hero-desc-wrapper-sp {
@@ -306,14 +303,23 @@ export default {
   text-indent: -4px;
 }
 
-// .is-android .hero-index-sp-01 {
-//   position: relative;
-//   left: -4px;
-// }
-
 .hero-full-title-sp {
   font-size: 108px;
   font-family: $sixcaps;
 }
-///////////////////////////////////////////////////////////
+
+.works-mv-img picture,
+.works-mv-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.works-mv-item-first {
+  margin: 0 0 40px 0;
+}
+
+.works-mv-item .card-sub-title {
+  margin: 0 0 10px 0;
+}
 </style>

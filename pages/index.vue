@@ -94,7 +94,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/scss/constants/animation';
+@use "~/assets/scss/constants/animation" as *;
 
 .index {
   overflow: hidden;

@@ -196,10 +196,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use '../assets/scss/constants/break-points' as *;
-@use '../assets/scss/constants/color' as *;
-@use '../assets/scss/constants/font' as *;
-@use '../assets/scss/functions/mixins' as *;
+@use "~/assets/scss/constants/break-points" as *;
+@use "~/assets/scss/constants/color" as *;
+@use "~/assets/scss/constants/font" as *;
+@use "~/assets/scss/functions/mixins" as *;
 
 .hero-inner {
   padding: 92px 0;

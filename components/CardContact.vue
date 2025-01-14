@@ -68,12 +68,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use '../assets/scss/constants/animation' as *;
-@use '../assets/scss/constants/break-points' as *;
-@use '../assets/scss/constants/color' as *;
-@use '../assets/scss/constants/font' as *;
-@use '../assets/scss/functions/function' as *;
-@use '../assets/scss/functions/mixins' as *;
+@use "~/assets/scss/constants/animation" as *;
+@use "~/assets/scss/constants/break-points" as *;
+@use "~/assets/scss/constants/color" as *;
+@use "~/assets/scss/constants/font" as *;
+@use "~/assets/scss/functions/function" as *;
+@use "~/assets/scss/functions/mixins" as *;
 
 .card-article {
   position: relative;
@@ -122,19 +122,19 @@ export default {
   @include sp() {
     font-size: 17px;
   }
+}
 
-  &:first-of-type {
-    font-size: 36px;
-    text-indent: -4px;
-    line-height: 1;
+.card-title-wrapper-01-block:first-of-type {
+  font-size: 36px;
+  text-indent: -4px;
+  line-height: 1;
 
-    @include sp() {
-      display: inline-block;
-      margin: 0 0 0 -4px;
-      font-size: 28px;
-      line-height: 0.9;
-      text-indent: 0;
-    }
+  @include sp() {
+    display: inline-block;
+    margin: 0 0 0 -4px;
+    font-size: 28px;
+    line-height: 0.9;
+    text-indent: 0;
   }
 }
 
@@ -164,28 +164,32 @@ export default {
     bottom: -5px;
     font-size: 80px;
   }
+}
 
-  & .card-sub-title {
-    position: absolute;
-    top: 12px;
-    right: -4px;
-    font-size: 12px;
-    font-family: $helvetica;
-    letter-spacing: 0.02em;
+.card-title-wrapper-03 .card-sub-title {
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  font-size: 12px;
+  font-family: $helvetica;
+  letter-spacing: 0.02em;
 
-    @include sp() {
-      top: 7px;
-      font-size: 10px;
-    }
+  @include sp() {
+    top: 7px;
+    font-size: 10px;
   }
 }
 
-/* stylelint-disable */
-.is-windows .card-title-wrapper-01-block {
-  &:first-of-type {
-    position: relative;
-    left: -8px;
-  }
+.is-windows .card-title-wrapper-01-block:first-of-type {
+  position: relative;
+  left: -8px;
 }
-/* stylelint-enable */
+
+.card-contact-item-first {
+  margin: 0 0 40px 0;
+}
+
+.card-contact-item .card-sub-title {
+  margin: 0 0 10px 0;
+}
 </style>

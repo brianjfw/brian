@@ -3,8 +3,8 @@
     ref="HambergerMenu"
     class="hambergerMenu"
     :class="{
-      'is-disable': hambergerMenuDisable,
-      'is-open': hambergerMenuState,
+      'hambergerMenu--disable': hambergerMenuDisable,
+      'hambergerMenu--open': hambergerMenuState,
     }"
   >
     <div ref="HambergerMenuOverlay01" class="hambergerMenu-overlay-01"></div>
@@ -59,16 +59,16 @@
             </li>
           </ul>
         </div>
+        <button ref="HambergerMenuBtn" aria-label="hambergermenu btn" class="hambergerMenu-btn js-click-target" @click="hambergerMenuOnClick">
+          <span ref="HambergerMenuBtnHover" class="hambergerMenu-btn-hover">
+            <span ref="hambergerMenuOpenarea" class="hambergerMenu-btn-openarea">
+              <span ref="hambergerMenuOpenareaLine01" class="hambergerMenu-btn-line hambergerMenu-btn-line--01"></span>
+              <span ref="hambergerMenuOpenareaLine02" class="hambergerMenu-btn-line hambergerMenu-btn-line--02"></span>
+            </span>
+          </span>
+        </button>
       </div>
     </div>
-    <button ref="HambergerMenuBtn" aria-label="hambergermenu btn" class="hambergerMenu-btn js-click-target" @click="hambergerMenuOnClick">
-      <span ref="HambergerMenuBtnHover" class="hambergerMenu-hover">
-        <span ref="hambergerMenuOpenarea" class="hambergerMenu-openarea">
-          <span ref="hambergerMenuOpenareaLine01" class="hambergerMenu-openarea-line hambergerMenu-openarea-line-01"></span>
-          <span ref="hambergerMenuOpenareaLine02" class="hambergerMenu-openarea-line hambergerMenu-openarea-line-02"></span>
-        </span>
-      </span>
-    </button>
   </div>
 </template>
 
@@ -479,10 +479,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use '../assets/scss/constants/break-points' as *;
-@use '../assets/scss/constants/color' as *;
-@use '../assets/scss/constants/font' as *;
-@use '../assets/scss/functions/mixins' as *;
+@use "~/assets/scss/constants/break-points" as *;
+@use "~/assets/scss/constants/color" as *;
+@use "~/assets/scss/constants/font" as *;
+@use "~/assets/scss/functions/mixins" as *;
 
 :root {
   --viewportWidth: 100vw;
@@ -507,11 +507,11 @@ export default {
     width: 60px;
     height: 60px;
   }
+}
 
-  &.is-disable {
-    pointer-events: none;
-    user-select: none;
-  }
+.hambergerMenu--disable {
+  pointer-events: none;
+  user-select: none;
 }
 
 .hambergerMenu-overlay-01 {
@@ -524,37 +524,25 @@ export default {
   border-radius: 10px;
   pointer-events: none;
   transform-origin: right;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-shadow: inset 2px 35px 16px 5px rgb(24 23 13 / 20%);
-    border-radius: 10px;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity $base-duration $colorAndOpacity-easing;
-  }
-
-  @include sp() {
-    top: 22px;
-    left: calc(-100vw + 60px + 20px);
-    width: 100vw;
-    height: calc(var(--viewportHeight, 100vh) - 32px);
-    border-radius: 10px;
-    transform: scaleY(0);
-    transform-origin: top;
-  }
 }
 
-.hambergerMenu.is-open .hambergerMenu-overlay-01 {
-  &::before {
-    opacity: 1;
-  }
+.hambergerMenu-overlay-01::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 2px 35px 16px 5px rgb(24 23 13 / 20%);
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity $base-duration $colorAndOpacity-easing;
+}
+
+.hambergerMenu--open .hambergerMenu-overlay-01::before {
+  opacity: 1;
 }
 
 .hambergerMenu-overlay-02 {
@@ -569,28 +557,19 @@ export default {
   transform-origin: right;
   transform: scaleX(0);
   overflow: hidden;
+}
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-shadow: inset 35px 60px 50px 20px rgb(24 23 13 / 50%);
-    border-radius: 10px;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  @include sp() {
-    top: 42px;
-    right: -10px;
-    width: calc(100vw - 20px);
-    height: calc(var(--viewportHeight) - 52px - 20px);
-    transform: scaleY(0);
-    transform-origin: top;
-  }
+.hambergerMenu-overlay-02::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 35px 60px 50px 20px rgb(24 23 13 / 50%);
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .hambergerMenu-contents {
@@ -603,21 +582,6 @@ export default {
   overflow-y: scroll;
   opacity: 0;
   pointer-events: none;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #89877c;
-    border-radius: 10px;
-  }
-
-  @include sp() {
-    right: 0;
-    width: 100%;
-    padding: 38px 8px;
-  }
 }
 
 .hambergerMenu-title {
@@ -628,21 +592,12 @@ export default {
   font-family: $sixcaps;
   letter-spacing: -0.002em;
   z-index: 2;
-
-  @include sp() {
-    margin: 0 0 46px 0;
-    font-size: vw_sp(216);
-  }
 }
 
 .hambergerMenu-section-title {
   position: relative;
   margin: 0 0 36px 0;
   z-index: 2;
-
-  @include sp() {
-    margin: 0 0 34px 0;
-  }
 }
 
 .hambergerMenu-title-wrapper-01 {
@@ -658,14 +613,6 @@ export default {
 .hambergerMenu-item {
   position: relative;
   overflow: hidden;
-
-  &:not(:last-of-type) {
-    margin: 0 0 20px 0;
-
-    @include sp() {
-      margin: 0 0 17px 0;
-    }
-  }
 }
 
 .hambergerMenu-item-wrapper {
@@ -684,11 +631,6 @@ export default {
   font-size: 56px;
   font-family: $sixcaps;
   text-align: center;
-
-  @include sp() {
-    margin: 0 0 12px 0;
-    font-size: vw_sp(96);
-  }
 }
 
 .hambergerMenu-item-desc {
@@ -708,21 +650,6 @@ export default {
   margin: 0 20px 0 0;
   overflow: hidden;
   border-radius: 14px;
-
-  @include sp() {
-    width: vw_sp(215);
-    height: vw_sp(215);
-    border-radius: 4px;
-  }
-
-  & img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
 }
 
 .hambergerMenu-btn {
@@ -743,7 +670,7 @@ export default {
   user-select: none;
 }
 
-.hambergerMenu-hover {
+.hambergerMenu-btn-hover {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -757,38 +684,39 @@ export default {
   background-color: $white;
   transition: transform $base-duration * 0.25 $transform-easing;
   border-radius: inherit;
+}
 
-  @include hover() {
+@include hover() {
+  .hambergerMenu-btn-hover {
     transform: scale(0.9, 0.98);
-
-    @include sp() {
+  }
+  
+  @include sp() {
+    .hambergerMenu-btn-hover {
       transform: scale(1, 1);
     }
   }
 }
 
-.hambergerMenu.is-open .hambergerMenu-hover {
-  @include hover() {
+@include hover() {
+  .hambergerMenu--open .hambergerMenu-btn-hover {
     transform: scale(1.1, 1.1);
-
-    @include sp() {
+  }
+  
+  @include sp() {
+    .hambergerMenu--open .hambergerMenu-btn-hover {
       transform: scale(1, 1);
     }
   }
 }
 
-.hambergerMenu-openarea {
+.hambergerMenu-btn-openarea {
   position: relative;
   width: 37px;
   height: 13px;
-
-  @include sp() {
-    width: 26px;
-    height: 13px;
-  }
 }
 
-.hambergerMenu-openarea-line {
+.hambergerMenu-btn-line {
   position: absolute;
   left: 0;
   width: 100%;
@@ -798,11 +726,208 @@ export default {
   cursor: pointer;
 }
 
-.hambergerMenu-openarea-line-01 {
+.hambergerMenu-btn-line--01 {
   top: 0;
 }
 
-.hambergerMenu-openarea-line-02 {
+.hambergerMenu-btn-line--02 {
   bottom: 0;
+}
+
+.hambergerMenu-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: $white;
+  transition: border-radius $base-duration $transform-easing;
+}
+
+.hambergerMenu-btn-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: $white;
+  transition: border-radius $base-duration $transform-easing;
+}
+
+.hambergerMenu-btn-openarea::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: $white;
+  transition: border-radius $base-duration $transform-easing;
+}
+
+.hambergerMenu-contents::-webkit-scrollbar {
+  display: none;
+}
+
+.hambergerMenu-contents::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.hambergerMenu-item:not(:last-of-type) {
+  margin: 0 0 60px 0;
+}
+
+.hambergerMenu-item-img img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hamberger-menu-button {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: $z-index-hamberger-menu-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background-color: $color-black;
+  cursor: pointer;
+  transition: background-color $base-duration $base-ease;
+}
+
+.hamberger-menu-button.is-disable {
+  pointer-events: none;
+}
+
+.hamberger-menu-button::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 20px;
+  height: 2px;
+  background-color: $color-white;
+  transform: translate(-50%, -50%);
+  transition: transform $base-duration $base-ease;
+  content: '';
+}
+
+.hamberger-menu-button::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 20px;
+  height: 2px;
+  background-color: $color-white;
+  transform: translate(-50%, -50%);
+  transition: transform $base-duration $base-ease;
+  content: '';
+}
+
+.hamberger-menu-button.is-active {
+  background-color: $color-white;
+}
+
+.hamberger-menu-button.is-active::before {
+  background-color: $color-black;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.hamberger-menu-button.is-active::after {
+  background-color: $color-black;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.hamberger-menu-content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: $z-index-hamberger-menu-content;
+  width: 100%;
+  height: 100vh;
+  padding: 80px 0 0;
+  background-color: $color-white;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.hamberger-menu-content::-webkit-scrollbar {
+  width: 0;
+}
+
+.hamberger-menu-content::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.hamberger-menu-content-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 0 0 80px;
+}
+
+.hamberger-menu-content-inner-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.hamberger-menu-content-inner-list-item:not(:last-of-type) {
+  margin: 0 0 40px;
+}
+
+.hamberger-menu-content-inner-list-item-link {
+  display: block;
+  font-size: 36px;
+  font-family: $helvetica;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.hamberger-menu-content-inner-list-item-link .img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hamberger-menu-hover {
+  transform: scale(0.9, 0.98);
+}
+
+@include sp {
+  .hamberger-menu-hover {
+    transform: scale(1, 1);
+  }
+}
+
+.hamberger-menu.is-open .hamberger-menu-hover {
+  transform: scale(1.1, 1.1);
+}
+
+@include sp {
+  .hamberger-menu.is-open .hamberger-menu-hover {
+    transform: scale(1, 1);
+  }
 }
 </style>

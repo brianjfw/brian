@@ -67,9 +67,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use '../assets/scss/constants/color' as *;
-@use '../assets/scss/constants/font' as *;
-@use '../assets/scss/functions/mixins' as *;
+@use "~/assets/scss/constants/color" as *;
+@use "~/assets/scss/constants/font" as *;
+@use "~/assets/scss/functions/mixins" as *;
 
 .card-article {
   position: relative;
@@ -80,7 +80,7 @@ export default {
   color: $black;
   border-radius: 14px;
 
-  @include sp() {
+  @include sp {
     padding: 20px 16px;
     border-radius: 7px;
   }
@@ -105,7 +105,7 @@ export default {
   margin: 0 0 60px 0;
   color: $darkBlack;
 
-  @include sp() {
+  @include sp {
     margin: 0 0 40px 0;
   }
 }
@@ -116,23 +116,28 @@ export default {
   font-family: $helvetica;
   line-height: 1.2;
 
-  @include sp() {
+  @include sp {
     font-size: 17px;
   }
+}
 
-  &:first-of-type {
-    font-size: 36px;
-    text-indent: -4px;
-    line-height: 1;
+.card-title-wrapper-01-block:first-of-type {
+  font-size: 36px;
+  text-indent: -4px;
+  line-height: 1;
 
-    @include sp() {
-      display: inline-block;
-      margin: 0 0 0 -4px;
-      font-size: 28px;
-      line-height: 0.9;
-      text-indent: 0;
-    }
+  @include sp {
+    display: inline-block;
+    margin: 0 0 0 -4px;
+    font-size: 28px;
+    line-height: 0.9;
+    text-indent: 0;
   }
+}
+
+.is-windows .card-title-wrapper-01-block:first-of-type {
+  position: relative;
+  left: -8px;
 }
 
 .card-title-wrapper-02 {
@@ -147,7 +152,7 @@ export default {
   letter-spacing: 0.02em;
   line-height: 1.24;
 
-  @include sp() {
+  @include sp {
     width: 180px;
     font-size: 10px;
   }
@@ -162,32 +167,32 @@ export default {
   font-size: 120px;
   font-family: $sixcaps;
 
-  @include sp() {
+  @include sp {
     bottom: -5px;
     font-size: 80px;
   }
+}
 
-  & .card-sub-title {
-    position: absolute;
-    top: 12px;
-    right: -4px;
-    font-size: 12px;
-    font-family: $helvetica;
-    letter-spacing: 0.02em;
+.card-title-wrapper-03 .card-sub-title {
+  position: absolute;
+  top: 12px;
+  right: -4px;
+  font-size: 12px;
+  font-family: $helvetica;
+  letter-spacing: 0.02em;
 
-    @include sp() {
-      top: 7px;
-      font-size: 10px;
-    }
+  @include sp {
+    top: 7px;
+    font-size: 10px;
   }
 }
 
-/* stylelint-disable */
-.is-windows .card-title-wrapper-01-block {
-  &:first-of-type {
-    position: relative;
-    left: -8px;
-  }
+.card-company-item-first {
+  margin: 0 0 40px 0;
 }
-/* stylelint-enable */
+
+.card-company-item .card-sub-title {
+  margin: 0 0 10px 0;
+}
+
 </style>

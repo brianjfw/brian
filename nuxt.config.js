@@ -169,7 +169,8 @@ export default {
           @use "~/assets/scss/single.scss" as *;
         `,
         sassOptions: {
-          fiber: false
+          fiber: false,
+          includePaths: ['./assets/scss']
         }
       }
     },

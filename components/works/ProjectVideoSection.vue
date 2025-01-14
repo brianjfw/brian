@@ -147,10 +147,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/scss/constants/break-points' as *;
-@use '../assets/scss/constants/color' as *;
-@use '../assets/scss/constants/font' as *;
-@use '../assets/scss/functions/mixins' as *;
+@use "~/assets/scss/constants/break-points" as *;
+@use "~/assets/scss/constants/color" as *;
+@use "~/assets/scss/constants/font" as *;
+@use "~/assets/scss/functions/mixins" as *;
 
 .contents-loop-title-wrapper {
   position: relative;
@@ -212,14 +212,13 @@ export default {
   height: 100%;
   border-radius: 8px;
   overflow: hidden;
+}
 
-  & video {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-    object-position: center;
-  }
+.contents-loop-video-wrapper video {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .contents-loop-card {
@@ -235,5 +234,11 @@ export default {
     top: 520px;
     right: 110px;
   }
+}
+
+.works-video .video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>

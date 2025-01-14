@@ -142,8 +142,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/scss/constants/break-points' as *;
-@use '../assets/scss/functions/mixins' as *;
+@use "~/assets/scss/constants/break-points" as *;
+@use "~/assets/scss/functions/mixins" as *;
 
 .app-bounce-line {
   // ... existing code ...

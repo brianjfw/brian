@@ -1,9 +1,9 @@
 //constants
-@forward './constants/animation';
-@forward './constants/break-points';
-@forward './constants/color';
-@forward './constants/font';
+@forward '~/assets/scss/constants/animation';
+@forward '~/assets/scss/constants/break-points';
+@forward '~/assets/scss/constants/color';
+@forward '~/assets/scss/constants/font';
 
 //functions
-@forward './functions/function';
-@forward './functions/mixins';
+@forward '~/assets/scss/functions/function';
+@forward '~/assets/scss/functions/mixins';

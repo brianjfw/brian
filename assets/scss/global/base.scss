@@ -1,3 +1,7 @@
+@use '../constants/color' as *;
+@use '../constants/font' as *;
+@use '../functions/mixins' as *;
+
 body {
   background-color: $darkBlack;
   color: $white;
