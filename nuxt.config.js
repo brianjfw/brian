@@ -165,9 +165,9 @@ export default {
       scss: {
         implementation: require('sass'),
         additionalData: `
-          @import "~/assets/scss/constants/color.scss";
-          @import "~/assets/scss/constants/font.scss";
-          @import "~/assets/scss/functions/mixins.scss";
+          @use "~/assets/scss/constants/color.scss" as *;
+          @use "~/assets/scss/constants/font.scss" as *;
+          @use "~/assets/scss/functions/mixins.scss" as *;
         `,
         sassOptions: {
           fiber: false
