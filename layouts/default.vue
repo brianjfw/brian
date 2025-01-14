@@ -334,6 +334,66 @@ export default {
     },
   },
   mounted() {
+    // Only run client-side initialization if window exists
+    if (typeof window === 'undefined') return
+
+    this.$nextTick(() => {
+      // particle
+      const color = [
+        {
+          dark: this.pickupData?.[0]?.pickup?.color01 || '#000000',
+          light: this.pickupData?.[0]?.pickup?.color02 || '#ffffff',
+        },
+        {
+          dark: this.pickupData?.[1]?.pickup?.color01 || '#000000',
+          light: this.pickupData?.[1]?.pickup?.color02 || '#ffffff',
+        },
+        {
+          dark: this.pickupData?.[2]?.pickup?.color01 || '#000000',
+          light: this.pickupData?.[2]?.pickup?.color02 || '#ffffff',
+        },
+      ]
+
+      try {
+        this.particle = new Particle(this.$SITECONFIG, this.$refs.Particle, color)
+        this.particle.init()
+
+        this.pResize = () => {
+          this.particle?.onResize()
+        }
+
+        window.addEventListener('resize', this.pResize)
+
+        this.pRaf = () => {
+          this.particle?._drawParticles()
+        }
+
+        // metaball
+        const imgPath = []
+        imgPath.push(
+          {
+            pc: this.pickupData?.[0]?.heroImg?.pc?.url || '',
+            sp: this.pickupData?.[0]?.heroImg?.sp?.url || '',
+          },
+          {
+            pc: this.pickupData?.[1]?.heroImg?.pc?.url || '',
+            sp: this.pickupData?.[1]?.heroImg?.sp?.url || '',
+          },
+          {
+            pc: this.pickupData?.[2]?.heroImg?.pc?.url || '',
+            sp: this.pickupData?.[2]?.heroImg?.sp?.url || '',
+          }
+        )
+
+        const stage = new Stage(this.$refs.Webgl)
+        stage.init()
+
+        this.meshList = []
+      } catch (err) {
+        console.error('Error initializing client-side features:', err)
+      }
+    })
+
     // checkdevice
     if (this.$checkDevice.isAndroid) {
       this.isAndroid = 'is-android'
@@ -343,68 +403,6 @@ export default {
     }
     if (this.$checkDevice.isSafari) {
       this.isSafari = 'is-safari'
-    }
-
-    // particle
-    const color = [
-      {
-        dark: this.pickupData[0].pickup.color01,
-        light: this.pickupData[0].pickup.color02,
-      },
-      {
-        dark: this.pickupData[1].pickup.color01,
-        light: this.pickupData[1].pickup.color02,
-      },
-      {
-        dark: this.pickupData[2].pickup.color01,
-        light: this.pickupData[2].pickup.color02,
-      },
-    ]
-    this.particle = new Particle(this.$SITECONFIG, this.$refs.Particle, color)
-    this.particle.init()
-
-    this.pResize = () => {
-      this.particle.onResize()
-    }
-
-    window.addEventListener('resize', this.pResize)
-
-    this.pRaf = () => {
-      this.particle._drawParticles()
-    }
-
-    // metaball
-    const imgPath = []
-    imgPath.push(
-      {
-        pc: `${this.pickupData[0].heroImg.pc.url}`,
-        sp: `${this.pickupData[0].heroImg.sp.url}`,
-      },
-      {
-        pc: `${this.pickupData[1].heroImg.pc.url}`,
-        sp: `${this.pickupData[1].heroImg.sp.url}`,
-      },
-      {
-        pc: `${this.pickupData[2].heroImg.pc.url}`,
-        sp: `${this.pickupData[2].heroImg.sp.url}`,
-      }
-    )
-
-    const stage = new Stage(this.$refs.Webgl)
-    stage.init()
-
-    this.meshList = []
-
-    for (let i = 0; i < 3.0; i++) {
-      this.meshList.push(
-        (this.mesh = new Mesh(
-          this.$SITECONFIG,
-          stage,
-          metaballSceneList[i],
-          imgPath[i]
-        ))
-      )
-      this.meshList[i].init()
     }
 
     this.m1Mouse = (e) => {

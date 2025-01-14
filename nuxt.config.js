@@ -109,6 +109,7 @@ export default {
     '~/plugins/asscroll-and-gsap.client.js',
     '~/plugins/constants.js',
     '~/plugins/check-device.client.js',
+    '~/plugins/store-init.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -228,7 +229,8 @@ export default {
       return routes
     },
     dir: 'dist', // Explicitly set output directory
-    subFolders: false // Generate HTML files in root instead of subfolders
+    subFolders: false, // Generate HTML files in root instead of subfolders
+    fallback: '200.html' // Ensure 200.html is generated as fallback
   },
 
   hooks: {
@@ -258,16 +260,37 @@ export default {
         if (fs.existsSync(distPath)) {
           const files = fs.readdirSync(distPath)
           console.log('Contents of dist directory:', files)
-          // Check for index.html specifically
+          
+          // Ensure index.html exists
           if (!files.includes('index.html')) {
             console.error('Warning: index.html not found in dist directory')
-            // Try to copy from fallback if it exists
-            if (fs.existsSync(path.join(distPath, '200.html'))) {
-              fs.copyFileSync(
-                path.join(distPath, '200.html'),
-                path.join(distPath, 'index.html')
-              )
-              console.log('Copied 200.html to index.html')
+            try {
+              // Try to copy from 200.html if it exists
+              if (fs.existsSync(path.join(distPath, '200.html'))) {
+                fs.copyFileSync(
+                  path.join(distPath, '200.html'),
+                  path.join(distPath, 'index.html')
+                )
+                console.log('Successfully copied 200.html to index.html')
+              } else {
+                // If 200.html doesn't exist, create a basic index.html
+                const basicHtml = `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Heather Hudson Art</title>
+  </head>
+  <body>
+    <div id="__nuxt"></div>
+    <script>window.location.href = "/200.html" + window.location.hash;</script>
+  </body>
+</html>`
+                fs.writeFileSync(path.join(distPath, 'index.html'), basicHtml)
+                console.log('Created basic index.html with redirect')
+              }
+            } catch (err) {
+              console.error('Failed to create index.html:', err)
             }
           }
         }
