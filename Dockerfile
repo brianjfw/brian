@@ -27,6 +27,7 @@ COPY --from=builder /app/.nuxt ./.nuxt
 COPY --from=builder /app/static ./static
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/nuxt.config.js ./
+COPY --from=builder /app/data ./data
 
 # Install production dependencies only
 RUN HUSKY=0 NPM_CONFIG_IGNORE_SCRIPTS=true npm ci --only=production
