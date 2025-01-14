@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+# Default to port 3000 if PORT is not set
+PORT="${PORT:-3000}"
+
+# Replace PORT_PLACEHOLDER with actual port in nginx config
+sed -i "s/PORT_PLACEHOLDER/$PORT/g" /etc/nginx/conf.d/default.conf
+
+# Verify the configuration
+echo "Checking nginx configuration..."
+nginx -t
+
+# Start nginx
+echo "Starting nginx on port $PORT..."
+exec nginx -g 'daemon off;' 
