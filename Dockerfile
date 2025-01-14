@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package*.json ./
-RUN npm ci
+RUN HUSKY=0 NPM_CONFIG_IGNORE_SCRIPTS=true npm ci
 
 # Copy source
 COPY . .
@@ -29,7 +29,7 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/nuxt.config.js ./
 
 # Install production dependencies only
-RUN HUSKY=0 npm ci --only=production
+RUN HUSKY=0 NPM_CONFIG_IGNORE_SCRIPTS=true npm ci --only=production
 
 # Set environment variables
 ENV HOST=0.0.0.0
