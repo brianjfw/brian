@@ -29,6 +29,7 @@ COPY --from=builder /app/static ./static
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/nuxt.config.js ./
 COPY --from=builder /app/data ./data
+COPY --from=builder /app/assets/scss ./assets/scss
 
 # Install production dependencies only
 RUN npm cache clean --force && \
