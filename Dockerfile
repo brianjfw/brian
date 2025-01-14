@@ -21,6 +21,9 @@ RUN npm run generate
 # Production stage
 FROM nginx:alpine
 
+# Install gosu for proper privilege dropping
+RUN apk add --no-cache gosu
+
 # Copy nginx configurations
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
@@ -35,10 +38,10 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # Create log directories with correct permissions
 RUN mkdir -p /var/log/nginx && \
     chown -R nginx:nginx /var/log/nginx && \
-    chmod -R 755 /var/log/nginx
-
-# Switch to non-root user
-USER nginx
+    chmod -R 755 /var/log/nginx && \
+    # Make sure nginx user can read config files
+    chown -R root:nginx /etc/nginx && \
+    chmod -R 755 /etc/nginx
 
 # Expose port (this is just documentation)
 EXPOSE 3000

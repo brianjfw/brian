@@ -11,6 +11,6 @@ sed -i "s/PORT_PLACEHOLDER/$PORT/g" /etc/nginx/conf.d/default.conf
 echo "Checking nginx configuration..."
 nginx -t
 
-# Start nginx
+# Start nginx as nginx user
 echo "Starting nginx on port $PORT..."
-exec nginx -g 'daemon off;' 
+exec gosu nginx nginx -g 'daemon off;' 
