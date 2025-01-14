@@ -3,6 +3,7 @@ import { defaultProjectData } from './data/siteData'
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
+  ssr: true,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -200,7 +201,9 @@ export default {
   },
 
   generate: {
-    fallback: '404.html',
+    fallback: true,
+    crawler: true,
+    concurrency: 1,
     routes() {
       // Include root route and project routes
       const routes = [
@@ -208,7 +211,20 @@ export default {
         '/archive',
         ...defaultProjectData.map(project => `/works/${project.id}`)
       ]
+      console.log('Generated routes:', routes)
       return routes
+    }
+  },
+
+  hooks: {
+    generate: {
+      before() {
+        console.log('Starting static generation...')
+      },
+      done(generator) {
+        console.log('Static generation completed')
+        console.log('Generated files:', generator.generatedRoutes)
+      }
     }
   }
 }

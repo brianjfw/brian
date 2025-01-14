@@ -21,11 +21,17 @@ RUN set -e && \
 # Set environment variables for static generation
 ENV NODE_ENV=production
 ENV NUXT_TELEMETRY_DISABLED=1
+# Enable Nuxt debug output
+ENV DEBUG=nuxt:*
 
 # Generate static files with error checking and verbose output
 RUN set -e && \
     echo "Running nuxt generate with verbose output..." && \
-    NODE_OPTIONS=--max_old_space_size=4096 npm run generate --verbose && \
+    echo "Node version:" && node -v && \
+    echo "NPM version:" && npm -v && \
+    echo "Available memory:" && free -h || true && \
+    echo "Directory contents before generate:" && ls -la && \
+    NODE_OPTIONS="--max_old_space_size=4096 --trace-warnings" npm run generate --verbose && \
     echo "Verifying dist directory exists..." && \
     if [ ! -d "dist" ]; then echo "dist directory not found!"; exit 1; fi && \
     echo "Verifying dist directory contents:" && \
@@ -36,8 +42,12 @@ RUN set -e && \
         ls -la dist/; \
         echo "Contents of dist/_nuxt:"; \
         ls -la dist/_nuxt/; \
-        echo "Contents of 200.html for debugging:"; \
-        cat dist/200.html | head -n 20; \
+        echo "Checking for any HTML files:"; \
+        find dist -name "*.html" -type f; \
+        echo "Package.json contents:"; \
+        cat package.json; \
+        echo "Nuxt config contents:"; \
+        cat nuxt.config.js; \
         exit 1; \
     fi && \
     echo "Checking index.html content:" && \
