@@ -129,8 +129,6 @@ export default {
 
   styleResources: {
     scss: [
-      '~/assets/scss/constants/*.scss',
-      '~/assets/scss/functions/*.scss',
       '~/assets/scss/single.scss'
     ]
   },
@@ -166,6 +164,11 @@ export default {
     loaders: {
       scss: {
         implementation: require('sass'),
+        additionalData: `
+          @import "~/assets/scss/constants/color.scss";
+          @import "~/assets/scss/constants/font.scss";
+          @import "~/assets/scss/functions/mixins.scss";
+        `,
         sassOptions: {
           fiber: false
         }

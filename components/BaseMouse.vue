@@ -237,6 +237,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$base-duration: 0.4s;
+$colorAndOpacity-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
 :root {
   --viewportHeight: 100vh;
 }
