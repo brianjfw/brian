@@ -166,11 +166,7 @@ export default {
         implementation: require('sass'),
         additionalData: `
           @use "sass:math";
-          @use "~/assets/scss/constants/color.scss" as *;
-          @use "~/assets/scss/constants/animation.scss" as *;
-          @use "~/assets/scss/constants/break-points.scss" as *;
-          @use "~/assets/scss/functions/mixins.scss" as *;
-          @use "~/assets/scss/functions/function.scss" as *;
+          @use "~/assets/scss/single.scss" as *;
         `,
         sassOptions: {
           fiber: false

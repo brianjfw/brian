@@ -1,9 +1,9 @@
 //constants
-@use './constants/animation';
-@use './constants/break-points';
-@use './constants/color';
-@use './constants/font';
+@forward './constants/animation';
+@forward './constants/break-points';
+@forward './constants/color';
+@forward './constants/font';
 
 //functions
-@use './functions/function';
-@use './functions/mixins';
+@forward './functions/function';
+@forward './functions/mixins';
