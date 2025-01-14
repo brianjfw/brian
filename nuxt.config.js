@@ -177,8 +177,8 @@ export default {
     optimization: {
       splitChunks: {
         chunks: 'all',
-        maxInitialRequests: Infinity,
-        minSize: 0,
+        maxInitialRequests: 5,
+        minSize: 20000,
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
@@ -192,9 +192,9 @@ export default {
     },
     hardSource: process.env.NODE_ENV === 'development',
     performance: {
-      hints: false,
-      maxEntrypointSize: 512000,
-      maxAssetSize: 512000
+      hints: 'warning',
+      maxEntrypointSize: 1024000,
+      maxAssetSize: 1024000
     },
   },
 
