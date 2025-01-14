@@ -8,6 +8,22 @@ export default {
   // Ensure static generation works correctly
   modern: false,
 
+  // Static generation optimizations
+  render: {
+    static: {
+      maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+    }
+  },
+
+  // Disable telemetry for cleaner builds
+  telemetry: false,
+
+  // Increase build timeouts
+  cli: {
+    badgeMessages: ['Environment: Production', 'Target: Static'],
+    buildTimeout: 60000,
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Hisami Kurita Portfolio',
@@ -202,10 +218,31 @@ export default {
       maxEntrypointSize: 1024000,
       maxAssetSize: 1024000
     },
+    html: {
+      minify: {
+        collapseBooleanAttributes: true,
+        decodeEntities: true,
+        minifyCSS: true,
+        minifyJS: true,
+        processConditionalComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        trimCustomFragments: true,
+        useShortDoctype: true
+      }
+    },
+    optimizeCSS: true,
+    extractCSS: true,
+    quiet: false,
+    analyze: process.env.ANALYZE === 'true',
+    sourceMap: process.env.NODE_ENV !== 'production',
+    parallel: true,
+    cache: true,
+    minimize: true,
   },
 
   generate: {
-    fallback: true,
+    fallback: '200.html', // Ensure 200.html is generated as fallback
     crawler: true,
     concurrency: 1,
     cache: false, // Disable cache to ensure fresh generation
@@ -225,33 +262,40 @@ export default {
           payload: project
         }))
       ]
+      // eslint-disable-next-line no-console
       console.log('Routes to be generated:', JSON.stringify(routes, null, 2))
       return routes
     },
     dir: 'dist', // Explicitly set output directory
-    subFolders: false, // Generate HTML files in root instead of subfolders
-    fallback: '200.html' // Ensure 200.html is generated as fallback
+    subFolders: false // Generate HTML files in root instead of subfolders
   },
 
   hooks: {
     generate: {
       before() {
+        // eslint-disable-next-line no-console
         console.log('Starting static generation...')
       },
       routeCreated(route) {
+        // eslint-disable-next-line no-console
         console.log('Route created:', route)
       },
       page(page) {
+        // eslint-disable-next-line no-console
         console.log('Generating page:', page.route)
       },
       routeFailed(route, errors) {
+        // eslint-disable-next-line no-console
         console.error('Route generation failed:', route, errors)
       },
       extendRoutes(routes) {
+        // eslint-disable-next-line no-console
         console.log('Extended routes:', routes)
       },
       done(generator) {
+        // eslint-disable-next-line no-console
         console.log('Static generation completed')
+        // eslint-disable-next-line no-console
         console.log('Generated files:', generator.generatedRoutes)
         // List contents of dist directory
         const fs = require('fs')
@@ -259,10 +303,12 @@ export default {
         const distPath = path.join(__dirname, 'dist')
         if (fs.existsSync(distPath)) {
           const files = fs.readdirSync(distPath)
+          // eslint-disable-next-line no-console
           console.log('Contents of dist directory:', files)
           
           // Ensure index.html exists
           if (!files.includes('index.html')) {
+            // eslint-disable-next-line no-console
             console.error('Warning: index.html not found in dist directory')
             try {
               // Try to copy from 200.html if it exists
@@ -271,6 +317,7 @@ export default {
                   path.join(distPath, '200.html'),
                   path.join(distPath, 'index.html')
                 )
+                // eslint-disable-next-line no-console
                 console.log('Successfully copied 200.html to index.html')
               } else {
                 // If 200.html doesn't exist, create a basic index.html
@@ -287,9 +334,11 @@ export default {
   </body>
 </html>`
                 fs.writeFileSync(path.join(distPath, 'index.html'), basicHtml)
+                // eslint-disable-next-line no-console
                 console.log('Created basic index.html with redirect')
               }
             } catch (err) {
+              // eslint-disable-next-line no-console
               console.error('Failed to create index.html:', err)
             }
           }

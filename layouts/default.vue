@@ -66,10 +66,8 @@
 
 <script>
 import Particle from '../components/canvas/index/pickup/particle'
-import Mesh from '../components/canvas/index/pickup/metaball'
 import Stage from '../components/canvas/stage'
 import { preEvent } from '../assets/js/preEvent'
-import { metaballSceneList } from '../assets/js/metaball'
 
 export default {
   data: () => {
@@ -77,6 +75,7 @@ export default {
       isAndroid: '',
       isWindows: '',
       isSafari: '',
+      stage: null,
     }
   },
 
@@ -385,11 +384,12 @@ export default {
           }
         )
 
-        const stage = new Stage(this.$refs.Webgl)
-        stage.init()
+        this.stage = new Stage(this.$refs.Webgl)
+        this.stage.init()
 
         this.meshList = []
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Error initializing client-side features:', err)
       }
     })
