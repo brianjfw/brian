@@ -154,6 +154,15 @@ export default {
         use: ['raw-loader', 'glslify-loader']
       })
     },
+    loaders: {
+      scss: {
+        implementation: require('sass'),
+        sassOptions: {
+          fiber: false,
+          includePaths: ['./assets/scss/']
+        }
+      }
+    },
     optimization: {
       splitChunks: {
         chunks: 'all',
