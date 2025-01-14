@@ -165,11 +165,12 @@ export default {
       scss: {
         implementation: require('sass'),
         additionalData: `
-          @use "~/assets/scss/constants/color.scss" as colors;
-          @use "~/assets/scss/constants/animation.scss" as animations;
-          $white: colors.$white;
-          $base-duration: animations.$base-duration;
-          $colorAndOpacity-easing: animations.$colorAndOpacity-easing;
+          @use "sass:math";
+          @use "~/assets/scss/constants/color.scss" as *;
+          @use "~/assets/scss/constants/animation.scss" as *;
+          @use "~/assets/scss/constants/break-points.scss" as *;
+          @use "~/assets/scss/functions/mixins.scss" as *;
+          @use "~/assets/scss/functions/function.scss" as *;
         `,
         sassOptions: {
           fiber: false
