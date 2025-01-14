@@ -686,24 +686,23 @@ export default {
   border-radius: inherit;
 }
 
-// Replace hover mixins with media queries
 @media (hover: hover) and (pointer: fine) {
-  .hambergerMenu-btn-hover:hover {
+  .hambergerMenu-btn:hover {
     transform: scale(0.9, 0.98);
   }
   
   @include sp() {
-    .hambergerMenu-btn-hover:hover {
+    .hambergerMenu-btn:hover {
       transform: scale(1, 1);
     }
   }
 
-  .hambergerMenu--open .hambergerMenu-btn-hover:hover {
+  .hambergerMenu--open .hambergerMenu-btn:hover {
     transform: scale(1.1, 1.1);
   }
   
   @include sp() {
-    .hambergerMenu--open .hambergerMenu-btn-hover:hover {
+    .hambergerMenu--open .hambergerMenu-btn:hover {
       transform: scale(1, 1);
     }
   }
@@ -794,15 +793,15 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: $z-index-hamberger-menu-button;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 80px;
   height: 80px;
-  background-color: $color-black;
+  background-color: $darkBlack;
   cursor: pointer;
-  transition: background-color $base-duration $base-ease;
+  transition: background-color $base-duration $colorAndOpacity-easing;
 }
 
 .hamberger-menu-button.is-disable {
@@ -816,9 +815,9 @@ export default {
   z-index: 1;
   width: 20px;
   height: 2px;
-  background-color: $color-white;
+  background-color: $white;
   transform: translate(-50%, -50%);
-  transition: transform $base-duration $base-ease;
+  transition: transform $base-duration $colorAndOpacity-easing;
   content: '';
 }
 
@@ -829,23 +828,23 @@ export default {
   z-index: 1;
   width: 20px;
   height: 2px;
-  background-color: $color-white;
+  background-color: $white;
   transform: translate(-50%, -50%);
-  transition: transform $base-duration $base-ease;
+  transition: transform $base-duration $colorAndOpacity-easing;
   content: '';
 }
 
 .hamberger-menu-button.is-active {
-  background-color: $color-white;
+  background-color: $white;
 }
 
 .hamberger-menu-button.is-active::before {
-  background-color: $color-black;
+  background-color: $darkBlack;
   transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .hamberger-menu-button.is-active::after {
-  background-color: $color-black;
+  background-color: $darkBlack;
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
@@ -853,11 +852,11 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: $z-index-hamberger-menu-content;
+  z-index: 99;
   width: 100%;
   height: 100vh;
   padding: 80px 0 0;
-  background-color: $color-white;
+  background-color: $white;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
