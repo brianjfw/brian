@@ -20,8 +20,9 @@ FROM nginx:alpine
 
 WORKDIR /app
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy nginx configurations
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Copy static files from builder
 COPY --from=builder /app/dist /usr/share/nginx/html
