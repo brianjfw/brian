@@ -3,10 +3,12 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies with verbose logging
 COPY package*.json ./
 RUN npm cache clean --force && \
-    HUSKY=0 NPM_CONFIG_IGNORE_SCRIPTS=true npm ci
+    HUSKY=0 NPM_CONFIG_IGNORE_SCRIPTS=true NPM_CONFIG_LOGLEVEL=verbose npm ci && \
+    echo "Verifying node_modules:" && \
+    ls -la node_modules/.bin/nuxt
 
 # Copy source files first, ensuring data directory is included
 COPY . .
@@ -23,6 +25,7 @@ ENV NODE_ENV=production
 ENV NUXT_TELEMETRY_DISABLED=1
 # Enable Nuxt debug output
 ENV DEBUG=nuxt:*
+ENV NPM_CONFIG_LOGLEVEL=verbose
 
 # Generate static files with error checking and verbose output
 RUN set -e && \
@@ -31,17 +34,22 @@ RUN set -e && \
     echo "NPM version:" && npm -v && \
     echo "Available memory:" && free -h || true && \
     echo "Directory contents before generate:" && ls -la && \
-    NODE_OPTIONS="--max_old_space_size=4096 --trace-warnings" npm run generate --verbose && \
-    echo "Verifying dist directory exists..." && \
-    if [ ! -d "dist" ]; then echo "dist directory not found!"; exit 1; fi && \
+    echo "Nuxt version:" && ./node_modules/.bin/nuxt --version && \
+    NODE_OPTIONS="--max_old_space_size=4096 --trace-warnings" npm run generate --verbose 2>&1 | tee generate.log && \
+    if [ ! -d "dist" ]; then \
+        echo "dist directory not found! Generate log:"; \
+        cat generate.log; \
+        exit 1; \
+    fi && \
     echo "Verifying dist directory contents:" && \
     ls -la dist/ && \
-    echo "Checking for index.html..." && \
     if [ ! -f "dist/index.html" ]; then \
-        echo "index.html not found! Contents of dist:"; \
+        echo "index.html not found! Generate log:"; \
+        cat generate.log; \
+        echo "Contents of dist:"; \
         ls -la dist/; \
         echo "Contents of dist/_nuxt:"; \
-        ls -la dist/_nuxt/; \
+        ls -la dist/_nuxt/ || true; \
         echo "Checking for any HTML files:"; \
         find dist -name "*.html" -type f; \
         echo "Package.json contents:"; \

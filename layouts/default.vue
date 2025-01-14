@@ -610,24 +610,24 @@ export default {
   width: 100%;
   height: 100%;
   opacity: 0;
+}
 
-  & img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.layouts-normal-transition-img img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+
+  @include tab-vertical() {
+    object-position: right;
+  }
+
+  @include sp() {
     object-position: center;
-
-    @include tab-vertical() {
-      object-position: right;
-    }
-
-    @include sp() {
-      object-position: center;
-    }
   }
 }
 
@@ -661,12 +661,12 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 1;
+}
 
-  & canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
+.webgl canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .particle {
@@ -676,11 +676,34 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 2;
+}
 
-  & canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
+.particle canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.footer-link {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 0 20px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: $white;
+  text-decoration: none;
+  transition: color $base-duration $colorAndOpacity-easing;
+
+  @include hover {
+    color: $gray;
   }
+}
+
+.footer-link:first-of-type {
+  margin: 0;
+}
+
+.footer-link.is-current {
+  color: $gray;
 }
 </style>
