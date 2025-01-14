@@ -29,7 +29,7 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/nuxt.config.js ./
 
 # Install production dependencies only
-RUN npm ci --only=production
+RUN HUSKY=0 npm ci --only=production
 
 # Set environment variables
 ENV HOST=0.0.0.0
