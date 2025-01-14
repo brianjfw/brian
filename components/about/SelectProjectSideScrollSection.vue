@@ -348,12 +348,12 @@ export default {
   height: 100%;
   z-index: 1;
   pointer-events: none;
+}
 
-  & canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
+.project-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .project-inner {
@@ -402,10 +402,10 @@ export default {
   left: auto;
   overflow: hidden;
   z-index: 1;
+}
 
-  &.is-text-animation-end {
-    overflow: visible;
-  }
+.project-list.is-text-animation-end {
+  overflow: visible;
 }
 
 .project-item-wrapper-translate {
@@ -455,16 +455,16 @@ export default {
   transform: rotateX(180deg);
   transition: transform $half-base-duration $transform-easing;
   transform-style: preserve-3d;
+}
 
-  & img {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 10px;
-    overflow: hidden;
-  }
+.project-item-img img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .project-item-img-wrapper-01 {
@@ -496,31 +496,55 @@ export default {
   white-space: nowrap;
   perspective: 1000px;
   transition: opacity $half-base-duration $colorAndOpacity-easing;
+}
 
-  &.is-hover {
-    opacity: 0.5;
-  }
+.project-item.is-hover {
+  opacity: 0.5;
+}
 
-  &.is-overlay {
-    z-index: 10;
-  }
+.project-item.is-overlay {
+  z-index: 10;
+}
 
-  @include sp() {
+@include sp() {
+  .project-item {
     font-size: vw_sp(160);
   }
+}
 
-  &:not(:last-of-type) {
-    margin: 0 vw(100) 0 0;
+.project-item:not(:last-of-type) {
+  margin: 0 vw(100) 0 0;
+}
 
-    @include sp() {
-      margin: 0 vw_sp(130) 0 0;
+@include sp() {
+  .project-item:not(:last-of-type) {
+    margin: 0 vw_sp(130) 0 0;
+  }
+}
+
+.project-item:last-of-type .project-item-circle {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .select-project-side-scroll-item:hover {
+    transform: scale(0.9, 0.98);
+  }
+  
+  @include sp {
+    .select-project-side-scroll-item:hover {
+      transform: scale(1, 1);
     }
   }
+}
 
-  &:last-of-type {
-    & .project-item-circle {
-      display: none;
-    }
+.select-project-side-scroll-item.is-open {
+  transform: scale(1.1, 1.1);
+}
+
+@include sp {
+  .select-project-side-scroll-item.is-open {
+    transform: scale(1, 1);
   }
 }
 </style>

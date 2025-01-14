@@ -686,25 +686,24 @@ export default {
   border-radius: inherit;
 }
 
-@include hover() {
-  .hambergerMenu-btn-hover {
+// Replace hover mixins with media queries
+@media (hover: hover) and (pointer: fine) {
+  .hambergerMenu-btn-hover:hover {
     transform: scale(0.9, 0.98);
   }
   
   @include sp() {
-    .hambergerMenu-btn-hover {
+    .hambergerMenu-btn-hover:hover {
       transform: scale(1, 1);
     }
   }
-}
 
-@include hover() {
-  .hambergerMenu--open .hambergerMenu-btn-hover {
+  .hambergerMenu--open .hambergerMenu-btn-hover:hover {
     transform: scale(1.1, 1.1);
   }
   
   @include sp() {
-    .hambergerMenu--open .hambergerMenu-btn-hover {
+    .hambergerMenu--open .hambergerMenu-btn-hover:hover {
       transform: scale(1, 1);
     }
   }

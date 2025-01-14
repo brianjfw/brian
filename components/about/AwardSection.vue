@@ -418,4 +418,21 @@ export default {
     margin: 0 0 4px 0;
   }
 }
+
+@media (hover: hover) and (pointer: fine) {
+  .award-item:hover {
+    color: $white;
+    background-color: $black;
+  }
+}
+
+.award-item.is-hover {
+  color: $white;
+  background-color: $black;
+}
+
+.award-item.is-current-hover {
+  color: $white;
+  background-color: $black;
+}
 </style>

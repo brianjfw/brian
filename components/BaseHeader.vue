@@ -241,13 +241,13 @@ export default {
   transition-delay: $base-duration * 0.25;
 }
 
-@include hover {
-  .header-logo-link .header-logo-move-text {
+@media (hover: hover) and (pointer: fine) {
+  .header-logo-link:hover .header-logo-move-text {
     transform: translateX(0);
     transition-delay: 0s;
   }
 
-  .header-logo-link .header-logo-fade-text {
+  .header-logo-link:hover .header-logo-fade-text {
     transform: translateY(0);
     transition-delay: $base-duration * 0.25;
   }

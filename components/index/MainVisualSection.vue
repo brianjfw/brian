@@ -438,4 +438,26 @@ export default {
     transform: translateX(400px) rotate(180deg);
   }
 }
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-card-item:hover {
+    transform: scale(0.9, 0.98);
+  }
+  
+  @include sp {
+    .hero-card-item:hover {
+      transform: scale(1, 1);
+    }
+  }
+}
+
+.hero-card-item.is-open {
+  transform: scale(1.1, 1.1);
+}
+
+@include sp {
+  .hero-card-item.is-open {
+    transform: scale(1, 1);
+  }
+}
 </style>

@@ -345,4 +345,26 @@ export default {
   transform: rotate(-10deg);
   z-index: 101;
 }
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-title-wrapper:hover {
+    transform: scale(0.9, 0.98);
+  }
+  
+  @include sp {
+    .hero-title-wrapper:hover {
+      transform: scale(1, 1);
+    }
+  }
+}
+
+.hero-title-wrapper.is-open {
+  transform: scale(1.1, 1.1);
+}
+
+@include sp {
+  .hero-title-wrapper.is-open {
+    transform: scale(1, 1);
+  }
+}
 </style>

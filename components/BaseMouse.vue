@@ -252,21 +252,23 @@ export default {
   transform: translate(40px, calc(var(--viewportHeight) - 80px)) scale(0);
 }
 
-.mouse-action {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: -18px;
-  right: -38px;
-  width: 44px;
-  height: 14px;
-  padding: 1px 0 0 0;
-  background-color: $white;
-  color: $black;
-  font-size: 10px;
-  border-radius: 8px;
-  transform: scale(0);
+@media (hover: hover) and (pointer: fine) {
+  .mouse-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -18px;
+    right: -38px;
+    width: 44px;
+    height: 14px;
+    padding: 1px 0 0 0;
+    background-color: $white;
+    color: $black;
+    font-size: 10px;
+    border-radius: 8px;
+    transform: scale(0);
+  }
 }
 
 .mouse-loading {

@@ -148,4 +148,17 @@ export default {
 .app-bounce-line {
   // ... existing code ...
 }
+
+@media (hover: hover) and (pointer: fine) {
+  .bounce-line:hover {
+    cursor: pointer;
+  }
+}
+
+.bounce-line-path {
+  fill: none;
+  stroke: $black;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
 </style>
