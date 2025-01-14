@@ -94,11 +94,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/scss/constants/animation';
-@use '../assets/scss/constants/color' as *;
-@use '../assets/scss/constants/font' as *;
-@use '../assets/scss/functions/mixins' as *;
-
 .index {
   overflow: hidden;
 }
