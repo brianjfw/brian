@@ -13,7 +13,10 @@ COPY . .
 
 # Generate static files
 RUN npm run generate && \
-    ls -la dist/
+    echo "Verifying dist directory contents:" && \
+    ls -la dist/ && \
+    echo "Checking for index.html:" && \
+    cat dist/index.html | head -n 5
 
 # Production stage
 FROM nginx:alpine
@@ -28,8 +31,13 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Verify files are copied correctly
-RUN ls -la /etc/nginx/conf.d/ && \
-    ls -la /usr/share/nginx/html/
+RUN echo "Verifying nginx configurations:" && \
+    ls -la /etc/nginx/conf.d/ && \
+    ls -la /etc/nginx/ && \
+    echo "Verifying static files:" && \
+    ls -la /usr/share/nginx/html/ && \
+    echo "Checking nginx config:" && \
+    nginx -t
 
 # Expose port
 EXPOSE 80
