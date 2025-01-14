@@ -11,29 +11,23 @@ RUN npm cache clean --force && \
 # Copy source
 COPY . .
 
-# Build application
-RUN npm run build
+# Generate static files
+RUN npm run generate
 
 # Production stage
 FROM node:20-alpine
 
 WORKDIR /app
 
+# Install serve for static file serving
+RUN npm install -g serve@14.2.1
+
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nuxtjs -u 1001
 
-# Copy built assets from builder
-COPY --from=builder /app/.nuxt ./.nuxt
-COPY --from=builder /app/static ./static
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/nuxt.config.js ./
-COPY --from=builder /app/data ./data
-COPY --from=builder /app/assets/scss ./assets/scss
-
-# Install production dependencies only
-RUN npm cache clean --force && \
-    HUSKY=0 NPM_CONFIG_IGNORE_SCRIPTS=true npm ci --only=production
+# Copy only the generated static files
+COPY --from=builder /app/dist ./dist
 
 # Set environment variables
 ENV HOST=0.0.0.0
@@ -45,5 +39,5 @@ USER nuxtjs
 
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"] 
+# Start the static file server
+CMD ["serve", "-s", "dist", "-l", "3000"] 
