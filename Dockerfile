@@ -16,32 +16,21 @@ RUN npm run generate && \
     ls -la dist/
 
 # Production stage
-FROM node:20-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+# Copy nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/
 
-# Install serve for static file serving
-RUN npm install -g serve@14.2.1
+# Copy static files from builder
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nuxtjs -u 1001
+# Expose port
+EXPOSE 80
 
-# Copy only the generated static files and ensure proper ownership
-COPY --from=builder /app/dist ./dist
-RUN chown -R nuxtjs:nodejs ./dist && \
-    chmod -R 755 ./dist && \
-    ls -la dist/
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD wget -q --spider http://localhost:80/ || exit 1
 
-# Set environment variables
-ENV HOST=0.0.0.0
-ENV PORT=3000
-ENV NODE_ENV=production
-
-# Switch to non-root user
-USER nuxtjs
-
-EXPOSE 3000
-
-# Start the static file server
-CMD ["serve", "-s", "dist", "-l", "3000"] 
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"] 
