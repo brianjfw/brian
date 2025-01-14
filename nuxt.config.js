@@ -5,6 +5,9 @@ export default {
   target: 'static',
   ssr: true,
 
+  // Ensure static generation works correctly
+  modern: false,
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Hisami Kurita Portfolio',
@@ -204,6 +207,7 @@ export default {
     fallback: true,
     crawler: true,
     concurrency: 1,
+    cache: false, // Disable cache to ensure fresh generation
     routes() {
       // Explicitly define all routes including root
       const routes = [
@@ -222,7 +226,9 @@ export default {
       ]
       console.log('Routes to be generated:', JSON.stringify(routes, null, 2))
       return routes
-    }
+    },
+    dir: 'dist', // Explicitly set output directory
+    subFolders: false // Generate HTML files in root instead of subfolders
   },
 
   hooks: {
@@ -233,6 +239,15 @@ export default {
       routeCreated(route) {
         console.log('Route created:', route)
       },
+      page(page) {
+        console.log('Generating page:', page.route)
+      },
+      routeFailed(route, errors) {
+        console.error('Route generation failed:', route, errors)
+      },
+      extendRoutes(routes) {
+        console.log('Extended routes:', routes)
+      },
       done(generator) {
         console.log('Static generation completed')
         console.log('Generated files:', generator.generatedRoutes)
@@ -241,7 +256,20 @@ export default {
         const path = require('path')
         const distPath = path.join(__dirname, 'dist')
         if (fs.existsSync(distPath)) {
-          console.log('Contents of dist directory:', fs.readdirSync(distPath))
+          const files = fs.readdirSync(distPath)
+          console.log('Contents of dist directory:', files)
+          // Check for index.html specifically
+          if (!files.includes('index.html')) {
+            console.error('Warning: index.html not found in dist directory')
+            // Try to copy from fallback if it exists
+            if (fs.existsSync(path.join(distPath, '200.html'))) {
+              fs.copyFileSync(
+                path.join(distPath, '200.html'),
+                path.join(distPath, 'index.html')
+              )
+              console.log('Copied 200.html to index.html')
+            }
+          }
         }
       }
     }

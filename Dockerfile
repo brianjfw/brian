@@ -30,9 +30,23 @@ ENV NPM_CONFIG_LOGLEVEL=verbose
 # Generate static files with debug output
 RUN set -x && \
     echo "Starting nuxt generate with debug output..." && \
-    NODE_OPTIONS="--max-old-space-size=4096" NUXT_TELEMETRY_DISABLED=1 npm run generate 2>&1 | tee generate.log || \
+    echo "Node version: $(node -v)" && \
+    echo "NPM version: $(npm -v)" && \
+    echo "Memory info: $(free -h || true)" && \
+    echo "Directory contents before generate:" && \
+    ls -la && \
+    NODE_OPTIONS="--max-old-space-size=4096 --trace-warnings" \
+    DEBUG=nuxt:*,nuxt:generate:* \
+    NUXT_TELEMETRY_DISABLED=1 \
+    npm run generate 2>&1 | tee generate.log || \
     (echo "Static generation failed. Debug output:" && \
      cat generate.log && \
+     echo "Checking for any HTML files in dist:" && \
+     find dist -name "*.html" -type f && \
+     echo "package.json contents:" && \
+     cat package.json && \
+     echo "nuxt.config.js contents:" && \
+     cat nuxt.config.js && \
      if [ ! -d "dist" ]; then \
        echo "dist directory not found" && \
        exit 1; \
