@@ -27,39 +27,37 @@ ENV NUXT_TELEMETRY_DISABLED=1
 ENV DEBUG=nuxt:*
 ENV NPM_CONFIG_LOGLEVEL=verbose
 
-# Generate static files with error checking and verbose output
-RUN set -e && \
-    echo "Running nuxt generate with verbose output..." && \
-    echo "Node version:" && node -v && \
-    echo "NPM version:" && npm -v && \
-    echo "Available memory:" && free -h || true && \
-    echo "Directory contents before generate:" && ls -la && \
-    echo "Nuxt version:" && ./node_modules/.bin/nuxt --version && \
-    NODE_OPTIONS="--max_old_space_size=4096 --trace-warnings" npm run generate --verbose 2>&1 | tee generate.log && \
-    if [ ! -d "dist" ]; then \
-        echo "dist directory not found! Generate log:"; \
-        cat generate.log; \
-        exit 1; \
-    fi && \
-    echo "Verifying dist directory contents:" && \
+# Generate static files with debug output
+RUN set -x && \
+    echo "Starting nuxt generate with debug output..." && \
+    NODE_OPTIONS="--max-old-space-size=4096" NUXT_TELEMETRY_DISABLED=1 npm run generate 2>&1 | tee generate.log || \
+    (echo "Static generation failed. Debug output:" && \
+     cat generate.log && \
+     if [ ! -d "dist" ]; then \
+       echo "dist directory not found" && \
+       exit 1; \
+     fi && \
+     if [ ! -f "dist/index.html" ]; then \
+       echo "index.html not found in dist directory" && \
+       echo "Contents of dist directory:" && \
+       ls -la dist/ && \
+       echo "Contents of dist/_nuxt directory:" && \
+       ls -la dist/_nuxt/ || true && \
+       exit 1; \
+     fi)
+
+# Verify generated files
+RUN echo "Verifying generated files..." && \
     ls -la dist/ && \
-    if [ ! -f "dist/index.html" ]; then \
-        echo "index.html not found! Generate log:"; \
-        cat generate.log; \
-        echo "Contents of dist:"; \
-        ls -la dist/; \
-        echo "Contents of dist/_nuxt:"; \
-        ls -la dist/_nuxt/ || true; \
-        echo "Checking for any HTML files:"; \
-        find dist -name "*.html" -type f; \
-        echo "Package.json contents:"; \
-        cat package.json; \
-        echo "Nuxt config contents:"; \
-        cat nuxt.config.js; \
-        exit 1; \
-    fi && \
-    echo "Checking index.html content:" && \
-    cat dist/index.html | head -n 5
+    echo "Contents of dist/_nuxt:" && \
+    ls -la dist/_nuxt/ || true && \
+    if [ -f dist/index.html ]; then \
+      echo "First 10 lines of index.html:" && \
+      head -n 10 dist/index.html; \
+    else \
+      echo "index.html not found!" && \
+      exit 1; \
+    fi
 
 # Production stage
 FROM nginx:alpine

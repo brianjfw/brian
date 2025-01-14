@@ -205,13 +205,22 @@ export default {
     crawler: true,
     concurrency: 1,
     routes() {
-      // Include root route and project routes
+      // Explicitly define all routes including root
       const routes = [
-        '/',
-        '/archive',
-        ...defaultProjectData.map(project => `/works/${project.id}`)
+        {
+          route: '/',
+          payload: null
+        },
+        {
+          route: '/archive',
+          payload: null
+        },
+        ...defaultProjectData.map(project => ({
+          route: `/works/${project.id}`,
+          payload: project
+        }))
       ]
-      console.log('Generated routes:', routes)
+      console.log('Routes to be generated:', JSON.stringify(routes, null, 2))
       return routes
     }
   },
@@ -221,9 +230,19 @@ export default {
       before() {
         console.log('Starting static generation...')
       },
+      routeCreated(route) {
+        console.log('Route created:', route)
+      },
       done(generator) {
         console.log('Static generation completed')
         console.log('Generated files:', generator.generatedRoutes)
+        // List contents of dist directory
+        const fs = require('fs')
+        const path = require('path')
+        const distPath = path.join(__dirname, 'dist')
+        if (fs.existsSync(distPath)) {
+          console.log('Contents of dist directory:', fs.readdirSync(distPath))
+        }
       }
     }
   }
