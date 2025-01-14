@@ -21,8 +21,8 @@ RUN npm run generate
 # Production stage
 FROM nginx:alpine
 
-# Install gosu for proper privilege dropping
-RUN apk add --no-cache gosu
+# Install su-exec for proper privilege dropping
+RUN apk add --no-cache su-exec
 
 # Copy nginx configurations
 COPY nginx.conf /etc/nginx/nginx.conf

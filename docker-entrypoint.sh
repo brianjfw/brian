@@ -13,4 +13,4 @@ nginx -t
 
 # Start nginx as nginx user
 echo "Starting nginx on port $PORT..."
-exec gosu nginx nginx -g 'daemon off;' 
+exec su-exec nginx nginx -g 'daemon off;' 
