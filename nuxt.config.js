@@ -164,6 +164,10 @@ export default {
     loaders: {
       scss: {
         implementation: require('sass'),
+        additionalData: `
+          @use "~/assets/scss/constants/color.scss" as *;
+          @use "~/assets/scss/constants/animation.scss" as *;
+        `,
         sassOptions: {
           fiber: false
         }
