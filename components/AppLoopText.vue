@@ -249,6 +249,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 .app-loop-text {
   display: block;
   width: max-content;
@@ -268,7 +271,19 @@ export default {
 
 <!-- クローンを動的に生成するクラスはscopedから外す -->
 <style lang="scss">
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 .app-loop-text-block {
   padding: 0 vw(6);
 }
+</style>
+
+<style lang="scss" scoped>
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/constants/color' as *;
+@use '../assets/scss/constants/font' as *;
+@use '../assets/scss/functions/mixins' as *;
+
+// Add any existing styles here if needed
 </style>

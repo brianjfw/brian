@@ -67,7 +67,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
+@use '../assets/scss/constants/animation' as *;
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/constants/color' as *;
+@use '../assets/scss/constants/font' as *;
+@use '../assets/scss/functions/function' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 .card-article {
   position: relative;
   width: 100%;

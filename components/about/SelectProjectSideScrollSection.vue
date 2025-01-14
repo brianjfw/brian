@@ -314,13 +314,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-:root {
-  --viewportWidth: 100vw;
-  --viewportHeight: 100vh;
-  --viewportSpHeight: 100vh;
-}
+@use '../../assets/scss/constants/break-points' as *;
+@use '../../assets/scss/constants/color' as *;
+@use '../../assets/scss/constants/font' as *;
+@use '../../assets/scss/functions/mixins' as *;
 
-.project {
+.select-project-side-scroll-section {
   position: relative;
   height: 3500px;
   z-index: 1;

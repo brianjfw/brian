@@ -277,6 +277,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 .app-card {
   position: relative;
 }

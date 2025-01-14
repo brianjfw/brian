@@ -1,21 +1,3 @@
-<template>
-  <div ref="HeaderLogo" class="header-logo is-top is-op">
-    <button class="header-link js-click-target" @click="onClickSameUrlReload">
-      <span
-        v-for="(char, index) of name"
-        :key="index"
-        ref="HeaderLogoText"
-        class="header-logo-text"
-        style="transform: translateY(60px)"
-        :class="{
-          'header-logo-fade-text': index % 2 === 1,
-          'header-logo-move-text': index % 2 === 0,
-        }"
-        >{{ char }}</span
-      >
-    </button>
-  </div>
-</template>
 <script>
 export default {
   data: () => {
@@ -141,7 +123,31 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<template>
+  <div ref="HeaderLogo" class="header-logo is-top is-op">
+    <button class="header-link js-click-target" @click="onClickSameUrlReload">
+      <span
+        v-for="(char, index) of name"
+        :key="index"
+        ref="HeaderLogoText"
+        class="header-logo-text"
+        style="transform: translateY(60px)"
+        :class="{
+          'header-logo-fade-text': index % 2 === 1,
+          'header-logo-move-text': index % 2 === 0,
+        }"
+        >{{ char }}</span
+      >
+    </button>
+  </div>
+</template>
+
+<style lang="scss">
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/constants/color' as *;
+@use '../assets/scss/constants/font' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 .header-logo-text {
   display: inline-block;
   transition: transform $base-duration $transform-easing;

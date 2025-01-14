@@ -439,6 +439,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "../assets/scss/foundation/variables/breakpoints" as *;
+@use "../assets/scss/foundation/variables/colors" as *;
+@use "../assets/scss/foundation/variables/fonts" as *;
+@use "../assets/scss/foundation/mixin" as *;
+
 $gap: 60px;
 $gap-sp: 26px;
 

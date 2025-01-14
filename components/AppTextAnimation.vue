@@ -173,6 +173,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 .app-text-animation {
   display: block;
   pointer-events: none;

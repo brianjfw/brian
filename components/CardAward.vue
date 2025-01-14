@@ -33,13 +33,6 @@
 
 <script>
 export default {
-  /**
-   * group : グループ(AWWWARDS/CSS DESIGN AWARDS/CSS WINNER)
-   * title : タイトル
-   * rank : ランク
-   * date : 日付
-   * modifier : 見た目を変更するクラス
-   */
   props: {
     group: {
       type: String,
@@ -65,7 +58,12 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/constants/color' as *;
+@use '../assets/scss/constants/font' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 $awwwwardsLogo: 28px;
 $awwwwardsLogoBottomMargin: 24px;
 $cssdaLogo: 39px;

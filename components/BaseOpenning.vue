@@ -293,6 +293,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@use '@/assets/scss/break-points' as *;
+@use '@/assets/scss/mixins' as *;
+@use '@/assets/scss/colors' as *;
+
 .openning {
   display: flex;
   justify-content: center;

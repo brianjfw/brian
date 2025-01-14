@@ -136,6 +136,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "../assets/scss/foundation/colors" as *;
+@use "../assets/scss/foundation/breakpoints" as *;
+@use "../assets/scss/foundation/fonts" as *;
+@use "../assets/scss/foundation/mixins" as *;
+
 .works {
   overflow: hidden;
 }

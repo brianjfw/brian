@@ -160,6 +160,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/constants/color' as *;
+@use '../assets/scss/constants/font' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 :root {
   --viewportWidth: 100vw;
   --viewportHeight: 100vh;

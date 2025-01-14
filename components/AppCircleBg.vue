@@ -56,7 +56,11 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+@use '../assets/scss/constants/break-points' as *;
+@use '../assets/scss/constants/color' as *;
+@use '../assets/scss/functions/mixins' as *;
+
 .circle-bg {
   display: block;
   position: absolute;
