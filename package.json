@@ -1,0 +1,63 @@
+{
+  "name": "hisamikurita-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "20.x",
+    "npm": ">=10.0.0"
+  },
+  "engineStrict": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
+    "prepare": "husky install",
+    "lint": "npm run lint:js && npm run lint:style"
+  },
+  "lint-staged": {
+    "*.{js,vue}": "eslint",
+    "*.{css,vue}": "stylelint"
+  },
+  "dependencies": {
+    "@ashthornton/asscroll": "^2.0.2",
+    "@nuxtjs/axios": "^5.13.6",
+    "core-js": "^3.15.1",
+    "gsap": "^3.7.1",
+    "nuxt": "^2.15.8",
+    "nuxt-webfontloader": "^1.1.0",
+    "three": "^0.136.0"
+  },
+  "devDependencies": {
+    "@aceforth/nuxt-optimized-images": "^1.4.0",
+    "@babel/eslint-parser": "^7.14.7",
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@nuxt/image": "^0.6.0",
+    "@nuxtjs/eslint-config": "^6.0.1",
+    "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/style-resources": "^1.2.1",
+    "@nuxtjs/stylelint-module": "^4.0.0",
+    "eslint": "^7.29.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-nuxt": "^2.0.0",
+    "eslint-plugin-vue": "^7.12.1",
+    "glslify-loader": "^2.0.0",
+    "hard-source-webpack-plugin": "^0.13.1",
+    "husky": "^6.0.0",
+    "imagesloaded": "^4.1.4",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.3.2",
+    "raw-loader": "^4.0.2",
+    "sass": "^1.39.0",
+    "sass-loader": "^10.2.0",
+    "stylelint": "^13.13.1",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-standard": "^22.0.0",
+    "webp-loader": "^0.6.0",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
