@@ -164,11 +164,6 @@ export default {
     loaders: {
       scss: {
         implementation: require('sass'),
-        additionalData: `
-          @use "~/assets/scss/constants/color.scss" as *;
-          @use "~/assets/scss/constants/font.scss" as *;
-          @use "~/assets/scss/functions/mixins.scss" as *;
-        `,
         sassOptions: {
           fiber: false
         }
