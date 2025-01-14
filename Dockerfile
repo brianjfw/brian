@@ -12,7 +12,8 @@ RUN npm cache clean --force && \
 COPY . .
 
 # Generate static files
-RUN npm run generate
+RUN npm run generate && \
+    ls -la dist/
 
 # Production stage
 FROM node:20-alpine
@@ -26,8 +27,11 @@ RUN npm install -g serve@14.2.1
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nuxtjs -u 1001
 
-# Copy only the generated static files
+# Copy only the generated static files and ensure proper ownership
 COPY --from=builder /app/dist ./dist
+RUN chown -R nuxtjs:nodejs ./dist && \
+    chmod -R 755 ./dist && \
+    ls -la dist/
 
 # Set environment variables
 ENV HOST=0.0.0.0
