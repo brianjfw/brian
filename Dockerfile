@@ -24,6 +24,11 @@ FROM nginx:alpine
 # Install su-exec for proper privilege dropping
 RUN apk add --no-cache su-exec
 
+# Fix permissions so that nginx can create /var/cache/nginx/client_temp
+RUN mkdir -p /var/cache/nginx/client_temp \
+    && chown -R nginx:nginx /var/cache/nginx \
+    && chmod -R 755 /var/cache/nginx
+
 # Copy nginx configurations
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
