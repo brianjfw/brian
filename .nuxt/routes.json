@@ -1,0 +1,30 @@
+[
+  {
+    "name": "about",
+    "path": "/about",
+    "component": "/Users/brianfenwick-wilson/Heather Hudson Art/pages/about.vue",
+    "chunkName": "pages/about",
+    "_name": "_8857a19e"
+  },
+  {
+    "name": "archive",
+    "path": "/archive",
+    "component": "/Users/brianfenwick-wilson/Heather Hudson Art/pages/archive.vue",
+    "chunkName": "pages/archive",
+    "_name": "_566096e6"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/brianfenwick-wilson/Heather Hudson Art/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_48e7ec14"
+  },
+  {
+    "name": "works-slug",
+    "path": "/works/:slug?",
+    "component": "/Users/brianfenwick-wilson/Heather Hudson Art/pages/works/_slug.vue",
+    "chunkName": "pages/works/_slug",
+    "_name": "_1eae7561"
+  }
+]

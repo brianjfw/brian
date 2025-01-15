@@ -4,35 +4,35 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Git
-.git
-.gitignore
-
-# IDE
-.idea
-.vscode
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
 # Build output
 dist
 .nuxt
+.output
 
-# Environment
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Environment files
 .env
 .env.*
+!.env.example
 
-# Docker
-Dockerfile
-.dockerignore
+# Version control
+.git
+.gitignore
 
-# Tests
+# Test coverage
 coverage
-.nyc_output
 
 # Logs
 logs

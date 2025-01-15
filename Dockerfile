@@ -1,38 +1,42 @@
 # Build stage
 FROM node:20-alpine AS builder
 
+# Set working directory
 WORKDIR /app
 
-# Install dependencies with verbose logging
+# Copy package files
 COPY package*.json ./
-RUN npm cache clean --force && \
-    NPM_CONFIG_LOGLEVEL=verbose npm ci && \
-    echo "Verifying node_modules:" && \
-    ls -la node_modules/.bin/nuxt
+
+# Install dependencies
+RUN npm ci
 
 # Copy source files
 COPY . .
 
-# Generate static files
+# Build the application
 ENV NODE_ENV=production
-ENV NUXT_TELEMETRY_DISABLED=1
-RUN npm run generate
+RUN npm run build
 
 # Production stage
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files and install production dependencies
+# Install production dependencies only
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
-# Copy server file and static files from builder
+# Copy server and built files from builder
 COPY server.js ./
 COPY --from=builder /app/dist ./dist
 
-# Expose port (this is just documentation)
+# Set production environment
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
+
+# Expose the port
 EXPOSE 3000
 
-# Start the server
-CMD ["npm", "start"] 
+# Start the Express server
+CMD ["node", "server.js"] 

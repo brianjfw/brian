@@ -1,39 +1,22 @@
 module.exports = {
   extends: [
     'stylelint-config-standard',
-    'stylelint-config-prettier'
+    'stylelint-config-standard-scss'
   ],
-  plugins: [
-    'stylelint-scss'
-  ],
-  ignoreFiles: ["./assets/scss/reset/**/*"],
+  plugins: ['stylelint-scss'],
   rules: {
-    "at-rule-no-unknown": null,
-    "scss/at-rule-no-unknown": [true, {
-      "ignoreAtRules": [
-        "include",
-        "use",
-        "function",
-        "return",
-        "mixin",
-        "each",
-        "for",
-        "if",
-        "else",
-        "forward",
-        "extend"
-      ]
-    }],
-    "no-descending-specificity": null,
-    "selector-pseudo-class-no-unknown": [true, {
-      "ignorePseudoClasses": ["global"]
-    }],
-    "property-no-unknown": [true, {
-      "ignoreProperties": ["composes"]
-    }],
-    "declaration-colon-newline-after": null,
-    "value-keyword-case": null,
-    "scss/dollar-variable-pattern": "^[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*$",
-    "scss/selector-no-redundant-nesting-selector": true
+    'at-rule-no-unknown': null,
+    'scss/at-rule-no-unknown': true,
+    'no-descending-specificity': null,
+    'font-family-no-missing-generic-family-keyword': null,
+    'selector-class-pattern': null,
+    'property-no-vendor-prefix': null,
+    'value-no-vendor-prefix': null,
+    'selector-pseudo-class-no-unknown': [
+      true,
+      {
+        ignorePseudoClasses: ['global', 'deep']
+      }
+    ]
   }
 }
