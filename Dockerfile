@@ -19,37 +19,20 @@ ENV NUXT_TELEMETRY_DISABLED=1
 RUN npm run generate
 
 # Production stage
-FROM nginx:alpine
+FROM node:20-alpine
 
-# Install su-exec for proper privilege dropping
-RUN apk add --no-cache su-exec
+WORKDIR /app
 
-# Fix permissions so that nginx can create /var/cache/nginx/client_temp
-RUN mkdir -p /var/cache/nginx/client_temp \
-    && chown -R nginx:nginx /var/cache/nginx \
-    && chmod -R 755 /var/cache/nginx
+# Copy package files and install production dependencies
+COPY package*.json ./
+RUN npm ci --only=production
 
-# Copy nginx configurations
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY default.conf /etc/nginx/conf.d/default.conf
-
-# Copy entrypoint script
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
-# Copy static files from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Create necessary directories with correct permissions
-RUN mkdir -p /var/log/nginx && \
-    chown -R nginx:nginx /var/log/nginx /usr/share/nginx/html && \
-    chmod -R 755 /var/log/nginx /usr/share/nginx/html && \
-    # Make sure nginx user can read config files
-    chown -R root:nginx /etc/nginx && \
-    chmod -R 755 /etc/nginx
+# Copy server file and static files from builder
+COPY server.js ./
+COPY --from=builder /app/dist ./dist
 
 # Expose port (this is just documentation)
 EXPOSE 3000
 
-# Use our entrypoint script
-ENTRYPOINT ["/docker-entrypoint.sh"] 
+# Start the server
+CMD ["npm", "start"] 
