@@ -14,12 +14,7 @@
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
-    "prepare": "husky install",
     "lint": "npm run lint:js && npm run lint:style"
-  },
-  "lint-staged": {
-    "*.{js,vue}": "eslint",
-    "*.{css,vue}": "stylelint"
   },
   "dependencies": {
     "@ashthornton/asscroll": "^2.0.2",
@@ -48,7 +43,6 @@
     "eslint-plugin-vue": "^7.12.1",
     "glslify-loader": "^2.0.0",
     "hard-source-webpack-plugin": "^0.13.1",
-    "husky": "^6.0.0",
     "imagesloaded": "^4.1.4",
     "lint-staged": "^10.5.4",
     "prettier": "^2.3.2",

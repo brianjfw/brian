@@ -6,7 +6,7 @@ WORKDIR /app
 # Install dependencies with verbose logging
 COPY package*.json ./
 RUN npm cache clean --force && \
-    HUSKY=0 NPM_CONFIG_IGNORE_SCRIPTS=true NPM_CONFIG_LOGLEVEL=verbose npm ci && \
+    NPM_CONFIG_LOGLEVEL=verbose npm ci && \
     echo "Verifying node_modules:" && \
     ls -la node_modules/.bin/nuxt
 
