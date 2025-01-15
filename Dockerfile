@@ -36,9 +36,9 @@ RUN chmod +x /docker-entrypoint.sh
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Create necessary directories with correct permissions
-RUN mkdir -p /var/log/nginx /var/run/nginx /var/cache/nginx && \
-    chown -R nginx:nginx /var/log/nginx /var/run/nginx /var/cache/nginx && \
-    chmod -R 755 /var/log/nginx /var/run/nginx /var/cache/nginx && \
+RUN mkdir -p /var/log/nginx && \
+    chown -R nginx:nginx /var/log/nginx /usr/share/nginx/html && \
+    chmod -R 755 /var/log/nginx /usr/share/nginx/html && \
     # Make sure nginx user can read config files
     chown -R root:nginx /etc/nginx && \
     chmod -R 755 /etc/nginx
