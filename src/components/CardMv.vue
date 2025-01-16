@@ -18,7 +18,7 @@
           <span class="sp-only">
             {{ title }}
             <span class="card-sub-title">
-              <span>{{ subtitle }}</span>
+              {{ subtitle }}
             </span>
           </span>
         </span>
@@ -28,12 +28,7 @@
 </template>
 
 <script>
-import AppPageTransitionBg from '@/components/AppPageTransitionBg.vue'
-
 export default {
-  components: {
-    AppPageTransitionBg
-  },
   props: {
     /**
      * name : 案件名
@@ -67,11 +62,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .card-article {
   position: relative;
   width: 100%;
@@ -120,19 +110,19 @@ export default {
   @include sp() {
     font-size: 17px;
   }
-}
 
-.card-title-wrapper-01-block:first-of-type {
-  font-size: 36px;
-  text-indent: -4px;
-  line-height: 1;
+  &:first-of-type {
+    font-size: 36px;
+    text-indent: -4px;
+    line-height: 1;
 
-  @include sp() {
-    display: inline-block;
-    margin: 0 0 0 -4px;
-    font-size: 28px;
-    line-height: 0.9;
-    text-indent: 0;
+    @include sp() {
+      display: inline-block;
+      margin: 0 0 0 -4px;
+      font-size: 28px;
+      line-height: 0.9;
+      text-indent: 0;
+    }
   }
 }
 
@@ -167,32 +157,28 @@ export default {
     bottom: -5px;
     font-size: 80px;
   }
-}
 
-.card-sub-title {
-  position: absolute;
-  top: 12px;
-  right: -4px;
-  font-size: 12px;
-  font-family: $helvetica;
-  letter-spacing: 0.02em;
+  & .card-sub-title {
+    position: absolute;
+    top: 12px;
+    right: -4px;
+    font-size: 12px;
+    font-family: $helvetica;
+    letter-spacing: 0.02em;
 
-  @include sp() {
-    top: 7px;
-    font-size: 10px;
+    @include sp() {
+      top: 7px;
+      font-size: 10px;
+    }
   }
 }
 
-.card-mv-item-first {
-  margin: 0 0 40px 0;
+/* stylelint-disable */
+.is-windows .card-title-wrapper-01-block {
+  &:first-of-type {
+    position: relative;
+    left: -8px;
+  }
 }
-
-.card-mv-item .card-sub-title {
-  margin: 0 0 10px 0;
-}
-
-.is-windows .card-title-wrapper-01-block:first-of-type {
-  position: relative;
-  left: -8px;
-}
+/* stylelint-enable */
 </style>

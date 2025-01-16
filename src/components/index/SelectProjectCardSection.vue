@@ -1,6 +1,6 @@
 <template>
   <div ref="Project" class="project">
-    <div ref="ProjectBg" class="project-bg" :style="`background-color:${backgroundColor};`">
+    <div ref="ProjectBg" class="project-bg" :style="`background-color:${pickupEndData.siteColor.bodyContentsColor};`">
       <span class="project-circle-bg-enter"><span ref="ProjectCircleEnter" class="project-circle-bg-element"></span></span>
       <div class="project-inner">
         <h2 ref="ProjectLoopTitle" class="project-loop-title">
@@ -20,7 +20,7 @@
         <div class="project-card-area">
           <div class="l-container">
             <div ref="projectCardAreaClip" class="project-card-area-clip">
-              <div v-for="(data, index) in safeProjectData" :key="data.id">
+              <div v-for="(data, index) in projectData" :key="data.id">
                 <div class="project-card-item" :class="`project-card-item-0${index}`">
                   <AppCard
                     :id="data.id"
@@ -37,7 +37,7 @@
                 </div>
               </div>
               <div>
-                <div class="project-card-item" :class="`project-card-item-0${safeProjectData.length}`">
+                <div class="project-card-item" :class="`project-card-item-0${projectData.length}`">
                   <AppCard
                     :component-name="'project'"
                     :type="'archive'"
@@ -59,46 +59,20 @@
 </template>
 
 <script>
-import AppReadTitle from '@/components/AppReadTitle.vue'
-import AppBounceLine from '@/components/AppBounceLine.vue'
-import AppLoopText from '@/components/AppLoopText.vue'
-import AppCard from '@/components/AppCard.vue'
-
 export default {
-  components: {
-    AppReadTitle,
-    AppBounceLine,
-    AppLoopText,
-    AppCard
-  },
   props: {
     projectData: {
       type: Array,
       required: true,
+      default: () => [],
       validator: function(value) {
-        return value.every(item => {
-          // Check required base properties
-          if (!item.id || !item.title || !item.desc) {
-            return false;
-          }
-          
-          // If projectNum is provided, validate its properties
-          if (item.projectNum) {
-            return typeof item.projectNum === 'object' &&
-                   typeof item.projectNum.rotate === 'number' &&
-                   typeof item.projectNum.xspeed === 'number' &&
-                   typeof item.projectNum.yspeed === 'number';
-          }
-          
-          // If projectNum is not provided, that's okay - we handle it in safeProjectData
-          return true;
-        })
+        return Array.isArray(value)
       }
     },
     pickupEndData: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
 
   data: () => {
@@ -111,26 +85,13 @@ export default {
   },
 
   computed: {
-    backgroundColor() {
-      return this.pickupEndData?.siteColor?.bodyContentsColor || '#ffffff'
-    },
-    ProjectAnimationState: function () {
+    ProjectAnimationState () {
       return this.$store.getters['indexPickup/projectAnimationState']
     },
-    safeProjectData() {
-      return this.projectData.map(data => ({
-        ...data,
-        projectNum: {
-          rotate: data.projectNum?.rotate ?? 8,
-          xspeed: data.projectNum?.xspeed ?? 0.1,
-          yspeed: data.projectNum?.yspeed ?? 0.1
-        }
-      }))
-    }
   },
 
   watch: {
-    ProjectAnimationState: function () {
+    ProjectAnimationState () {
       switch (this.ProjectAnimationState) {
         case 'start':
           // 円の縮小
@@ -221,7 +182,7 @@ export default {
     this.iObserverLoopText.observe(this.observe)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // リセット
     this.iObserverTextSegment.unobserve(this.observe)
     this.iObserverTextSegment = null
@@ -232,11 +193,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 :root {
   --viewportWidth: 100vw;
   --viewportHeight: 100vh;

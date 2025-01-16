@@ -11,63 +11,63 @@
           <span class="pc-only">
             <span class="hero-title-wrapper hero-title-wrapper-01">
               <AppBounceLine :state="isTextUnderlineState" :origin="'left'" :sp-animation="false" :width="840" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :rotate="CONSTANTS.BASEROTATE.right" :text="'FOLIO OF HISAMI KURITA'" :sp-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :rotate="$BASEROTATE.right" :text="'FOLIO OF HISAMI KURITA'" :sp-animation="false" />
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-02">
               <AppBounceLine :state="isTextUnderlineState" :start="0.176" :origin="'right'" :width="1080" :sp-animation="false" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :start="0.176" :rotate="CONSTANTS.BASEROTATE.left" :text="'19/AUG.1996'" :sp-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.176" :rotate="$BASEROTATE.left" :text="'19/AUG.1996'" :sp-animation="false" />
               <span class="hero-title-wrapper-02-base-area">
-                <AppTextAnimation :state="isTextSegmentState" :start="0.264" :rotate="CONSTANTS.BASEROTATE.left" :text="'( BASED IN TOKYO AND KAWASAKI )'" :sp-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :start="0.264" :rotate="$BASEROTATE.left" :text="'( BASED IN TOKYO AND KAWASAKI )'" :sp-animation="false" />
                 <span class="hero-title-wrapper-02-base-area-helvetica hero-title-wrapper-02-base-area-helvetica-sometimes">
-                  <AppTextAnimation :state="isTextSegmentState" :start="0.352" :rotate="CONSTANTS.BASEROTATE.left" :text="'SOMETIMES'" :sp-animation="false" />
+                  <AppTextAnimation :state="isTextSegmentState" :start="0.352" :rotate="$BASEROTATE.left" :text="'SOMETIMES'" :sp-animation="false" />
                 </span>
                 <span class="hero-title-wrapper-02-base-area-helvetica hero-title-wrapper-02-base-area-helvetica-allways">
-                  <AppTextAnimation :state="isTextSegmentState" :start="0.432" :rotate="CONSTANTS.BASEROTATE.left" :text="'ALLWAYS'" :sp-animation="false" />
+                  <AppTextAnimation :state="isTextSegmentState" :start="0.432" :rotate="$BASEROTATE.left" :text="'ALLWAYS'" :sp-animation="false" />
                 </span>
               </span>
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-03">
               <AppBounceLine :state="isTextUnderlineState" :start="0.4" :origin="'left'" :width="700" :sp-animation="false" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :start="0.4" :rotate="CONSTANTS.BASEROTATE.right" :text="'FRONTEND DEVELOPER'" :sp-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.4" :rotate="$BASEROTATE.right" :text="'FRONTEND DEVELOPER'" :sp-animation="false" />
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-04">
               <AppBounceLine :state="isTextUnderlineState" :start="0.42" :width="350" :origin="'right'" :sp-animation="false" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :start="0.42" :rotate="CONSTANTS.BASEROTATE.left" :text="'AT LIG INC'" :sp-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.42" :rotate="$BASEROTATE.left" :text="'AT LIG INC'" :sp-animation="false" />
             </span>
           </span>
           <span class="sp-only">
             <span class="hero-title-wrapper hero-title-wrapper-01-sp">
               <AppBounceLine :state="isTextUnderlineState" :origin="'left'" :pc-animation="false" :width="335" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :rotate="CONSTANTS.BASEROTATE.right" :text="'FOLIO OF'" :pc-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :rotate="$BASEROTATE.right" :text="'FOLIO OF'" :pc-animation="false" />
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-02-sp">
               <AppBounceLine :state="isTextUnderlineState" :start="0.176" :origin="'right'" :pc-animation="false" :width="586" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :start="0.176" :rotate="CONSTANTS.BASEROTATE.left" :text="'HISAMI KURITA'" :pc-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.176" :rotate="$BASEROTATE.left" :text="'HISAMI KURITA'" :pc-animation="false" />
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-03-sp">
               <AppBounceLine :state="isTextUnderlineState" :start="0.264" :origin="'left'" :pc-animation="false" :width="504" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :start="0.264" :rotate="CONSTANTS.BASEROTATE.right" :text="'19/AUG.1996'" :pc-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.264" :rotate="$BASEROTATE.right" :text="'19/AUG.1996'" :pc-animation="false" />
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-04-sp">
-              <AppTextAnimation :state="isTextSegmentState" :start="0.352" :rotate="CONSTANTS.BASEROTATE.left" :text="'( BASED IN TOKYO AND KAWASAKI )'" :pc-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.352" :rotate="$BASEROTATE.left" :text="'( BASED IN TOKYO AND KAWASAKI )'" :pc-animation="false" />
               <span class="hero-title-wrapper-04-01-sp">
-                <AppTextAnimation :state="isTextSegmentState" :start="0.432" :rotate="CONSTANTS.BASEROTATE.left" :text="'SOMETIMES'" :pc-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :start="0.432" :rotate="$BASEROTATE.left" :text="'SOMETIMES'" :pc-animation="false" />
               </span>
               <span class="hero-title-wrapper-04-02-sp">
-                <AppTextAnimation :state="isTextSegmentState" :start="0.512" :rotate="CONSTANTS.BASEROTATE.left" :text="'ALLWAYS'" :pc-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :start="0.512" :rotate="$BASEROTATE.left" :text="'ALLWAYS'" :pc-animation="false" />
               </span>
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-05-sp">
               <AppBounceLine :state="isTextUnderlineState" :start="0.592" :origin="'right'" :pc-animation="false" :width="367" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :start="0.592" :rotate="CONSTANTS.BASEROTATE.right" :text="'FRONTEND'" :pc-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.592" :rotate="$BASEROTATE.right" :text="'FRONTEND'" :pc-animation="false" />
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-06-sp">
               <AppBounceLine :state="isTextUnderlineState" :start="0.672" :origin="'left'" :pc-animation="false" :width="420" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :start="0.672" :rotate="CONSTANTS.BASEROTATE.left" :text="'DEVELOPER'" :pc-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.672" :rotate="$BASEROTATE.left" :text="'DEVELOPER'" :pc-animation="false" />
             </span>
             <span class="hero-title-wrapper hero-title-wrapper-07-sp">
               <AppBounceLine :state="isTextUnderlineState" :start="0.752" :origin="'right'" :pc-animation="false" :width="431" :modifier="'index-hero'" />
-              <AppTextAnimation :state="isTextSegmentState" :start="0.752" :rotate="CONSTANTS.BASEROTATE.right" :text="'AT LIG INC'" :pc-animation="false" />
+              <AppTextAnimation :state="isTextSegmentState" :start="0.752" :rotate="$BASEROTATE.right" :text="'AT LIG INC'" :pc-animation="false" />
             </span>
           </span>
         </h1>
@@ -91,11 +91,10 @@
 </template>
 
 <script>
-import { CONSTANTS } from '@/plugins/constants';
-import AppReadTitle from '@/components/AppReadTitle.vue';
-import AppBounceLine from '@/components/AppBounceLine.vue';
-import AppTextAnimation from '@/components/AppTextAnimation.vue';
-import AppCard from '@/components/AppCard.vue';
+import AppReadTitle from '../AppReadTitle.vue'
+import AppBounceLine from '../AppBounceLine.vue'
+import AppTextAnimation from '../AppTextAnimation.vue'
+import AppCard from '../AppCard.vue'
 
 export default {
   components: {
@@ -104,13 +103,11 @@ export default {
     AppTextAnimation,
     AppCard
   },
-
   data: () => {
     return {
       isTextSegmentState: 'default',
       isTextUnderlineState: 'default',
       isMvCardDrag: false,
-      CONSTANTS
     }
   },
 
@@ -127,12 +124,12 @@ export default {
   },
 
   watch: {
-    openningEnd: function () {
+    openningEnd () {
       setTimeout(() => {
         this.mvItemViewIn()
       }, 1000)
     },
-    imageLoaded: function () {
+    imageLoaded () {
       if (this.imageLoaded) {
         if (!this.openningEnd) return
         this.mvItemViewIn()
@@ -144,7 +141,7 @@ export default {
     this.deviceRatio = this.$checkDevice.isIpad ? 8.0 : 4.0
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.iObserver.unobserve(this.observe)
     this.iObserver = null
     this.$gsap.ticker.remove(this.bgCircleScaleChangeScroll)
@@ -210,11 +207,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .hero-inner {
   padding: 92px 0;
 
@@ -450,28 +442,6 @@ export default {
     right: 6%;
     left: auto;
     transform: translateX(400px) rotate(180deg);
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .hero-card-item:hover {
-    transform: scale(0.9, 0.98);
-  }
-  
-  @include sp {
-    .hero-card-item:hover {
-      transform: scale(1, 1);
-    }
-  }
-}
-
-.hero-card-item.is-open {
-  transform: scale(1.1, 1.1);
-}
-
-@include sp {
-  .hero-card-item.is-open {
-    transform: scale(1, 1);
   }
 }
 </style>

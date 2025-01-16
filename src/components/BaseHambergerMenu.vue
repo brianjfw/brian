@@ -3,8 +3,8 @@
     ref="HambergerMenu"
     class="hambergerMenu"
     :class="{
-      'hambergerMenu--disable': hambergerMenuDisable,
-      'hambergerMenu--open': hambergerMenuState,
+      'is-disable': hambergerMenuDisable,
+      'is-open': hambergerMenuState,
     }"
   >
     <div ref="HambergerMenuOverlay01" class="hambergerMenu-overlay-01"></div>
@@ -33,7 +33,7 @@
                 <AppPageTransitionBg v-if="index === projectAndArchiveData.length - 1.0" :url="`/archive`" :color="'#000000'" class="hambergerMenu-item-link">
                   <span class="hambergerMenu-item-img">
                     <picture>
-                      <img :src="`/src/static/images/hambergermenu-archive.webp`" :width="`180`" :height="`180`" :alt="`archive`" />
+                      <img :src="`/images/hambergermenu-archive.webp`" :width="`180`" :height="`180`" :alt="`archive`" />
                     </picture>
                   </span>
                   <span>
@@ -59,94 +59,45 @@
             </li>
           </ul>
         </div>
-        <button ref="HambergerMenuBtn" aria-label="hambergermenu btn" class="hambergerMenu-btn js-click-target" @click="hambergerMenuOnClick">
-          <span ref="HambergerMenuBtnHover" class="hambergerMenu-btn-hover">
-            <span ref="hambergerMenuOpenarea" class="hambergerMenu-btn-openarea">
-              <span ref="hambergerMenuOpenareaLine01" class="hambergerMenu-btn-line hambergerMenu-btn-line--01"></span>
-              <span ref="hambergerMenuOpenareaLine02" class="hambergerMenu-btn-line hambergerMenu-btn-line--02"></span>
-            </span>
-          </span>
-        </button>
       </div>
     </div>
+    <button ref="HambergerMenuBtn" aria-label="hambergermenu btn" class="hambergerMenu-btn js-click-target" @click="hambergerMenuOnClick">
+      <span ref="HambergerMenuBtnHover" class="hambergerMenu-hover">
+        <span ref="hambergerMenuOpenarea" class="hambergerMenu-openarea">
+          <span ref="hambergerMenuOpenareaLine01" class="hambergerMenu-openarea-line hambergerMenu-openarea-line-01"></span>
+          <span ref="hambergerMenuOpenareaLine02" class="hambergerMenu-openarea-line hambergerMenu-openarea-line-02"></span>
+        </span>
+      </span>
+    </button>
   </div>
 </template>
 
 <script>
-// import { preEvent, preEventTouch } from '../assets/js/preEvent'
+import AppTextAnimation from './AppTextAnimation.vue'
+import AppPageTransitionBg from './AppPageTransitionBg.vue'
+import AppReadTitle from './AppReadTitle.vue'
+import AppPageTransitionImage from './AppPageTransitionImage.vue'
 
 export default {
-  data() {
+  components: {
+    AppTextAnimation,
+    AppPageTransitionBg,
+    AppReadTitle,
+    AppPageTransitionImage
+  },
+  data: () => {
     return {
-      isInitialized: false,
-      isMounted: false,
-      refs: {
-        HambergerMenuBtn: null,
-        HambergerMenuBtnHover: null,
-        hambergerMenuOpenareaLine01: null,
-        hambergerMenuOpenareaLine02: null,
-        hambergerMenuOpenarea: null,
-        HambergerMenuOverlay01: null,
-        HambergerMenuOverlay02: null,
-        HambergerMenuContents: null,
-        HambergerMenuItemWrapper: null
-      },
-      animations: {
-        btn: null,
-        btnHover: null,
-        line01: null,
-        line02: null,
-        openarea: null,
-        overlay01: null,
-        overlay02: null,
-        itemLink: null
-      },
-      isTextSegmentState: 'init',
-      itemLinkCenter: null,
-      itemLinkBottom: null,
-      itemLinkCenterArchive: null
-    }
-  },
-
-  beforeMount() {
-    this.isMounted = false;
-    this.isInitialized = false;
-  },
-
-  mounted() {
-    this.isMounted = true;
-    
-    try {
-      // Initialize refs
-      this.refs = {
-        HambergerMenuBtn: this.$refs.HambergerMenuBtn,
-        HambergerMenuBtnHover: this.$refs.HambergerMenuBtnHover,
-        hambergerMenuOpenareaLine01: this.$refs.hambergerMenuOpenareaLine01,
-        hambergerMenuOpenareaLine02: this.$refs.hambergerMenuOpenareaLine02,
-        hambergerMenuOpenarea: this.$refs.hambergerMenuOpenarea,
-        HambergerMenuOverlay01: this.$refs.HambergerMenuOverlay01,
-        HambergerMenuOverlay02: this.$refs.HambergerMenuOverlay02,
-        HambergerMenuContents: this.$refs.HambergerMenuContents,
-        HambergerMenuItemWrapper: this.$refs.HambergerMenuItemWrapper
-      };
-
-      if (!Object.values(this.refs).every(ref => ref)) {
-        console.warn('BaseHambergerMenu: Some required elements not found during mount');
-        return;
+      projectData: '',
+      projectAndArchiveData: [],
+      isTextSegmentState: 'default',
+      isOpen: false,
+      isClose: false,
+      $BASEROTATE: {
+        right: 3,
+        left: -3
       }
-
-      this.isInitialized = true;
-    } catch (error) {
-      console.warn('BaseHambergerMenu: Error during mount:', error);
     }
   },
-
-  beforeUnmount() {
-    this.killAllAnimations();
-    this.isMounted = false;
-    this.isInitialized = false;
-  },
-
   computed: {
     openningEnd() {
       return this.$store.getters['openning/state']
@@ -158,44 +109,377 @@ export default {
       return this.$store.getters['hambergerMenu/disable']
     },
     getProjectData() {
-      return this.$store.getters.projectData
+      return this.$store.getters.projectData || []
     },
     projectAndArchiveDatas() {
-      this.directSubstitution()
-      return this.projectAndArchiveData
+      const projectData = Array.isArray(this.getProjectData) ? this.getProjectData : []
+      return [
+        ...projectData,
+        {
+          id: 'archive',
+          title: { short: 'ARCHIVE' },
+          desc: "I'M PUTTING TOGETHER A DYNAMIC ARCHIVE PAGE OF THE WORK I'M SUBMITTING TO CODEPEN.",
+          hambergerMenuImg: {
+            url: '/images/hambergermenu-archive.webp',
+            width: 180,
+            height: 180
+          }
+        }
+      ]
     },
-    indexPickupState: function () {
+    indexPickupState () {
       return this.$store.getters['indexPickup/state']
     },
   },
   watch: {
-    openningEnd: function () {
-      this.$gsap.to(this.$refs.HambergerMenu, {
-        duration: 1.2,
-        ease: this.$EASING.transform,
-        x: 0,
-      })
+    openningEnd () {
+      if (this.$refs.HambergerMenu) {
+        this.$gsap.to(this.$refs.HambergerMenu, {
+          duration: 1.2,
+          ease: this.$EASING.transform,
+          x: 0,
+        })
+      }
     },
-    hambergerMenuState() {
-      if (!this.isMounted || !this.isInitialized) {
-        console.warn('BaseHambergerMenu: Component not ready for state change');
-        return;
+    hambergerMenuState () {
+      /**
+       * ハンバガーメニューが開いた時
+       */
+      if (this.hambergerMenuState) {
+        if (this.$SITECONFIG.isPc) {
+          /**
+           * contents
+           */
+          this.$gsap.set(this.$refs.HambergerMenuContents, {
+            autoAlpha: 1.0,
+          })
+          this.$refs.HambergerMenuContents.style.pointerEvents = 'auto'
+          /**
+           * btn
+           */
+          this.$gsap.to(this.$refs.HambergerMenuBtn, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            x: -520,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuBtn, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            width: 86,
+            height: 86,
+            borderRadius: 100,
+            scale: 0.9,
+          })
+          this.$gsap.set(this.$refs.HambergerMenuBtnHover, {
+            boxShadow: '0px 10px 20px 5px rgb(193 193 192 / 10%)',
+          })
+          /**
+           * ico
+           */
+          this.$gsap.to(this.$refs.hambergerMenuOpenareaLine01, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            top: 3,
+            height: 9,
+            borderRadius: 4,
+            rotate: 45,
+          })
+          this.$gsap.to(this.$refs.hambergerMenuOpenareaLine02, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            bottom: 2,
+            height: 9,
+            borderRadius: 4,
+            rotate: -45,
+          })
+          this.$gsap.to(this.$refs.hambergerMenuOpenarea, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            scale: 0.6,
+          })
+          /**
+           * bg
+           */
+          this.$gsap.to(this.$refs.HambergerMenuOverlay01, {
+            delay: 0.16,
+            duration: 0.3,
+            ease: this.$EASING.transform,
+            scaleX: 5.1,
+            scaleY: 1.1,
+            x: 10,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuOverlay02, {
+            delay: 0.16,
+            duration: 0.3,
+            ease: this.$EASING.transform,
+            scaleX: 1.0,
+          })
+          /**
+           * text
+           */
+          setTimeout(() => {
+            this.isTextSegmentState = 'center'
+            this.itemLinkCenter = this.$gsap.to(this.$refs.HambergerMenuItemWrapper, {
+              duration: this.$SITECONFIG.baseDuration,
+              delay: 0.36,
+              ease: this.$EASING.transform,
+              stagger: {
+                each: 0.12,
+              },
+              y: 0,
+            })
+          }, 300)
+        } else if (this.$SITECONFIG.isMobile) {
+          /**
+           * contents
+           */
+          this.$gsap.set(this.$refs.HambergerMenuContents, {
+            autoAlpha: 1.0,
+          })
+          this.$refs.HambergerMenuContents.style.pointerEvents = 'auto'
+          /**
+           * btn
+           */
+          this.$gsap.to(this.$refs.HambergerMenuBtn, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            x: -window.innerWidth / 2.0 + 30 + 20,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuBtn, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            borderRadius: 100,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuBtnHover, {
+            duration: 0.2,
+            ease: this.$EASING.colorAndOpacity,
+            boxShadow: 'none',
+          })
+          window.addEventListener('resize', this.hambergerMenuBtnOnResize)
+          /**
+           * ico
+           */
+          this.$gsap.to(this.$refs.hambergerMenuOpenareaLine01, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            top: 5,
+            rotate: 45,
+          })
+          this.$gsap.to(this.$refs.hambergerMenuOpenareaLine02, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            bottom: 4,
+            rotate: -45,
+          })
+          /**
+           * bg
+           */
+          this.$gsap.to(this.$refs.HambergerMenuOverlay01, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            scaleY: 1,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuOverlay02, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            scaleY: 1,
+          })
+          /**
+           * text
+           */
+          setTimeout(() => {
+            this.isTextSegmentState = 'center'
+            this.itemLinkCenter = this.$gsap.to(this.$refs.HambergerMenuItemWrapper, {
+              duration: this.$SITECONFIG.baseDuration,
+              delay: 0.36,
+              ease: this.$EASING.transform,
+              stagger: {
+                each: 0.12,
+              },
+              y: 0,
+            })
+          }, 300)
+        }
+      } else if (!this.hambergerMenuState) {
+        /**
+         * ハンバガーメニューが閉じた時
+         */
+        if (this.$SITECONFIG.isPc) {
+          /**
+           * btn
+           */
+          this.$gsap.to(this.$refs.HambergerMenuBtn, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            x: 0,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuBtn, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            width: '100%',
+            height: '100%',
+            borderRadius: 10,
+            scale: 1.0,
+          })
+          this.$gsap.set(this.$refs.HambergerMenuBtnHover, {
+            boxShadow: 'none',
+          })
+          /**
+           * ico
+           */
+          this.$gsap.to(this.$refs.hambergerMenuOpenarea, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            scale: 1,
+          })
+          this.$gsap.to(this.$refs.hambergerMenuOpenareaLine01, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            top: 0,
+            height: 4,
+            borderRadius: 2,
+            rotate: 0,
+          })
+          this.$gsap.to(this.$refs.hambergerMenuOpenareaLine02, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            bottom: 0,
+            height: 4,
+            borderRadius: 2,
+            rotate: 0,
+          })
+          /**
+           * bg
+           */
+          this.$gsap.to(this.$refs.HambergerMenuOverlay02, {
+            delay: 0,
+            duration: 0.3,
+            ease: this.$EASING.transform,
+            scaleX: 0,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuOverlay01, {
+            delay: 0,
+            duration: 0.3,
+            ease: this.$EASING.transform,
+            scaleX: 1.0,
+            scaleY: 1.0,
+            x: 0,
+          })
+          /**
+           * init
+           */
+          setTimeout(() => {
+            this.$refs.HambergerMenuContents.scrollTo(0, 0)
+            this.isTextSegmentState = 'init'
+            this.$gsap.set(this.$refs.HambergerMenuContents, {
+              autoAlpha: 0.0,
+            })
+            if (this.itemLinkCenter) this.itemLinkCenter.kill()
+            if (this.itemLinkBottom) this.itemLinkBottom.kill()
+            if (this.itemLinkCenterArchive) this.itemLinkCenterArchive.kill()
+            this.$gsap.set(this.$refs.HambergerMenuItemWrapper, {
+              y: 180,
+            })
+            this.$refs.HambergerMenuContents.style.pointerEvents = 'none'
+          }, 300)
+        } else if (this.$SITECONFIG.isMobile) {
+          /**
+           * btn
+           */
+          this.$gsap.to(this.$refs.HambergerMenuBtn, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            x: 0,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuBtn, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            borderRadius: 10,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuBtnHover, {
+            duration: 0.2,
+            ease: this.$EASING.colorAndOpacity,
+            boxShadow: 'none',
+          })
+          window.removeEventListener('resize', this.hambergerMenuBtnOnResize)
+          /**
+           * ico
+           */
+          this.$gsap.to(this.$refs.hambergerMenuOpenareaLine01, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            top: 0,
+            rotate: 0,
+          })
+          this.$gsap.to(this.$refs.hambergerMenuOpenareaLine02, {
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            bottom: 0,
+            rotate: 0,
+          })
+          /**
+           * bg
+           */
+          this.$gsap.to(this.$refs.HambergerMenuOverlay01, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            scaleY: 0,
+          })
+          this.$gsap.to(this.$refs.HambergerMenuOverlay02, {
+            delay: 0.2,
+            duration: 0.2,
+            ease: this.$EASING.transform,
+            scaleY: 0,
+          })
+          /**
+           * init
+           */
+          setTimeout(() => {
+            this.$refs.HambergerMenuContents.scrollTo(0, 0)
+            this.isTextSegmentState = 'init'
+            this.$gsap.set(this.$refs.HambergerMenuContents, {
+              autoAlpha: 0.0,
+            })
+            if (this.itemLinkCenter) this.itemLinkCenter.kill()
+            if (this.itemLinkBottom) this.itemLinkBottom.kill()
+            this.$gsap.set(this.$refs.HambergerMenuItemWrapper, {
+              y: 180,
+            })
+            this.$refs.HambergerMenuContents.style.pointerEvents = 'none'
+          }, 600)
+        }
       }
-
-      try {
-        this.handleMenuState();
-      } catch (error) {
-        console.warn('BaseHambergerMenu: Error during state change:', error);
-      }
-    }
+    },
   },
   methods: {
     /**
      * アーカイブページ用に空のオブジェクトを追加してインデックスを一つ増やす
      */
     directSubstitution() {
-      this.projectAndArchiveData = Array.from(this.getProjectData)
-      this.projectAndArchiveData.push({})
+      this.projectAndArchiveData = []
+      
+      if (this.getProjectData && Array.isArray(this.getProjectData)) {
+        this.projectAndArchiveData.push(...this.getProjectData)
+      }
+      
+      this.projectAndArchiveData.push({
+        id: 'archive',
+        title: { short: 'ARCHIVE' },
+        desc: "I'M PUTTING TOGETHER A DYNAMIC ARCHIVE PAGE OF THE WORK I'M SUBMITTING TO CODEPEN.",
+        hambergerMenuImg: {
+          url: '/images/hambergermenu-archive.webp',
+          width: 180,
+          height: 180
+        }
+      })
     },
     hambergerMenuOnClick() {
       if (this.isOpen || this.isClose) return
@@ -227,149 +511,16 @@ export default {
       this.$store.commit('hambergerMenu/close')
     },
     hambergerMenuBtnOnResize() {
-      if (!this.isMounted || !this.isInitialized) return;
-
-      try {
-        this.safeGsapAnimation(this.$refs.HambergerMenuBtn, {
-          duration: 0.2,
-          x: -window.innerWidth / 2.0 + 30 + 20,
-        });
-      } catch (error) {
-        console.warn('BaseHambergerMenu: Error during resize:', error);
-      }
+      this.$gsap.set(this.$refs.HambergerMenuBtn, {
+        x: -window.innerWidth / 2.0 + 30 + 20,
+      })
     },
-    getEasing() {
-      return this.$EASING?.transform || 'power2.out';
-    },
-    
-    getDuration(type = 'base') {
-      if (type === 'short') {
-        return this.$SITECONFIG?.shortDuration || 0.3;
-      }
-      return this.$SITECONFIG?.baseDuration || 0.6;
-    },
-    
-    safeGsapAnimation(element, props) {
-      if (!this.$gsap) {
-        console.warn('BaseHambergerMenu: GSAP not initialized');
-        return null;
-      }
-
-      if (!element) {
-        console.warn('BaseHambergerMenu: Animation target not found');
-        return null;
-      }
-
-      try {
-        return this.$gsap.to(element, {
-          ...props,
-          ease: props.ease || this.getEasing(),
-          duration: props.duration || this.getDuration(),
-        });
-      } catch (error) {
-        console.warn('BaseHambergerMenu: Animation error:', error);
-        return null;
-      }
-    },
-    safeGsapSet(element, props) {
-      if (!this.isMounted || !this.isInitialized) {
-        console.warn('BaseHambergerMenu: Component not ready for animation');
-        return;
-      }
-
-      if (!this.$gsap) {
-        console.warn('BaseHambergerMenu: GSAP not initialized');
-        return;
-      }
-
-      if (!element) {
-        console.warn('BaseHambergerMenu: Animation target not found');
-        return;
-      }
-
-      try {
-        this.$gsap.set(element, props);
-      } catch (error) {
-        console.warn('BaseHambergerMenu: Set error:', error);
-      }
-    },
-    onHambergerMenuBtnClick() {
-      this.$store.commit('hamberger-menu/toggle')
-    },
-    handleMenuState() {
-      if (!this.isMounted || !this.isInitialized) return;
-
-      try {
-        if (this.hambergerMenuState) {
-          this.openMenu();
-        } else {
-          this.closeMenu();
-        }
-      } catch (error) {
-        console.warn('BaseHambergerMenu: Error handling menu state:', error);
-      }
-    },
-    openMenu() {
-      if (!this.isMounted || !this.isInitialized) return;
-
-      if (this.$SITECONFIG?.isPc) {
-        this.openMenuPc();
-      } else if (this.$SITECONFIG?.isMobile) {
-        this.openMenuMobile();
-      }
-    },
-    closeMenu() {
-      if (!this.isMounted || !this.isInitialized) return;
-
-      if (this.$SITECONFIG?.isPc) {
-        this.closeMenuPc();
-      } else if (this.$SITECONFIG?.isMobile) {
-        this.closeMenuMobile();
-      }
-    },
-    openMenuPc() {
-      // ... existing openMenuPc code with safeGsapAnimation ...
-    },
-    openMenuMobile() {
-      // ... existing openMenuMobile code with safeGsapAnimation ...
-    },
-    closeMenuPc() {
-      // ... existing closeMenuPc code with safeGsapAnimation ...
-    },
-    closeMenuMobile() {
-      // ... existing closeMenuMobile code with safeGsapAnimation ...
-    },
-    killAllAnimations() {
-      try {
-        Object.values(this.animations).forEach(animation => {
-          if (animation?.kill) {
-            animation.kill();
-          }
-        });
-        
-        this.animations = {
-          btn: null,
-          btnHover: null,
-          line01: null,
-          line02: null,
-          openarea: null,
-          overlay01: null,
-          overlay02: null,
-          itemLink: null
-        };
-      } catch (error) {
-        console.warn('BaseHambergerMenu: Error killing animations:', error);
-      }
-    }
   },
 }
 </script>
 
-<style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
+<style lang="scss">
+@use '@/assets/scss/constants/animation' as *;
 
 :root {
   --viewportWidth: 100vw;
@@ -394,11 +545,11 @@ export default {
     width: 60px;
     height: 60px;
   }
-}
 
-.hambergerMenu--disable {
-  pointer-events: none;
-  user-select: none;
+  &.is-disable {
+    pointer-events: none;
+    user-select: none;
+  }
 }
 
 .hambergerMenu-overlay-01 {
@@ -411,25 +562,37 @@ export default {
   border-radius: 10px;
   pointer-events: none;
   transform-origin: right;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 2px 35px 16px 5px rgb(24 23 13 / 20%);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity $base-duration $colorAndOpacity-easing;
+  }
+
+  @include sp() {
+    top: 22px;
+    left: calc(-100vw + 60px + 20px);
+    width: 100vw;
+    height: calc(var(--viewportHeight, 100vh) - 32px);
+    border-radius: 10px;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
 }
 
-.hambergerMenu-overlay-01::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  box-shadow: inset 2px 35px 16px 5px rgb(24 23 13 / 20%);
-  border-radius: 10px;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity $base-duration $colorAndOpacity-easing;
-}
-
-.hambergerMenu--open .hambergerMenu-overlay-01::before {
-  opacity: 1;
+.hambergerMenu.is-open .hambergerMenu-overlay-01 {
+  &::before {
+    opacity: 1;
+  }
 }
 
 .hambergerMenu-overlay-02 {
@@ -444,19 +607,28 @@ export default {
   transform-origin: right;
   transform: scaleX(0);
   overflow: hidden;
-}
 
-.hambergerMenu-overlay-02::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  box-shadow: inset 35px 60px 50px 20px rgb(24 23 13 / 50%);
-  border-radius: 10px;
-  pointer-events: none;
-  z-index: 1;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 35px 60px 50px 20px rgb(24 23 13 / 50%);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @include sp() {
+    top: 42px;
+    right: -10px;
+    width: calc(100vw - 20px);
+    height: calc(var(--viewportHeight) - 52px - 20px);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
 }
 
 .hambergerMenu-contents {
@@ -469,6 +641,21 @@ export default {
   overflow-y: scroll;
   opacity: 0;
   pointer-events: none;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #89877c;
+    border-radius: 10px;
+  }
+
+  @include sp() {
+    right: 0;
+    width: 100%;
+    padding: 38px 8px;
+  }
 }
 
 .hambergerMenu-title {
@@ -479,12 +666,21 @@ export default {
   font-family: $sixcaps;
   letter-spacing: -0.002em;
   z-index: 2;
+
+  @include sp() {
+    margin: 0 0 46px 0;
+    font-size: vw_sp(216);
+  }
 }
 
 .hambergerMenu-section-title {
   position: relative;
   margin: 0 0 36px 0;
   z-index: 2;
+
+  @include sp() {
+    margin: 0 0 34px 0;
+  }
 }
 
 .hambergerMenu-title-wrapper-01 {
@@ -500,6 +696,14 @@ export default {
 .hambergerMenu-item {
   position: relative;
   overflow: hidden;
+
+  &:not(:last-of-type) {
+    margin: 0 0 20px 0;
+
+    @include sp() {
+      margin: 0 0 17px 0;
+    }
+  }
 }
 
 .hambergerMenu-item-wrapper {
@@ -518,6 +722,11 @@ export default {
   font-size: 56px;
   font-family: $sixcaps;
   text-align: center;
+
+  @include sp() {
+    margin: 0 0 12px 0;
+    font-size: vw_sp(96);
+  }
 }
 
 .hambergerMenu-item-desc {
@@ -537,6 +746,21 @@ export default {
   margin: 0 20px 0 0;
   overflow: hidden;
   border-radius: 14px;
+
+  @include sp() {
+    width: vw_sp(215);
+    height: vw_sp(215);
+    border-radius: 4px;
+  }
+
+  & img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .hambergerMenu-btn {
@@ -557,7 +781,7 @@ export default {
   user-select: none;
 }
 
-.hambergerMenu-btn-hover {
+.hambergerMenu-hover {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -571,37 +795,38 @@ export default {
   background-color: $white;
   transition: transform $base-duration * 0.25 $transform-easing;
   border-radius: inherit;
-}
 
-@media (hover: hover) and (pointer: fine) {
-  .hambergerMenu-btn:hover {
+  @include hover() {
     transform: scale(0.9, 0.98);
-  }
-  
-  @include sp() {
-    .hambergerMenu-btn:hover {
-      transform: scale(1, 1);
-    }
-  }
 
-  .hambergerMenu--open .hambergerMenu-btn:hover {
-    transform: scale(1.1, 1.1);
-  }
-  
-  @include sp() {
-    .hambergerMenu--open .hambergerMenu-btn:hover {
+    @include sp() {
       transform: scale(1, 1);
     }
   }
 }
 
-.hambergerMenu-btn-openarea {
+.hambergerMenu.is-open .hambergerMenu-hover {
+  @include hover() {
+    transform: scale(1.1, 1.1);
+
+    @include sp() {
+      transform: scale(1, 1);
+    }
+  }
+}
+
+.hambergerMenu-openarea {
   position: relative;
   width: 37px;
   height: 13px;
+
+  @include sp() {
+    width: 26px;
+    height: 13px;
+  }
 }
 
-.hambergerMenu-btn-line {
+.hambergerMenu-openarea-line {
   position: absolute;
   left: 0;
   width: 100%;
@@ -611,208 +836,11 @@ export default {
   cursor: pointer;
 }
 
-.hambergerMenu-btn-line--01 {
+.hambergerMenu-openarea-line-01 {
   top: 0;
 }
 
-.hambergerMenu-btn-line--02 {
+.hambergerMenu-openarea-line-02 {
   bottom: 0;
-}
-
-.hambergerMenu-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  background-color: $white;
-  transition: border-radius $base-duration $transform-easing;
-}
-
-.hambergerMenu-btn-hover::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  background-color: $white;
-  transition: border-radius $base-duration $transform-easing;
-}
-
-.hambergerMenu-btn-openarea::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  background-color: $white;
-  transition: border-radius $base-duration $transform-easing;
-}
-
-.hambergerMenu-contents::-webkit-scrollbar {
-  display: none;
-}
-
-.hambergerMenu-contents::-webkit-scrollbar-thumb {
-  background-color: transparent;
-}
-
-.hambergerMenu-item:not(:last-of-type) {
-  margin: 0 0 60px 0;
-}
-
-.hambergerMenu-item-img img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hamberger-menu-button {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  background-color: $darkBlack;
-  cursor: pointer;
-  transition: background-color $base-duration $colorAndOpacity-easing;
-}
-
-.hamberger-menu-button.is-disable {
-  pointer-events: none;
-}
-
-.hamberger-menu-button::before {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
-  width: 20px;
-  height: 2px;
-  background-color: $white;
-  transform: translate(-50%, -50%);
-  transition: transform $base-duration $colorAndOpacity-easing;
-  content: '';
-}
-
-.hamberger-menu-button::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1;
-  width: 20px;
-  height: 2px;
-  background-color: $white;
-  transform: translate(-50%, -50%);
-  transition: transform $base-duration $colorAndOpacity-easing;
-  content: '';
-}
-
-.hamberger-menu-button.is-active {
-  background-color: $white;
-}
-
-.hamberger-menu-button.is-active::before {
-  background-color: $darkBlack;
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.hamberger-menu-button.is-active::after {
-  background-color: $darkBlack;
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.hamberger-menu-content {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 99;
-  width: 100%;
-  height: 100vh;
-  padding: 80px 0 0;
-  background-color: $white;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.hamberger-menu-content::-webkit-scrollbar {
-  width: 0;
-}
-
-.hamberger-menu-content::-webkit-scrollbar-thumb {
-  background-color: transparent;
-}
-
-.hamberger-menu-content-inner {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  padding: 0 0 80px;
-}
-
-.hamberger-menu-content-inner-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.hamberger-menu-content-inner-list-item:not(:last-of-type) {
-  margin: 0 0 40px;
-}
-
-.hamberger-menu-content-inner-list-item-link {
-  display: block;
-  font-size: 36px;
-  font-family: $helvetica;
-  line-height: 1;
-  text-align: center;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.hamberger-menu-content-inner-list-item-link .img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hamberger-menu-hover {
-  transform: scale(0.9, 0.98);
-}
-
-@include sp {
-  .hamberger-menu-hover {
-    transform: scale(1, 1);
-  }
-}
-
-.hamberger-menu.is-open .hamberger-menu-hover {
-  transform: scale(1.1, 1.1);
-}
-
-@include sp {
-  .hamberger-menu.is-open .hamberger-menu-hover {
-    transform: scale(1, 1);
-  }
 }
 </style>

@@ -166,12 +166,12 @@ export default class Particle {
       }
 
       const particle = {
-        x: x,
-        y: y,
-        r: r,
-        clipR : clipR,
-        color: color,
-        rand: rand,
+        x,
+        y,
+        r,
+        clipR,
+        color,
+        rand,
       }
 
       this.particlesInit.push(particle);
@@ -308,19 +308,19 @@ export default class Particle {
       const pageTransitionSpeed = 1.0;
 
       p = {
-        x: x,
-        y: y,
-        r: r,
-        color: color,
-        clipR: clipR,
-        s: s,
-        angle: angle,
-        radians: radians,
-        vx: vx,
-        vy: vy,
+        x,
+        y,
+        r,
+        color,
+        clipR,
+        s,
+        angle,
+        radians,
+        vx,
+        vy,
         mass: r,
-        rand: rand,
-        pageTransitionSpeed: pageTransitionSpeed,
+        rand,
+        pageTransitionSpeed,
       }
       this.particles.push(p);
     }

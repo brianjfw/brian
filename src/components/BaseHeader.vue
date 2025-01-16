@@ -1,8 +1,29 @@
+<template>
+  <div ref="HeaderLogo" class="header-logo is-top is-op">
+    <button class="header-link js-click-target" @click="onClickSameUrlReload">
+      <span
+        v-for="(char, index) of name"
+        :key="index"
+        ref="HeaderLogoText"
+        class="header-logo-text"
+        style="transform: translateY(60px)"
+        :class="{
+          'header-logo-fade-text': index % 2 === 1,
+          'header-logo-move-text': index % 2 === 0,
+        }"
+        >{{ char }}</span
+      >
+    </button>
+  </div>
+</template>
 <script>
+import { useEventBus } from '@/plugins/eventBus'
+
 export default {
   data: () => {
     return {
       name: ['H', 'I', 'S', 'A', 'M', 'I', 'K', 'U', 'R', 'I', 'T', 'A'],
+      eventBus: useEventBus()
     }
   },
   computed: {
@@ -27,9 +48,9 @@ export default {
   },
 
   watch: {
-    defaultTransitionState: function () {
+    defaultTransitionState() {
       if (!this.$asscroll) return
-      
+
       if (this.defaultTransitionState) {
         this.$asscroll.off('scroll', this.onScroll)
         this.$refs.HeaderLogo.classList.add('is-top')
@@ -37,9 +58,9 @@ export default {
         this.$asscroll.on('scroll', this.onScroll)
       }
     },
-    imageTransitionState: function () {
+    imageTransitionState() {
       if (!this.$asscroll) return
-      
+
       if (this.imageTransitionState) {
         this.$asscroll.off('scroll', this.onScroll)
         this.$refs.HeaderLogo.classList.add('is-top')
@@ -47,9 +68,9 @@ export default {
         this.$asscroll.on('scroll', this.onScroll)
       }
     },
-    pickupTransitionState: function () {
+    pickupTransitionState() {
       if (!this.$asscroll) return
-      
+
       if (this.pickupTransitionState) {
         this.$asscroll.off('scroll', this.onScroll)
         this.$refs.HeaderLogo.classList.add('is-top')
@@ -57,22 +78,26 @@ export default {
         this.$asscroll.on('scroll', this.onScroll)
       }
     },
-    openningEnd: function () {
-      this.$gsap.to(this.$refs.HeaderLogoText, {
-        duration: 1.2,
-        delay: -0.8,
-        ease: this.$EASING.transform,
-        stagger: {
-          each: 0.04,
-        },
-        y: 0,
-        clearProps: 'all',
-        onComplete: () => {
-          this.$refs.HeaderLogo.classList.remove('is-op')
-        },
-      })
+    openningEnd() {
+      if (this.$refs.HeaderLogoText) {
+        this.$gsap.to(this.$refs.HeaderLogoText, {
+          duration: 1.2,
+          delay: -0.8,
+          ease: 'power3.out',
+          stagger: {
+            each: 0.04,
+          },
+          y: 0,
+          clearProps: 'all',
+          onComplete: () => {
+            if (this.$refs.HeaderLogo) {
+              this.$refs.HeaderLogo.classList.remove('is-op')
+            }
+          },
+        })
+      }
     },
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       // ハンバーガーメニューが開いて、PCだった時にロゴを動かす
       if (this.hambergerMenuState && this.$SITECONFIG.isPc) {
         this.$gsap.to(this.$refs.HeaderLogo, {
@@ -93,15 +118,26 @@ export default {
   },
 
   mounted() {
+    // Use event bus instead of $root
+    this.eventBus.on('asscroll:ready', (asscroll) => {
+      if (asscroll) {
+        asscroll.on('scroll', this.onScroll)
+      }
+    })
+  },
+
+  beforeDestroy() {
+    // Clean up event listeners
     if (this.$asscroll) {
-      this.$asscroll.on('scroll', this.onScroll)
+      this.$asscroll.off('scroll', this.onScroll)
     }
+    this.eventBus.off('asscroll:ready')
   },
 
   methods: {
     onScroll() {
       // ハンバーガーメニューが開いている時と遷移中は処理を返す
-      if (this.hambergerMenuState || this.indexPickupState || !this.$asscroll) return
+      if (this.hambergerMenuState || this.indexPickupState) return
 
       if (this.$asscroll.targetPos < 1.0) {
         this.$refs.HeaderLogo.classList.add('is-top')
@@ -131,133 +167,11 @@ export default {
 }
 </script>
 
-<template>
-  <div ref="HeaderLogo" class="header-logo is-top is-op">
-    <button class="header-link js-click-target" @click="onClickSameUrlReload">
-      <span
-        v-for="(char, index) of name"
-        :key="index"
-        ref="HeaderLogoText"
-        class="header-logo-text"
-        style="transform: translateY(60px)"
-        :class="{
-          'header-logo-fade-text': index % 2 === 1,
-          'header-logo-move-text': index % 2 === 0,
-        }"
-        >{{ char }}</span
-      >
-    </button>
-  </div>
-</template>
-
 <style lang="scss">
-@use "@/assets/scss/constants/break-points" as *;
-@use "@/assets/scss/constants/color" as *;
-@use "@/assets/scss/constants/font" as *;
-@use "@/assets/scss/functions/mixins" as *;
+@use '@/assets/scss/constants/animation' as *;
 
 .header-logo-text {
   display: inline-block;
   transition: transform $base-duration $transform-easing;
-}
-
-.header-logo {
-  position: fixed;
-  top: 20px;
-  left: 40px;
-  z-index: 10;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: width 0.01s linear;
-  transition-delay: $base-duration * 0.25;
-  cursor: pointer;
-
-  @include sp() {
-    top: 14px;
-    left: 20px;
-  }
-}
-
-.header-logo.is-op {
-  user-select: none;
-  pointer-events: none;
-}
-
-.header-logo.is-top {
-  transition-delay: 0s;
-}
-
-.header-link {
-  display: block;
-  color: $black;
-  font-size: 50px;
-  font-family: $sixcaps;
-  letter-spacing: 0.04em;
-}
-
-.header-logo-move-text {
-  transform: translateX(0);
-  transition-delay: 0s;
-}
-
-.header-logo-move-text:nth-of-type(3) {
-  transform: translateX(-10px);
-}
-
-.header-logo-move-text:nth-of-type(5) {
-  transform: translateX(-24px);
-}
-
-.header-logo-move-text:nth-of-type(7) {
-  transform: translateX(-34.5px);
-}
-
-.header-logo-move-text:nth-of-type(9) {
-  transform: translateX(-49.6px);
-}
-
-.header-logo-move-text:nth-of-type(11) {
-  transform: translateX(-60px);
-}
-
-.is-top .header-logo-move-text {
-  transform: translateX(0);
-  transition-delay: 0s;
-}
-
-.header-logo-fade-text {
-  transform: translateY(0);
-  transition-delay: $base-duration * 0.25;
-}
-
-.is-op .header-logo-text {
-  transition-delay: 0s !important;
-}
-
-.is-top .header-logo-fade-text {
-  transform: translateY(0);
-  transition-delay: $base-duration * 0.25;
-}
-
-.header-logo-link .header-logo-move-text {
-  transform: translateX(0);
-  transition-delay: 0s;
-}
-
-.header-logo-link .header-logo-fade-text {
-  transform: translateY(0);
-  transition-delay: $base-duration * 0.25;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .header-logo-link:hover .header-logo-move-text {
-    transform: translateX(0);
-    transition-delay: 0s;
-  }
-
-  .header-logo-link:hover .header-logo-fade-text {
-    transform: translateY(0);
-    transition-delay: $base-duration * 0.25;
-  }
 }
 </style>

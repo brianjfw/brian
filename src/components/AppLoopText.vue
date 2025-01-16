@@ -24,13 +24,6 @@ export default {
     text: {
       type: String,
       required: true,
-      validator: function(value) {
-        if (value.length > 1000) {
-          console.warn('AppLoopText: Text prop is too long, it may cause performance issues');
-          return false;
-        }
-        return true;
-      }
     },
     start: {
       type: Number,
@@ -47,7 +40,7 @@ export default {
   },
 
   computed: {
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       return this.$store.getters['hambergerMenu/state']
     },
   },
@@ -57,264 +50,205 @@ export default {
      * 親コンポーネントからアニメーションの状態管理をする
      */
     loop() {
-      if (!this.isMounted || !this.isInitialized) {
-        console.warn('AppLoopText: Component not ready for animation');
-        return;
+      if (this.loop === 'isActive') {
+        this.tweenPosition.value = this.$asscroll.currentPos
+        this.$asscroll.on('scroll', this.onScroll)
+        this.$gsap.ticker.add(this.render)
+      } else if (this.loop === 'isNoActive') {
+        this.$asscroll.off('scroll', this.onScroll)
+        this.$gsap.ticker.remove(this.render)
       }
-
-      try {
-        if (this.loop === 'isActive') {
-          this.tweenPosition.value = this.$asscroll?.currentPos || 0;
-          if (this.$asscroll && typeof this.onScroll === 'function') {
-            this.$asscroll.on('scroll', this.onScroll);
-          }
-          if (this.$gsap && typeof this.render === 'function') {
-            this.$gsap.ticker.add(this.render);
-          }
-        } else if (this.loop === 'isNoActive') {
-          if (this.$asscroll && typeof this.onScroll === 'function') {
-            this.$asscroll.off('scroll', this.onScroll);
-          }
-          if (this.$gsap && typeof this.render === 'function') {
-            this.$gsap.ticker.remove(this.render);
-          }
-        }
-      } catch (error) {
-        console.warn('AppLoopText: Error during loop state change:', error);
-      }
-    }
-  },
-
-  data() {
-    return {
-      isInitialized: false,
-      isMounted: false,
-      animations: {
-        rotate: null,
-        translate: null
-      },
-      refs: {
-        root: null,
-        wrapper: null,
-        rotate: null,
-        translate: null,
-        block: null
-      },
-      position: { value: 0 },
-      tweenPosition: { value: 0 },
-      scrollDirection: { value: 1 },
-      initDirection: 1
-    }
-  },
-
-  beforeMount() {
-    this.isMounted = false;
-    this.isInitialized = false;
+    },
   },
 
   mounted() {
-    this.isMounted = true;
-    
-    try {
-      // Initialize refs
-      this.refs = {
-        root: this.$refs.root,
-        wrapper: this.$refs.wrapper,
-        rotate: this.$refs.rotate,
-        translate: this.$refs.translate,
-        block: this.$refs.block
-      };
+    this.position = { value: 0 }
+    this.tweenPosition = { value: 0 }
+    this.initDirection = 0
+    this.scrollDirection = { value: -1 }
+    this.scrollDirectionFlag = false
+    this.startPos = 0
+    this.scrollSpeed = 0
+    this.tweenScrollSpeed = 0
+    this.iObserver = null
+    this.observer = null
+    this.rootEl = this.$refs.root
+    this.wrapperEl = this.$refs.wrapper
+    this.rotateEl = this.$refs.rotate
+    this.translateEl = this.$refs.translate
+    this.blockEl = this.$refs.block
+    this.textValue = ''
+    this.cloneTextEl = null
 
-      if (!Object.values(this.refs).every(ref => ref)) {
-        console.warn('AppLoopText: Required elements not found during mount');
-        return;
-      }
-
-      this.isInitialized = true;
-      this.initAnimation();
-    } catch (error) {
-      console.warn('AppLoopText: Error during mount:', error);
+    // PCとSPで速度を出し分ける
+    if (this.$SITECONFIG.isPc) {
+      this.scrollSpeed = 2.0
+      this.tweenScrollSpeed = 0.04
+    } else {
+      this.scrollSpeed = 1.0
+      this.tweenScrollSpeed = 0.02
     }
+
+    // propsから最初のテキストが流れる方向を決める
+    if (this.direction === 'right') {
+      this.initDirection = -1.0
+    } else if (this.direction === 'left') {
+      this.initDirection = 1.0
+    }
+
+    // アニメーションさせる要素の初期値を設定する
+    this.$gsap.set(this.rotateEl, {
+      rotate: 3,
+      transformOrigin: 'left',
+    })
+    this.$gsap.set(this.translateEl, {
+      yPercent: 103.8,
+    })
+
+    this.initText()
+    this.observe()
   },
 
   beforeUnmount() {
-    this.killAllAnimations();
-    if (this.$asscroll) {
-      this.$asscroll.off('scroll', this.onScroll);
-    }
-    if (this.$gsap) {
-      this.$gsap.ticker.remove(this.render);
-    }
-    this.isMounted = false;
-    this.isInitialized = false;
+    this.$asscroll.off('scroll', this.onScroll)
+    this.$gsap.ticker.remove(this.render)
+    this.iObserver.unobserve(this.observer)
   },
 
   methods: {
-    killAllAnimations() {
-      try {
-        Object.values(this.animations).forEach(animation => {
-          if (animation?.kill) {
-            animation.kill();
-          }
-        });
-        
-        this.animations = {
-          rotate: null,
-          translate: null
-        };
-      } catch (error) {
-        console.warn('AppLoopText: Error killing animations:', error);
+    /**
+     * テキストを複製して親要素に追加する
+     */
+    cloneText() {
+      this.cloneTextEl = document.createElement('span')
+      this.cloneTextEl.className = this.blockEl.className
+      this.cloneTextEl.innerHTML = this.blockEl.textContent
+      this.translateEl.append(this.cloneTextEl)
+    },
+    /**
+     * テキストをウィンドウの横幅を超えるまで生成する
+     */
+    createText() {
+      while (window.innerWidth > this.blockEl.getBoundingClientRect().width) {
+        this.textValue += `${this.blockEl.textContent} `
+        this.blockEl.innerHTML = this.textValue
       }
     },
-
-    getEasing() {
-      return this.$EASING?.transform || 'power2.out';
-    },
-
-    getDuration(type = 'base') {
-      if (type === 'short') {
-        return this.$SITECONFIG?.shortDuration || 0.3;
-      }
-      return this.$SITECONFIG?.baseDuration || 0.6;
-    },
-
-    safeGsapAnimation(element, props) {
-      if (!this.isMounted || !this.isInitialized) {
-        console.warn('AppLoopText: Component not ready for animation');
-        return null;
-      }
-
-      if (!this.$gsap) {
-        console.warn('AppLoopText: GSAP not initialized');
-        return null;
-      }
-
-      if (!element) {
-        console.warn('AppLoopText: Animation target not found');
-        return null;
-      }
-
-      try {
-        return this.$gsap.to(element, {
-          ...props,
-          ease: props.ease || this.getEasing(),
-          duration: props.duration || this.getDuration(),
-        });
-      } catch (error) {
-        console.warn('AppLoopText: Animation error:', error);
-        return null;
+    initText() {
+      this.createText()
+      for (let i = 0; i < 2; i++) {
+        this.cloneText()
       }
     },
+    /**
+     * 上下のスクロールでテキストが左右に流れる方向を変更する
+     */
+    getScrollDirection() {
+      if (this.scrollDirectionFlag || this.hambergerMenuState) return
 
-    initAnimation() {
-      if (!this.isMounted || !this.isInitialized) return;
+      const currentPos = this.$asscroll.currentPos
 
-      // Set initial position
-      this.position.value = 0;
-      this.tweenPosition.value = 0;
-      this.scrollDirection.value = 1;
-      this.initDirection = this.direction === 'right' ? 1 : -1;
-
-      // Start animation loop
-      this.startAnimationLoop();
-    },
-
-    startAnimationLoop() {
-      if (!this.isMounted || !this.isInitialized) return;
-
-      try {
-        requestAnimationFrame(this.animate);
-      } catch (error) {
-        console.warn('AppLoopText: Error starting animation loop:', error);
+      // 下スクロール
+      if (currentPos > this.startPos) {
+        this.$gsap.to(this.scrollDirection, {
+          duration: this.$SITECONFIG.shortDuration,
+          ease: 'none',
+          value: -1,
+        })
       }
-    },
-
-    animate() {
-      if (!this.isMounted || !this.isInitialized) return;
-
-      try {
-        // 基準となるテキストブロックの横幅を取得
-        const standard = this.refs.block.getBoundingClientRect().width;
-        this.position.value += Math.floor(this.initDirection * (this.scrollSpeed * this.scrollDirection.value - (this.$asscroll?.currentPos - this.tweenPosition.value) * this.tweenScrollSpeed));
-
-        // テキストブロックの横幅分、移動したら中心に戻す
-        if (this.position.value < -standard) {
-          this.position.value = 0;
-        } else if (this.position.value > standard) {
-          this.position.value = 0;
-        }
-
-        // ルートは常に中心に来るようにする
-        this.refs.root.style.transform = `translate3d(${-standard}px, 0, 0)`;
-        this.refs.wrapper.style.transform = `translate3d(${this.position.value}px, 0, 0)`;
-
-        requestAnimationFrame(this.animate);
-      } catch (error) {
-        console.warn('AppLoopText: Error during animation:', error);
+      // 上スクロール
+      else {
+        this.$gsap.to(this.scrollDirection, {
+          duration: this.$SITECONFIG.shortDuration,
+          ease: 'none',
+          value: 1,
+        })
       }
+      this.startPos = currentPos
+
+      // 急に切り替えずにゆったりと方向を切り替えさせたいので、
+      // 発火したらインターバルを作成する
+      this.scrollDirectionFlag = true
+      setTimeout(() => {
+        this.scrollDirectionFlag = false
+      }, 600)
     },
 
-    fadeInAnimation() {
-      if (!this.isMounted || !this.isInitialized) return;
+    /**
+     * 現在のスクロール位置に、補完される値を取得する
+     */
+    getScrollTweenPosition() {
+      if (this.hambergerMenuState) return
 
-      this.animations.rotate = this.safeGsapAnimation(this.refs.rotate, {
-        duration: this.getDuration('short'),
-        delay: this.start,
-        ease: this.getEasing(),
-        rotate: 0,
-      });
-
-      this.animations.translate = this.safeGsapAnimation(this.refs.translate, {
-        duration: this.getDuration(),
-        delay: this.start,
-        ease: this.getEasing(),
-        yPercent: 0,
-      });
+      this.$gsap.to(this.tweenPosition, {
+        duration: this.$SITECONFIG.baseDuration,
+        ease: 'none',
+        value: this.$asscroll.currentPos,
+      })
     },
 
     onScroll() {
-      if (!this.isMounted || !this.isInitialized) return;
-      if (!this.$asscroll) return;
-
-      try {
-        this.scrollDirection.value = this.$asscroll.currentPos > this.tweenPosition.value ? 1 : -1;
-        this.tweenPosition.value = this.$asscroll.currentPos;
-      } catch (error) {
-        console.warn('AppLoopText: Error during scroll:', error);
-      }
+      this.getScrollDirection()
+      this.getScrollTweenPosition()
     },
 
     render() {
-      if (!this.isMounted || !this.isInitialized) return;
-      if (!this.refs.block || !this.refs.root || !this.refs.wrapper) return;
+      if (this.hambergerMenuState) return
 
-      try {
-        // 基準となるテキストブロックの横幅を取得
-        const standard = this.refs.block.getBoundingClientRect().width;
-        this.position.value += Math.floor(this.initDirection * (this.scrollSpeed * this.scrollDirection.value - (this.$asscroll?.currentPos - this.tweenPosition.value) * this.tweenScrollSpeed));
+      // 基準となるテキストブロックの横幅を取得
+      const standard = this.blockEl.getBoundingClientRect().width
+      this.position.value += Math.floor(this.initDirection * (this.scrollSpeed * this.scrollDirection.value - (this.$asscroll.currentPos - this.tweenPosition.value) * this.tweenScrollSpeed))
 
-        // テキストブロックの横幅分、移動したら中心に戻す
-        if (this.position.value < -standard) {
-          this.position.value = 0;
-        } else if (this.position.value > standard) {
-          this.position.value = 0;
-        }
-
-        // ルートは常に中心に来るようにする
-        this.refs.root.style.transform = `translate3d(${-standard}px, 0, 0)`;
-        this.refs.wrapper.style.transform = `translate3d(${this.position.value}px, 0, 0)`;
-      } catch (error) {
-        console.warn('AppLoopText: Error during render:', error);
+      // テキストブロックの横幅分、移動したら中心に戻す
+      if (this.position.value < -standard) {
+        this.position.value = 0
+      } else if (this.position.value > standard) {
+        this.position.value = 0
       }
-    }
+
+      // ルートは常に中心に来るようにする
+      this.rootEl.style.transform = `translate3d(${-standard}px, 0, 0)`
+      this.wrapperEl.style.transform = `translate3d(${this.position.value}px, 0, 0)`
+    },
+
+    fadeInAnimation() {
+      this.$gsap.to(this.rotateEl, {
+        duration: this.$SITECONFIG.shortDuration,
+        delay: this.start,
+        ease: this.$EASING.transform,
+        rotate: 0,
+      })
+      this.$gsap.to(this.translateEl, {
+        duration: this.$SITECONFIG.baseDuration,
+        delay: this.start,
+        ease: this.$EASING.transform,
+        yPercent: 0,
+      })
+    },
+
+    /**
+     * 画面内に表示された時に一度だけ発火
+     */
+    observe() {
+      this.observer = this.rootEl
+      this.iObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              this.fadeInAnimation()
+              this.iObserver.unobserve(this.observer)
+            }
+          })
+        },
+        { rootMargin: '0%' }
+      )
+      this.iObserver.observe(this.observer)
+    },
   },
 }
 </script>
 
 <style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .app-loop-text {
   display: block;
   width: max-content;
@@ -334,19 +268,7 @@ export default {
 
 <!-- クローンを動的に生成するクラスはscopedから外す -->
 <style lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .app-loop-text-block {
   padding: 0 vw(6);
 }
-</style>
-
-<style lang="scss" scoped>
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
-// Add any existing styles here if needed
 </style>

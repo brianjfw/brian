@@ -23,12 +23,7 @@
 </template>
 
 <script>
-import AppBounceLine from '~/components/AppBounceLine.vue'
-
 export default {
-  components: {
-    AppBounceLine
-  },
   props: {
     currentProject: {
       type: Object,
@@ -74,7 +69,7 @@ export default {
       })
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.$SITECONFIG.isPc) {
       for (let i = 0; i < this.observer.length; i++) {
         this.iObserver.unobserve(this.observer[i]) // リセット
@@ -86,11 +81,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .contents-inner {
   padding: 0 40px;
 

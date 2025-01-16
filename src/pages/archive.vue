@@ -1,11 +1,11 @@
 <template>
   <div class="archive js-hold-target">
     <ul ref="ArchiveList" class="archive-list">
-      <li v-for="(archive, index) in archives" :key="index" ref="ArchiveItem" class="archive-item" :data-pcimg="`/src/static/images/${archive.image.pc}`" :data-spimg="`/src/static/images/${archive.image.sp}`">
+      <li v-for="(archive, index) in archives" :key="index" ref="ArchiveItem" class="archive-item" :data-pcimg="`/images/${archive.image.pc}`" :data-spimg="`/images/${archive.image.sp}`">
         <a :href="`${archive.link}`" class="archive-link" target="_blank" rel="noopener">
           <picture>
-            <source :srcset="`/src/static/images/${archive.image.sp}`" media="(max-width: 767px)" />
-            <img class="archive-img" :src="`/src/static/images/${archive.image.pc}`" width="440" height="680" :alt="`${archive.fullTitle}`" />
+            <source :srcset="`/images/${archive.image.sp}`" media="(max-width: 767px)" />
+            <img class="archive-img" :src="`/images/${archive.image.pc}`" width="440" height="680" :alt="`${archive.fullTitle}`" />
           </picture>
         </a>
       </li>
@@ -22,11 +22,11 @@ import Stage from '../components/canvas/stage'
 import archives from '@/assets/json/archive.json'
 
 export default {
-  name: 'Archive',
+  name: 'ArchivePage',
 
   data() {
     return {
-      archives: archives,
+      archives,
     }
   },
 
@@ -182,29 +182,17 @@ export default {
       const images = document.querySelectorAll('.archive img')
       const imagesLoaded = ImagesLoaded(images)
 
-      console.log(`[Archive] Starting to load ${images.length} images`);
-
-      imagesLoaded.on('progress', (instance, image) => {
-        const result = image.isLoaded ? 'loaded' : 'broken';
-        console.log(`[Archive] Image ${image.img.src} ${result}`);
-      });
-
       imagesLoaded.on('always', () => {
-        console.log('[Archive] All images finished loading');
         if (this.defaultTransitionState) this.$store.commit('bg-transition/end')
         if (this.imageTransitionState) this.$store.commit('image-transition/end')
         if (this.pickupTransitionState) this.$store.commit('indexPickup/transition', false)
 
         this.$store.commit('imageLoaded/loaded')
       })
-
-      imagesLoaded.on('fail', (instance) => {
-        console.error('[Archive] Some images failed to load:', instance.images.length, 'failed images');
-      });
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.onResize)
     window.removeEventListener('resize', this.setWrapPosition)
     window.removeEventListener('mousedown', this.onTouchDown)
@@ -251,8 +239,8 @@ export default {
       const x = window.innerWidth / 2.0 - this.wrapperRect.width / 2.0
       const y = window.innerHeight / 2.0 - this.wrapperRect.height / 2.0
       this.$gsap.set(this.wrapper, {
-        x: x,
-        y: y,
+        x,
+        y,
       })
     },
     updatePosition() {
@@ -451,11 +439,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/assets/scss/constants/animation" as *;
-@use "@/assets/scss/constants/color" as *;
-@use "@/assets/scss/constants/font" as *;
-@use "@/assets/scss/functions/mixins" as *;
-
 $gap: 60px;
 $gap-sp: 26px;
 

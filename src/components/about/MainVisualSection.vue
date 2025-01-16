@@ -100,18 +100,18 @@ export default {
     imageLoaded() {
       return this.$store.getters['imageLoaded/isLoad']
     },
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       return this.$store.getters['hambergerMenu/state']
     },
   },
 
   watch: {
-    openningEnd: function () {
+    openningEnd () {
       setTimeout(() => {
         this.mvItemViewIn()
       }, 1000)
     },
-    imageLoaded: function () {
+    imageLoaded () {
       if (this.imageLoaded) {
         if (!this.openningEnd) return
         this.mvItemViewIn()
@@ -166,7 +166,7 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // リセット
     this.iObserver.unobserve(this.observe)
     this.iObserver = null
@@ -192,11 +192,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use '../../assets/scss/constants/break-points' as *;
-@use '../../assets/scss/constants/color' as *;
-@use '../../assets/scss/constants/font' as *;
-@use '../../assets/scss/functions/mixins' as *;
-
 .hero {
   position: relative;
   background-color: $skinColor;
@@ -344,27 +339,5 @@ export default {
   left: 33%;
   transform: rotate(-10deg);
   z-index: 101;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .hero-title-wrapper:hover {
-    transform: scale(0.9, 0.98);
-  }
-  
-  @include sp {
-    .hero-title-wrapper:hover {
-      transform: scale(1, 1);
-    }
-  }
-}
-
-.hero-title-wrapper.is-open {
-  transform: scale(1.1, 1.1);
-}
-
-@include sp {
-  .hero-title-wrapper.is-open {
-    transform: scale(1, 1);
-  }
 }
 </style>

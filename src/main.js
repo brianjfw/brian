@@ -1,36 +1,26 @@
-import { createApp } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
-import App from './App.vue';
-import store from './store';
-import { setupPlugins } from './plugins';
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import eventBus from './plugins/eventBus'
+import { BASEROTATE } from './constants/rotations'
+import { gsap, EASING } from './plugins/gsap'
+import ASScroll from '@ashthornton/asscroll'
+import { SITE_CONFIG } from './constants/site-config'
+import { preDefaultEvent } from './utils/events'
 
-// Import your existing pages
-import Home from './pages/index.vue';
-import About from './pages/about.vue';
-import Archive from './pages/archive.vue';
-import Works from './pages/works/_slug.vue';
+const app = createApp(App)
 
-// Create router instance
-const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    { path: '/', component: Home },
-    { path: '/about', component: About },
-    { path: '/archive', component: Archive },
-    { path: '/works/:slug', component: Works, name: 'works-slug' },
-    // Add other routes as needed
-  ]
-});
+// Add global properties
+app.config.globalProperties.$BASEROTATE = BASEROTATE
+app.config.globalProperties.$gsap = gsap
+app.config.globalProperties.$EASING = EASING
+app.config.globalProperties.$ASScroll = ASScroll
+app.config.globalProperties.$SITECONFIG = SITE_CONFIG
+app.config.globalProperties.$preDefaultEvent = preDefaultEvent
 
-// Create and mount the app
-const app = createApp(App);
+app.use(router)
+app.use(store)
+app.use(eventBus)
 
-// Setup plugins
-setupPlugins(app);
-
-// Use router and store
-app.use(router);
-app.use(store);
-
-// Mount the app
-app.mount('#app'); 
+app.mount('#app') 

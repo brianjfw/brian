@@ -71,8 +71,8 @@ export default class Mesh {
       this.geometryParm.heightSegments
     );
     this.material = new THREE.RawShaderMaterial({
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
+      vertexShader,
+      fragmentShader,
       uniforms: {
         u_texture: {
           type: "t",

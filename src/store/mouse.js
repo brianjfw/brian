@@ -1,45 +1,36 @@
 export default {
   namespaced: true,
-  state: () => ({
-    isLoad: false,
+  
+  state: {
     isHover: false,
-    isDown: false,
-    isLoading: false
-  }),
+    isHold: false,
+    isLoad: false,
+  },
+
+  getters: {
+    isHover: state => state.isHover,
+    isHold: state => state.isHold,
+    isLoad: state => state.isLoad,
+  },
+
   mutations: {
-    loadend(state) {
-      console.log('[Mouse] Load ended');
-      state.isLoad = true;
-    },
-    init(state) {
-      console.log('[Mouse] State reset');
-      state.isLoad = false;
-    },
-    mouseenter(state) {
+    hover(state) {
       state.isHover = true;
     },
-    mouseleave(state) {
+    hoverEnd(state) {
       state.isHover = false;
     },
-    mousedown(state) {
-      state.isDown = true;
+    hold(state) {
+      state.isHold = true;
     },
-    mouseup(state) {
-      state.isDown = false;
+    holdEnd(state) {
+      state.isHold = false;
     },
     loading(state) {
-      console.log('[Mouse] Loading state activated');
-      state.isLoading = true;
+      state.isLoad = true;
     },
-    loadingEnd(state) {
-      console.log('[Mouse] Loading state deactivated');
-      state.isLoading = false;
-    }
+    loadend(state) {
+      state.isLoad = false;
+    },
   },
-  getters: {
-    isLoad: state => state.isLoad,
-    isHover: state => state.isHover,
-    isDown: state => state.isDown,
-    isLoading: state => state.isLoading
-  }
-};
+}

@@ -20,17 +20,7 @@
 </template>
 
 <script>
-import AppTextAnimation from '~/components/AppTextAnimation.vue'
-
-const $BASEROTATE = {
-  left: -4,
-  right: 4
-}
-
 export default {
-  components: {
-    AppTextAnimation
-  },
   /**
    * shadowColor : 影の色
    * externalLink : 外部リンク
@@ -50,20 +40,10 @@ export default {
       default: '',
     },
   },
-  data() {
-    return {
-      $BASEROTATE
-    }
-  }
 }
 </script>
 
 <style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .card-article {
   position: relative;
   width: 100%;

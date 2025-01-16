@@ -133,8 +133,8 @@ export default class Particle {
     const geometry = new THREE.PlaneBufferGeometry(2, 2, 1, 1);
 
     const material = new THREE.RawShaderMaterial({
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
+      vertexShader,
+      fragmentShader,
       uniforms: {
         u_texture: {
           type: "t",
@@ -371,8 +371,8 @@ export default class Particle {
     gsap.to(this.mouse, {
       duration: 6.0,
       ease: "power3.out",
-      x: x,
-      y: y,
+      x,
+      y,
 
       onUpdate: () => {
         this.mesh.material.uniforms.u_metaballsPos.value[this.lastIndex] = this.mouse.x;

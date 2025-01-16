@@ -4,7 +4,7 @@
       <span ref="ContentsLoopVideo" class="contents-loop-video">
         <span class="contents-loop-video-shadow" :style="`box-shadow:0 22px 60px 0px ${currentProject.siteColor.shadowColor}`"></span>
         <span class="contents-loop-video-wrapper"
-          ><video :poster="`/src/static/images/poster-${currentProject.id}.webp`" :src="`/movie/${currentProject.id}.mp4`" playsinline autoplay loop muted disablePictureInPicture disableRemotePlayback></video
+          ><video :poster="`/images/poster-${currentProject.id}.webp`" :src="`/movie/${currentProject.id}.mp4`" playsinline autoplay loop muted disablePictureInPicture disableRemotePlayback></video
         ></span>
       </span>
       <AppLoopText :loop="isLoopTextState" :text="currentProject.title.short" />
@@ -23,14 +23,7 @@
 </template>
 
 <script>
-import AppLoopText from '~/components/AppLoopText.vue'
-import AppCard from '~/components/AppCard.vue'
-
 export default {
-  components: {
-    AppLoopText,
-    AppCard
-  },
   props: {
     currentProject: {
       type: Object,
@@ -46,13 +39,13 @@ export default {
   },
 
   computed: {
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       return this.$store.getters['hambergerMenu/state']
     },
   },
 
   watch: {
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       /**
        * PCかつタッチデバイスではない時
        */
@@ -124,7 +117,7 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // リセット
     this.iObserverTextSegment.unobserve(this.observe)
     this.iObserverTextSegment = null
@@ -154,11 +147,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .contents-loop-title-wrapper {
   position: relative;
   padding: vw(286) 0 vw(242);
@@ -219,13 +207,14 @@ export default {
   height: 100%;
   border-radius: 8px;
   overflow: hidden;
-}
 
-.contents-loop-video-wrapper video {
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  object-fit: cover;
+  & video {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    object-position: center;
+  }
 }
 
 .contents-loop-card {
@@ -241,11 +230,5 @@ export default {
     top: 520px;
     right: 110px;
   }
-}
-
-.works-video .video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 </style>

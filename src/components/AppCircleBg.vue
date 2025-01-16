@@ -26,7 +26,7 @@ export default {
     },
   },
   watch: {
-    state: function () {
+    state () {
       switch (this.state) {
         case 'extend':
           this.toExtend()
@@ -37,82 +37,26 @@ export default {
       }
     },
   },
-  data() {
-    return {
-      isInitialized: false,
-      isMounted: false,
-      refs: {
-        CircleBgElement: null
-      }
-    }
-  },
-  beforeMount() {
-    this.isMounted = false;
-    this.isInitialized = false;
-  },
-  mounted() {
-    this.isMounted = true;
-    this.refs.CircleBgElement = this.$refs.CircleBgElement;
-    if (this.refs.CircleBgElement) {
-      this.isInitialized = true;
-    }
-  },
-  beforeUnmount() {
-    this.isMounted = false;
-    this.isInitialized = false;
-  },
   methods: {
-    getEasing() {
-      return this.$EASING?.transform || 'power2.out';
+    toExtend () {
+      this.$gsap.to(this.$refs.CircleBgElement, {
+        duration: this.$SITECONFIG.baseDuration * 1.2,
+        ease: this.$EASING.transform,
+        scale: 1,
+      })
     },
-    getDuration() {
-      return (this.$SITECONFIG?.baseDuration || 0.6) * 1.2;
+    toShrink () {
+      this.$gsap.to(this.$refs.CircleBgElement, {
+        duration: this.$SITECONFIG.baseDuration * 1.2,
+        ease: this.$EASING.transform,
+        scale: 0,
+      })
     },
-    safeGsapAnimation(element, props) {
-      if (!this.isMounted || !this.isInitialized) {
-        console.warn('AppCircleBg: Component not ready for animation');
-        return null;
-      }
-      if (!this.$gsap) {
-        console.warn('AppCircleBg: GSAP not initialized');
-        return null;
-      }
-      if (!element) {
-        console.warn('AppCircleBg: Animation target not found');
-        return null;
-      }
-      try {
-        return this.$gsap.to(element, {
-          ...props,
-          ease: props.ease || this.getEasing(),
-          duration: props.duration || this.getDuration(),
-        });
-      } catch (error) {
-        console.warn('AppCircleBg: Animation error:', error);
-        return null;
-      }
-    },
-    toExtend() {
-      if (!this.isMounted || !this.isInitialized) return;
-      this.safeGsapAnimation(this.refs.CircleBgElement, {
-        scale: 1
-      });
-    },
-    toShrink() {
-      if (!this.isMounted || !this.isInitialized) return;
-      this.safeGsapAnimation(this.refs.CircleBgElement, {
-        scale: 0
-      });
-    }
   },
 }
 </script>
 
-<style lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
+<style scoped lang="scss">
 .circle-bg {
   display: block;
   position: absolute;

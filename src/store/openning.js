@@ -1,15 +1,17 @@
 export default {
   namespaced: true,
-  state: () => ({
-    isEnd: false
-  }),
+  
+  state: {
+    isOpenningEnd: false,
+  },
+
+  getters: {
+    state: state => state.isOpenningEnd,
+  },
+
   mutations: {
     end(state) {
-      console.log('[Opening] Opening animation ended');
-      state.isEnd = true;
-    }
+      state.isOpenningEnd = true;
+    },
   },
-  getters: {
-    state: state => state.isEnd
-  }
-};
+}

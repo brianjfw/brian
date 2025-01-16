@@ -37,7 +37,7 @@
                           <!--アーカイブページの時-->
                           <picture v-if="index === projectAndArchiveData.length - 1.0">
                             <source :srcset="`data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==`" media="(max-width: 767px)" />
-                            <img :src="`/src/static/images/about-sidescroll-archive-01.webp`" :width="`560`" :height="`410`" :alt="`archive`" />
+                            <img :src="`/images/about-sidescroll-archive-01.webp`" :width="`560`" :height="`410`" :alt="`archive`" />
                           </picture>
                           <!--アーカイブページ以外の時-->
                           <picture v-else>
@@ -51,7 +51,7 @@
                           <!--アーカイブページの時-->
                           <picture v-if="index === projectAndArchiveData.length - 1.0">
                             <source :srcset="`data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==`" media="(max-width: 767px)" />
-                            <img :src="`/src/static/images/about-sidescroll-archive-02.webp`" :width="`560`" :height="`410`" :alt="`archive`" />
+                            <img :src="`/images/about-sidescroll-archive-02.webp`" :width="`560`" :height="`410`" :alt="`archive`" />
                           </picture>
                           <!--アーカイブページ以外の時-->
                           <picture v-else>
@@ -98,7 +98,7 @@ export default {
       this.directSubstitution()
       return this.projectAndArchiveData
     },
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       return this.$store.getters['hambergerMenu/state']
     },
     imageLoaded() {
@@ -107,7 +107,7 @@ export default {
   },
 
   watch: {
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       /**
        * ハンバガーメニューが開いた時
        */
@@ -120,7 +120,7 @@ export default {
          */
       }
     },
-    imageLoaded: function () {
+    imageLoaded () {
       if (this.imageLoaded) {
         setTimeout(() => {
           this.setupScrollAnimation()
@@ -201,7 +201,7 @@ export default {
     window.addEventListener('resize', this.pResize)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // リセット
     this.fixSection.kill()
     this.synchronousScroll.kill()
@@ -280,7 +280,7 @@ export default {
       this.projectAndArchiveData = Array.from(this.projectData)
       this.projectAndArchiveData.push({})
     },
-    onMouseEnter: function (index) {
+    onMouseEnter (index) {
       if (this.enterflag || this.$SITECONFIG.isTouch || !this.isTextAnimationState) return
       this.enterflag = true
       this.leaveflag = false
@@ -314,12 +314,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../../assets/scss/constants/break-points' as *;
-@use '../../assets/scss/constants/color' as *;
-@use '../../assets/scss/constants/font' as *;
-@use '../../assets/scss/functions/mixins' as *;
+:root {
+  --viewportWidth: 100vw;
+  --viewportHeight: 100vh;
+  --viewportSpHeight: 100vh;
+}
 
-.select-project-side-scroll-section {
+.project {
   position: relative;
   height: 3500px;
   z-index: 1;
@@ -348,12 +349,12 @@ export default {
   height: 100%;
   z-index: 1;
   pointer-events: none;
-}
 
-.project-canvas canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
+  & canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .project-inner {
@@ -402,10 +403,10 @@ export default {
   left: auto;
   overflow: hidden;
   z-index: 1;
-}
 
-.project-list.is-text-animation-end {
-  overflow: visible;
+  &.is-text-animation-end {
+    overflow: visible;
+  }
 }
 
 .project-item-wrapper-translate {
@@ -455,16 +456,16 @@ export default {
   transform: rotateX(180deg);
   transition: transform $half-base-duration $transform-easing;
   transform-style: preserve-3d;
-}
 
-.project-item-img img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 10px;
-  overflow: hidden;
+  & img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+  }
 }
 
 .project-item-img-wrapper-01 {
@@ -496,55 +497,31 @@ export default {
   white-space: nowrap;
   perspective: 1000px;
   transition: opacity $half-base-duration $colorAndOpacity-easing;
-}
 
-.project-item.is-hover {
-  opacity: 0.5;
-}
+  &.is-hover {
+    opacity: 0.5;
+  }
 
-.project-item.is-overlay {
-  z-index: 10;
-}
+  &.is-overlay {
+    z-index: 10;
+  }
 
-@include sp() {
-  .project-item {
+  @include sp() {
     font-size: vw_sp(160);
   }
-}
 
-.project-item:not(:last-of-type) {
-  margin: 0 vw(100) 0 0;
-}
+  &:not(:last-of-type) {
+    margin: 0 vw(100) 0 0;
 
-@include sp() {
-  .project-item:not(:last-of-type) {
-    margin: 0 vw_sp(130) 0 0;
-  }
-}
-
-.project-item:last-of-type .project-item-circle {
-  display: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .select-project-side-scroll-item:hover {
-    transform: scale(0.9, 0.98);
-  }
-  
-  @include sp {
-    .select-project-side-scroll-item:hover {
-      transform: scale(1, 1);
+    @include sp() {
+      margin: 0 vw_sp(130) 0 0;
     }
   }
-}
 
-.select-project-side-scroll-item.is-open {
-  transform: scale(1.1, 1.1);
-}
-
-@include sp {
-  .select-project-side-scroll-item.is-open {
-    transform: scale(1, 1);
+  &:last-of-type {
+    & .project-item-circle {
+      display: none;
+    }
   }
 }
 </style>

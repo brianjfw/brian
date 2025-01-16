@@ -12,15 +12,15 @@
       <div class="card-title-wrapper-03">
         <span class="pc-only">
           <a v-if="title.link" :href="title.link" target="_blank" rel="noopener" class="card-title-wrapper-03-link">
-            <AppTextAnimation :state="state" :rotate="CONSTANTS.BASEROTATE.left" :text="title.text" :sp-animation="false" />
+            <AppTextAnimation :state="state" :rotate="$BASEROTATE.left" :text="title.text" :sp-animation="false" />
             <span v-if="title.subtext" class="card-sub-title">
-              <AppTextAnimation :state="state" :start="0.28" :rotate="CONSTANTS.BASEROTATE.left" :text="title.subtext" :sp-animation="false" />
+              <AppTextAnimation :state="state" :start="0.28" :rotate="$BASEROTATE.left" :text="title.subtext" :sp-animation="false" />
             </span>
           </a>
           <span v-else class="card-title-wrapper-03-link">
-            <AppTextAnimation :state="state" :rotate="CONSTANTS.BASEROTATE.left" :text="title.text" :sp-animation="false" />
+            <AppTextAnimation :state="state" :rotate="$BASEROTATE.left" :text="title.text" :sp-animation="false" />
             <span v-if="title.subtext" class="card-sub-title">
-              <AppTextAnimation :state="state" :start="0.28" :rotate="CONSTANTS.BASEROTATE.left" :text="title.subtext" :sp-animation="false" />
+              <AppTextAnimation :state="state" :start="0.28" :rotate="$BASEROTATE.left" :text="title.subtext" :sp-animation="false" />
             </span>
           </span>
         </span>
@@ -38,13 +38,7 @@
 </template>
 
 <script>
-import { CONSTANTS } from '@/plugins/constants'
-import AppTextAnimation from '@/components/AppTextAnimation.vue'
-
 export default {
-  components: {
-    AppTextAnimation
-  },
   props: {
     /**
      * name : 名前
@@ -70,20 +64,10 @@ export default {
       default: '',
     },
   },
-  data: () => ({
-    CONSTANTS
-  })
 }
 </script>
 
-<style scoped lang="scss">
-@use "~/assets/scss/constants/animation" as *;
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/function" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
+<style lang="scss" scoped>
 .card-article {
   position: relative;
   width: 100%;
@@ -131,19 +115,19 @@ export default {
   @include sp() {
     font-size: 17px;
   }
-}
 
-.card-title-wrapper-01-block:first-of-type {
-  font-size: 36px;
-  text-indent: -4px;
-  line-height: 1;
+  &:first-of-type {
+    font-size: 36px;
+    text-indent: -4px;
+    line-height: 1;
 
-  @include sp() {
-    display: inline-block;
-    margin: 0 0 0 -4px;
-    font-size: 28px;
-    line-height: 0.9;
-    text-indent: 0;
+    @include sp() {
+      display: inline-block;
+      margin: 0 0 0 -4px;
+      font-size: 28px;
+      line-height: 0.9;
+      text-indent: 0;
+    }
   }
 }
 
@@ -173,32 +157,28 @@ export default {
     bottom: -5px;
     font-size: 80px;
   }
-}
 
-.card-title-wrapper-03 .card-sub-title {
-  position: absolute;
-  top: 12px;
-  right: -4px;
-  font-size: 12px;
-  font-family: $helvetica;
-  letter-spacing: 0.02em;
+  & .card-sub-title {
+    position: absolute;
+    top: 12px;
+    right: -4px;
+    font-size: 12px;
+    font-family: $helvetica;
+    letter-spacing: 0.02em;
 
-  @include sp() {
-    top: 7px;
-    font-size: 10px;
+    @include sp() {
+      top: 7px;
+      font-size: 10px;
+    }
   }
 }
 
-.is-windows .card-title-wrapper-01-block:first-of-type {
-  position: relative;
-  left: -8px;
+/* stylelint-disable */
+.is-windows .card-title-wrapper-01-block {
+  &:first-of-type {
+    position: relative;
+    left: -8px;
+  }
 }
-
-.card-contact-item-first {
-  margin: 0 0 40px 0;
-}
-
-.card-contact-item .card-sub-title {
-  margin: 0 0 10px 0;
-}
+/* stylelint-enable */
 </style>

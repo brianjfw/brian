@@ -156,10 +156,10 @@ export default class Particle {
       }
 
       const particle = {
-        x: x,
-        y: y,
-        r: r,
-        clipR : clipR,
+        x,
+        y,
+        r,
+        clipR,
       }
 
       this.particlesInit.push(particle);
@@ -283,15 +283,15 @@ export default class Particle {
       const vx = Math.cos(radians) * this.speed;
       const vy = Math.sin(radians) * this.speed;
       p = {
-        x: x,
-        y: y,
-        r: r,
-        clipR: clipR,
-        s: s,
-        angle: angle,
-        radians: radians,
-        vx: vx,
-        vy: vy,
+        x,
+        y,
+        r,
+        clipR,
+        s,
+        angle,
+        radians,
+        vx,
+        vy,
         mass: r,
       }
       this.particles.push(p);

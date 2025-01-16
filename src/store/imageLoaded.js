@@ -1,19 +1,17 @@
 export default {
   namespaced: true,
-  state: () => ({
-    isLoad: false
-  }),
+  
+  state: {
+    isLoaded: false,
+  },
+
+  getters: {
+    state: state => state.isLoaded,
+  },
+
   mutations: {
     loaded(state) {
-      console.log('[ImageLoaded] Images loaded successfully');
-      state.isLoad = true;
+      state.isLoaded = true;
     },
-    init(state) {
-      console.log('[ImageLoaded] Resetting image loaded state');
-      state.isLoad = false;
-    }
   },
-  getters: {
-    isLoad: state => state.isLoad
-  }
-};
+}

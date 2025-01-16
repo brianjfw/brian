@@ -39,22 +39,7 @@
 </template>
 
 <script>
-import AppReadTitle from '~/components/AppReadTitle.vue'
-import AppPageTransitionImage from '~/components/AppPageTransitionImage.vue'
-import AppBounceLine from '~/components/AppBounceLine.vue'
-import AppLoopText from '~/components/AppLoopText.vue'
-import AppCard from '~/components/AppCard.vue'
-import AppPageTransitionBg from '~/components/AppPageTransitionBg.vue'
-
 export default {
-  components: {
-    AppReadTitle,
-    AppPageTransitionImage,
-    AppBounceLine,
-    AppLoopText,
-    AppCard,
-    AppPageTransitionBg
-  },
   props: {
     currentProject: {
       type: Object,
@@ -106,7 +91,7 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.iObserverLoopText.unobserve(this.observe)
     this.iObserverLoopText = null
     this.iObserver.unobserve(this.observe)
@@ -116,11 +101,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .next-inner {
   width: 100%;
   padding: 0 160px 0 40px;

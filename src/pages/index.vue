@@ -1,32 +1,32 @@
 <template>
   <div class="index">
     <div class="hero-and-about">
-      <MainVisualSection />
-      <AboutSection />
+      <IndexMainVisualSection />
+      <IndexAboutSection />
     </div>
-    <SelectProjectPickupSection :pickup-data="getPickupData" />
-    <SelectProjectCardSection :project-data="getProjectData" :pickup-end-data="getPickupEndData" />
-    <ContactSection :project-data="getProjectData" :contact-data="getContactData" />
+    <IndexSelectProjectPickupSection :pickup-data="getPickupData" />
+    <IndexSelectProjectCardSection :project-data="getProjectData" :pickup-end-data="getPickupData[2]" />
+    <IndexContactSection :project-data="getProjectData" :contact-data="getContactData" />
   </div>
 </template>
 
 <script>
 import ImagesLoaded from 'imagesloaded'
-import MainVisualSection from '@/components/index/MainVisualSection.vue'
-import AboutSection from '@/components/index/AboutSection.vue'
-import SelectProjectPickupSection from '@/components/index/SelectProjectPickupSection.vue'
-import SelectProjectCardSection from '@/components/index/SelectProjectCardSection.vue'
-import ContactSection from '@/components/index/ContactSection.vue'
+import IndexMainVisualSection from '@/components/index/MainVisualSection.vue'
+import IndexAboutSection from '@/components/index/AboutSection.vue'
+import IndexSelectProjectPickupSection from '@/components/index/SelectProjectPickupSection.vue'
+import IndexSelectProjectCardSection from '@/components/index/SelectProjectCardSection.vue'
+import IndexContactSection from '@/components/index/ContactSection.vue'
 
 export default {
-  name: 'Index',
-
+  name: 'HomePage',
+  
   components: {
-    MainVisualSection,
-    AboutSection,
-    SelectProjectPickupSection,
-    SelectProjectCardSection,
-    ContactSection
+    IndexMainVisualSection,
+    IndexAboutSection,
+    IndexSelectProjectPickupSection,
+    IndexSelectProjectCardSection,
+    IndexContactSection
   },
 
   computed: {
@@ -38,14 +38,6 @@ export default {
     },
     getPickupData() {
       return this.$store.getters.pickupData
-    },
-    getPickupEndData() {
-      // Provide a default object if the third pickup item doesn't exist
-      return this.getPickupData[2] || {
-        siteColor: {
-          bodyContentsColor: '#ffffff'
-        }
-      }
     },
     defaultTransitionState() {
       return this.$store.getters['bg-transition/state']
@@ -97,7 +89,7 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // リセット
     this.$preDefaultEvent(false)
     this.$asscroll.disable()
@@ -107,8 +99,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "@/assets/scss/constants/animation" as *;
-
 .index {
   overflow: hidden;
 }

@@ -1,17 +1,23 @@
 export default {
   namespaced: true,
-  state: () => ({
-    isActive: false
-  }),
+  
+  state: {
+    isTransition: false,
+    color: '#f0efeb',
+  },
+
+  getters: {
+    state: state => state.isTransition,
+    color: state => state.color,
+  },
+
   mutations: {
-    start(state) {
-      state.isActive = true;
+    start(state, color) {
+      state.isTransition = true;
+      state.color = color;
     },
     end(state) {
-      state.isActive = false;
-    }
+      state.isTransition = false;
+    },
   },
-  getters: {
-    state: state => state.isActive
-  }
-};
+}

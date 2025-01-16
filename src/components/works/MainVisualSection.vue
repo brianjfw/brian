@@ -14,12 +14,12 @@
               <AppReadTitle :state="isTextSegmentState" :text="['・', `WORKS 0${currentProject.index}`]" :sp-animation="false" :modifier="'works-section'" />
             </span>
             <span class="hero-title-wrapper-block">
-              <span v-for="index of mainTextPcLength" :key="index" class="hero-title-wrapper" :class="`hero-title-wrapper-0${index}`">
+              <span v-for="index of Object.keys(currentProject.detailsMainTextPc).length - 1" :key="index" class="hero-title-wrapper" :class="`hero-title-wrapper-0${index}`">
                 <AppTextAnimation
                   :state="isTextSegmentState"
                   :start="index * 0.12"
-                  :rotate="index % 2 != 0 ? leftRotation : rightRotation"
-                  :text="`${currentProject.detailsMainTextPc['text0' + index] || ''}`"
+                  :rotate="index % 2 != 0 ? $BASEROTATE.left : $BASEROTATE.right"
+                  :text="`${currentProject.detailsMainTextPc['text0' + index]}`"
                   :sp-animation="false"
                 />
               </span>
@@ -29,12 +29,12 @@
             </span>
           </h1>
           <p class="hero-desc">
-            <span v-for="index of mainDescPcLength" :key="index" class="hero-desc-wrapper" :class="`hero-desc-wrapper-0${index}`">
+            <span v-for="index of Object.keys(currentProject.detailsMainDescPc).length - 1" :key="index" class="hero-desc-wrapper" :class="`hero-desc-wrapper-0${index}`">
               <AppTextAnimation
                 :state="isTextSegmentState"
                 :start="index * 0.12 + 0.84"
-                :rotate="index % 2 != 0 ? leftRotation : rightRotation"
-                :text="`${currentProject.detailsMainDescPc['text0' + index] || ''}`"
+                :rotate="index % 2 != 0 ? $BASEROTATE.left : $BASEROTATE.right"
+                :text="`${currentProject.detailsMainDescPc['text0' + index]}`"
                 :sp-animation="false"
               />
             </span>
@@ -47,7 +47,7 @@
             <AppReadTitle :state="isTextSegmentState" :text="['・', `WORKS 0${currentProject.index}`]" :pc-animation="false" :modifier="'section'" />
           </div>
           <div class="hero-full-title-sp" :style="`color:${currentProject.siteColor.mvTextColor};`">
-            <AppTextAnimation :state="isTextSegmentState" :start="0.24" :rotate="rightRotation" :text="currentProject.title.full" :pc-animation="false" />
+            <AppTextAnimation :state="isTextSegmentState" :start="0.24" :rotate="$BASEROTATE.right" :text="currentProject.title.full" :pc-animation="false" />
           </div>
         </div>
       </div>
@@ -58,14 +58,14 @@
           <div class="hero-title-sp-area">
             <h1 class="hero-title-sp">
               <span class="hero-title-wrapper-block-sp">
-                <span v-for="index of mainTextSpLength" :key="index" class="hero-title-wrapper-sp" :class="`hero-title-wrapper-sp-0${index}`">
-                  {{ currentProject.detailsMainTextSp['text0' + index] || '' }}
+                <span v-for="index of Object.keys(currentProject.detailsMainTextSp).length - 1" :key="index" class="hero-title-wrapper-sp" :class="`hero-title-wrapper-sp-0${index}`">
+                  {{ currentProject.detailsMainTextSp['text0' + index] }}
                 </span>
               </span>
             </h1>
             <p class="hero-desc-sp">
-              <span v-for="index of mainDescSpLength" :key="index" class="hero-desc-wrapper-sp" :class="`hero-desc-wrapper-sp-0${index}`">
-                {{ currentProject.detailsMainDescSp['text0' + index] || '' }}
+              <span v-for="index of Object.keys(currentProject.detailsMainDescSp).length - 1" :key="index" class="hero-desc-wrapper-sp" :class="`hero-desc-wrapper-sp-0${index}`">
+                {{ currentProject.detailsMainDescSp['text0' + index] }}
               </span>
             </p>
           </div>
@@ -76,48 +76,21 @@
 </template>
 
 <script>
-import AppReadTitle from '~/components/AppReadTitle.vue'
-import AppTextAnimation from '~/components/AppTextAnimation.vue'
-import AppBounceLine from '~/components/AppBounceLine.vue'
-
 export default {
-  components: {
-    AppReadTitle,
-    AppTextAnimation,
-    AppBounceLine
-  },
-
   props: {
     currentProject: {
       type: Object,
       required: true,
     },
   },
-
-  data: () => ({
-    isTextSegmentState: 'default',
-    isTextUnderlineState: 'default',
-  }),
+  data: () => {
+    return {
+      isTextSegmentState: 'default',
+      isTextUnderlineState: 'default',
+    }
+  },
 
   computed: {
-    leftRotation() {
-      return -2
-    },
-    rightRotation() {
-      return 2
-    },
-    mainTextPcLength() {
-      return Object.keys(this.currentProject.detailsMainTextPc || {}).length - 1 || 0
-    },
-    mainDescPcLength() {
-      return Object.keys(this.currentProject.detailsMainDescPc || {}).length - 1 || 0
-    },
-    mainTextSpLength() {
-      return Object.keys(this.currentProject.detailsMainTextSp || {}).length - 1 || 0
-    },
-    mainDescSpLength() {
-      return Object.keys(this.currentProject.detailsMainDescSp || {}).length - 1 || 0
-    },
     openningEnd() {
       return this.$store.getters['openning/state']
     },
@@ -127,12 +100,12 @@ export default {
   },
 
   watch: {
-    openningEnd: function () {
+    openningEnd () {
       setTimeout(() => {
         this.mvItemViewIn()
       }, 1000)
     },
-    imageLoaded: function () {
+    imageLoaded () {
       if (this.imageLoaded) {
         if (!this.openningEnd) return
         this.mvItemViewIn()
@@ -163,7 +136,7 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // リセット
     if (this.$SITECONFIG.isMobile) {
       this.iObserver.unobserve(this.observe)
@@ -187,16 +160,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 :root {
   --viewportWidth: 100vw;
   --viewportHeight: 100vh;
 }
 
+/////////////////////// PC STYLE //////////////////////////
 .hero-bg {
   position: relative;
   height: var(--viewportHeight, 100vh);
@@ -218,21 +187,21 @@ export default {
   height: 100%;
   pointer-events: none;
   user-select: none;
-}
 
-.hero-img-picture,
-.hero-img-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-
-  @include tab-vertical() {
-    object-position: right;
-  }
-
-  @include sp() {
+  & picture,
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     object-position: center;
+
+    @include tab-vertical() {
+      object-position: right;
+    }
+
+    @include sp() {
+      object-position: center;
+    }
   }
 }
 
@@ -278,7 +247,9 @@ export default {
   font-size: 12px;
   font-family: $helvetica;
 }
+///////////////////////////////////////////////////////////
 
+/////////////////////// SP STYLE //////////////////////////
 .hero-title-sp {
   margin: 0 0 23px 0;
   font-size: vw_sp(120);
@@ -295,10 +266,10 @@ export default {
 .hero-title-wrapper-sp {
   display: block;
   white-space: nowrap;
-}
 
-.hero-title-wrapper-sp-first {
-  text-align: right;
+  &:first-of-type {
+    text-align: right;
+  }
 }
 
 .hero-desc-wrapper-sp {
@@ -330,23 +301,14 @@ export default {
   text-indent: -4px;
 }
 
+// .is-android .hero-index-sp-01 {
+//   position: relative;
+//   left: -4px;
+// }
+
 .hero-full-title-sp {
   font-size: 108px;
   font-family: $sixcaps;
 }
-
-.works-mv-img picture,
-.works-mv-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.works-mv-item-first {
-  margin: 0 0 40px 0;
-}
-
-.works-mv-item .card-sub-title {
-  margin: 0 0 10px 0;
-}
+///////////////////////////////////////////////////////////
 </style>

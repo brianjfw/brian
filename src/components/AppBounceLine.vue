@@ -58,13 +58,6 @@ export default {
   data: () => {
     return {
       path: { y: 200 },
-      isInitialized: false,
-      isMounted: false,
-      animations: {
-        mouseMove: null,
-        mouseLeave: null,
-        fadeIn: null
-      }
     }
   },
 
@@ -73,200 +66,247 @@ export default {
      * 親コンポーネントからアニメーションの状態管理をする
      */
     state() {
-      if (!this.isMounted || !this.isInitialized) {
-        console.warn('AppBounceLine: Component not ready for animation');
-        return;
-      }
-
-      try {
-        if (this.state === 'extend') {
-          this.fadeInAnimation();
-        }
-      } catch (error) {
-        console.warn('AppBounceLine: Error during state change:', error);
-      }
+      if (this.state === 'extend') this.fadeInAnimation()
     },
-  },
-
-  beforeMount() {
-    this.isMounted = false;
-    this.isInitialized = false;
   },
 
   mounted() {
-    this.isMounted = true;
-    
-    try {
-      this.svg = this.$refs.svg;
-      if (!this.svg) {
-        console.warn('AppBounceLine: SVG element not found');
-        return;
-      }
+    /**
+     * 参考
+     * https://codepen.io/osublake/pen/qaRBmY/613dea251165576962577e898b1a4ce7?editors=1010
+     */
+    this.svg = this.$refs.svg
+    this.amplitude = 0.07
+    this.baseLine = 80
+    this.mouseMoveBounceAnimation = null
+    this.mouseLeaveBounceAnimation = null
+    this.isFadeInAnimationActive = false
+    this.isMouseLeaveBounceAnimationActive = false
 
-      this.amplitude = 0.07;
-      this.baseLine = 80;
-      this.isFadeInAnimationActive = false;
-      this.isMouseLeaveBounceAnimationActive = false;
-
-      // アニメーションさせない場合は基準位置にする
-      if (!this.pcAnimation && !this.spAnimation) {
-        this.path.y = this.baseLine;
-      }
-
-      this.isInitialized = true;
-    } catch (error) {
-      console.warn('AppBounceLine: Error during initialization:', error);
-    }
-  },
-
-  beforeUnmount() {
-    this.killAllAnimations();
-    this.isMounted = false;
-    this.isInitialized = false;
+    // アニメーションさせない場合は基準位置にする
+    if (!this.pcAnimation && !this.spAnimation) this.path.y = this.baseLine
   },
 
   methods: {
-    killAllAnimations() {
-      try {
-        Object.values(this.animations).forEach(animation => {
-          if (animation?.kill) {
-            animation.kill();
-          }
-        });
-        
-        this.animations = {
-          mouseMove: null,
-          mouseLeave: null,
-          fadeIn: null
-        };
-      } catch (error) {
-        console.warn('AppBounceLine: Error killing animations:', error);
-      }
-    },
-
-    getEasing() {
-      return this.$EASING?.transform || 'power1.out';
-    },
-
-    getDuration() {
-      return this.$SITECONFIG?.baseDuration || 0.3;
-    },
-
-    safeGsapAnimation(target, props) {
-      if (!this.isMounted || !this.isInitialized) {
-        console.warn('AppBounceLine: Component not ready for animation');
-        return null;
-      }
-
-      if (!this.$gsap) {
-        console.warn('AppBounceLine: GSAP not initialized');
-        return null;
-      }
-
-      if (!target) {
-        console.warn('AppBounceLine: Animation target not found');
-        return null;
-      }
-
-      try {
-        return this.$gsap.to(target, {
-          ...props,
-          ease: props.ease || this.getEasing(),
-          duration: props.duration || this.getDuration(),
-        });
-      } catch (error) {
-        console.warn('AppBounceLine: Animation error:', error);
-        return null;
-      }
-    },
-
     onMousemove(e) {
-      if (!this.isMounted || !this.isInitialized) return;
-      if ((!this.spAnimation && this.$SITECONFIG?.isMobile) || 
-          this.isFadeInAnimationActive || 
-          !(e.target === this.svg && !this.isMouseLeaveBounceAnimationActive)) return;
-
-      if (this.animations.mouseLeave?.kill) {
-        this.animations.mouseLeave.kill();
-      }
-      
-      this.animations.mouseMove = this.safeGsapAnimation(this.path, {
+      // SPデバイスかフェードインアニメーション中は処理を返す
+      // SVGに触れている時だけ実行
+      if ((!this.spAnimation && this.$SITECONFIG.isMobile) || this.isFadeInAnimationActive || !(e.target === this.svg && !this.isMouseLeaveBounceAnimationActive)) return
+      if (this.mouseLeaveBounceAnimation) this.mouseLeaveBounceAnimation.kill()
+      // Y軸の値をマウスの位置から吸着させてるように動かす
+      this.mouseMoveBounceAnimation = this.$gsap.to(this.path, {
         duration: 0.3,
         ease: 'power1.out',
         y: (e.offsetY / this.svg.clientHeight - 0.5) * (this.svg.clientHeight + this.svg.clientWidth) * this.amplitude + this.baseLine,
-      });
+      })
     },
-
     onMouseLeave() {
-      if (!this.isMounted || !this.isInitialized) return;
-      if ((!this.spAnimation && this.$SITECONFIG?.isMobile) || this.isFadeInAnimationActive) return;
-
-      if (this.animations.mouseMove?.kill) {
-        this.animations.mouseMove.kill();
-      }
-
-      this.isMouseLeaveBounceAnimationActive = true;
-      
-      this.animations.mouseLeave = this.safeGsapAnimation(this.path, {
+      // SPデバイスかフェードインアニメーション中は処理を返す
+      if ((!this.spAnimation && this.$SITECONFIG.isMobile) || this.isFadeInAnimationActive) return
+      if (this.mouseMoveBounceAnimation) this.mouseMoveBounceAnimation.kill()
+      this.isMouseLeaveBounceAnimationActive = true
+      // Y軸の値をバウンスさせて元に戻す
+      this.mouseLeaveBounceAnimation = this.$gsap.to(this.path, {
         duration: 1.0,
         ease: 'elastic.out(1, 0.3)',
         y: this.baseLine,
-      });
-      
+      })
       setTimeout(() => {
-        this.isMouseLeaveBounceAnimationActive = false;
-      }, 100);
+        this.isMouseLeaveBounceAnimationActive = false
+      }, 100)
     },
-
     fadeInAnimation() {
-      if (!this.isMounted || !this.isInitialized) return;
-      if ((!this.spAnimation && this.$SITECONFIG?.isMobile) || (!this.pcAnimation && this.$SITECONFIG?.isPc)) return;
+      // propsの設定でアニメーションをさせない場合は処理を返す
+      if ((!this.spAnimation && this.$SITECONFIG.isMobile) || (!this.pcAnimation && this.$SITECONFIG.isPc)) return
 
-      this.isFadeInAnimationActive = true;
+      this.isFadeInAnimationActive = true
 
-      this.animations.fadeIn = this.safeGsapAnimation(this.path, {
-        duration: this.getDuration(),
-        ease: this.getEasing(),
+      this.$gsap.to(this.path, {
+        duration: this.$SITECONFIG.baseDuration,
+        ease: this.$EASING.transform,
         delay: this.start,
         y: this.baseLine,
         onComplete: () => {
-          this.isFadeInAnimationActive = false;
+          this.isFadeInAnimationActive = false
         },
-      });
-
-      this.safeGsapAnimation(this.svg, {
-        duration: this.getDuration(),
-        ease: this.getEasing(),
+      })
+      this.$gsap.to(this.svg, {
+        duration: this.$SITECONFIG.baseDuration,
+        ease: this.$EASING.transform,
         delay: this.start,
         scaleX: 1,
-      });
+      })
     },
   },
 }
 </script>
 
 <style lang="scss" scoped>
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .app-bounce-line {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
+  transform: scaleX(0);
+  z-index: 1;
 
-@media (hover: hover) and (pointer: fine) {
-  .bounce-line:hover {
-    cursor: pointer;
+  & path {
+    fill: none;
+    pointer-events: none;
   }
 }
 
-.bounce-line-path {
-  fill: none;
+//modifier
+
+.app-bounce-line--index-hero {
+  position: absolute;
+  top: vw(-100);
+  left: 0;
+  stroke: $white;
+
+  @include sp() {
+    top: vw_sp(-124);
+  }
+}
+
+.app-bounce-line--index-about {
+  top: vw(190);
+  left: 40px;
+  width: calc(100% - 56px - 40px);
+  stroke: $darkBlue;
+
+  @include tab {
+    top: vw(220);
+    left: vw(40);
+    width: calc(100% - #{vw(56)} - 40px);
+  }
+}
+
+.app-bounce-line--index-project-01 {
+  top: auto;
+  bottom: vw(90);
+  left: 40px;
+  width: calc(100% - 200px);
   stroke: $black;
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
+
+  @include sp() {
+    bottom: vw_sp(90);
+    left: 20px;
+    width: calc(100% - 40px);
+  }
+}
+
+.app-bounce-line--index-project-02 {
+  top: auto;
+  bottom: vw(-90);
+  left: 40px;
+  width: calc(100% - 200px);
+  stroke: $black;
+
+  @include sp() {
+    bottom: vw_sp(-98);
+    left: 20px;
+    width: calc(100% - 40px);
+  }
+}
+
+.app-bounce-line--about-hero {
+  top: vw(-106);
+  left: 0;
+  stroke: $black;
+
+  @include sp() {
+    top: vw_sp(-122);
+  }
+}
+
+.app-bounce-line--about-award {
+  top: vw(-100);
+  left: 0;
+  width: 100%;
+  height: vw(200);
+  stroke: $gray;
+  transform: scaleX(1);
+}
+
+.app-bounce-line--about-award-last {
+  top: vw(-100);
+  left: 0;
+  width: 100%;
+  height: vw(200);
+  stroke: $gray;
+  transform: scaleX(1);
+}
+
+.app-bounce-line--about-project-01 {
+  top: vw(-98);
+  left: 0;
+  width: calc(100% + 4px);
+  stroke: $black;
+
+  @include sp() {
+    top: vw_sp(-98);
+    left: 0;
+    width: 100%;
+  }
+}
+
+.app-bounce-line--about-project-02 {
+  top: auto;
+  bottom: vw(-98);
+  left: 0;
+  width: calc(100% + 4px);
+  stroke: $black;
+
+  @include sp() {
+    bottom: vw_sp(-98);
+    left: 0;
+    width: 100%;
+  }
+}
+
+.app-bounce-line--works {
+  top: auto;
+  bottom: vmin(148);
+  background-color: inherit;
+}
+
+.app-bounce-line--works-next-01 {
+  top: vw(-96);
+  left: 0;
+  width: calc(100%);
+
+  @include sp() {
+    top: vw_sp(-96);
+    left: 0;
+    width: 100%;
+  }
+}
+
+.app-bounce-line--works-next-02 {
+  top: auto;
+  bottom: vw(-96);
+  left: 0;
+  width: calc(100%);
+
+  @include sp() {
+    bottom: vw_sp(-96);
+    left: 0;
+    width: 100%;
+  }
+}
+
+.app-bounce-line--works-info {
+  top: vw(-110);
+  left: 0;
+  width: calc(100%);
+  height: vw(200);
+  transform: scaleX(1);
+
+  @include sp() {
+    left: 0;
+    width: 100%;
+  }
 }
 </style>

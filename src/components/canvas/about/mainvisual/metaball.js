@@ -115,8 +115,8 @@ export default class Particle {
     this.geometry = new THREE.PlaneBufferGeometry(2, 2, 1, 1);
 
     this.material = new THREE.RawShaderMaterial({
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
+      vertexShader,
+      fragmentShader,
       uniforms: {
         u_texture: {
           type: "t",

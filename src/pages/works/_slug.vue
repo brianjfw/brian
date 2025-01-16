@@ -2,7 +2,6 @@
   <div class="works">
     <!-- ページによって色を変更する -->
     <div
-      v-if="currentProject"
       class="works-bg"
       :style="`
       background-color:${currentProject.siteColor.bodyContentsColor};
@@ -10,33 +9,19 @@
       stroke:${currentProject.siteColor.mvTextColor};
       `"
     >
-      <MainVisualSection :current-project="currentProject" />
-      <ProjectVideoSection :current-project="currentProject" />
-      <ProjectContentsSection :current-project="currentProject" />
-      <NextProjectSection :current-project="currentProject" :next-project="nextProject" />
-    </div>
-    <div v-else class="works-error">
-      <p>Project not found</p>
+      <WorksMainVisualSection :current-project="currentProject" />
+      <WorksProjectVideoSection :current-project="currentProject" />
+      <WorksProjectContentsSection :current-project="currentProject" />
+      <WorksNextProjectSection :current-project="currentProject" :next-project="nextProject" />
     </div>
   </div>
 </template>
 
 <script>
 import ImagesLoaded from 'imagesloaded'
-import MainVisualSection from '~/components/works/MainVisualSection.vue'
-import ProjectVideoSection from '~/components/works/ProjectVideoSection.vue'
-import ProjectContentsSection from '~/components/works/ProjectContentsSection.vue'
-import NextProjectSection from '~/components/works/NextProjectSection.vue'
 
 export default {
-  name: 'Works',
-  
-  components: {
-    MainVisualSection,
-    ProjectVideoSection,
-    ProjectContentsSection,
-    NextProjectSection
-  },
+  name: 'WorksDetailPage',
 
   head() {
     return {
@@ -53,14 +38,10 @@ export default {
      */
     currentProject() {
       const projectResponse = this.$store.getters.projectData
-      console.log('[Works] Getting current project for slug:', this.$route.params.slug)
-      const index = projectResponse.findIndex((content) => content.id === this.$route.params.slug)
+      const index = projectResponse.findIndex((content) => content.id === this.$router.history.current.params.slug)
       const currentProject = projectResponse[index]
-      if (!currentProject) {
-        console.error('[Works] Project not found for slug:', this.$route.params.slug)
-        return null
-      }
       currentProject.index = index + 1
+
       return currentProject
     },
 
@@ -69,7 +50,7 @@ export default {
      */
     nextProject() {
       const projectResponse = this.$store.getters.projectData
-      const index = projectResponse.findIndex((content) => content.id === this.$route.params.slug)
+      const index = projectResponse.findIndex((content) => content.id === this.$router.history.current.params.slug)
       let nextProject = null
 
       if (index === projectResponse.length - 1) {
@@ -144,7 +125,7 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // リセット
     this.$preDefaultEvent(false)
     this.$asscroll.disable()
@@ -154,23 +135,8 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
+<style lang="scss" scoped>
 .works {
   overflow: hidden;
-}
-
-.works-error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f8f8f8;
-  color: #333;
-  font-size: 1.2rem;
 }
 </style>

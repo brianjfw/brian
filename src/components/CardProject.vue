@@ -13,7 +13,7 @@
         </span>
         <span class="card-title-wrapper-03">
           <span class="pc-only">
-            <AppTextAnimation :state="state" :rotate="CONSTANTS.BASEROTATE.left" :text="title" :sp-animation="false" />
+            <AppTextAnimation :state="state" :rotate="$BASEROTATE.left" :text="title" :sp-animation="false" />
           </span>
           <span class="sp-only">
             {{ title }}
@@ -25,17 +25,7 @@
 </template>
 
 <script>
-import { CONSTANTS } from '@/plugins/constants'
-import AppTextAnimation from '@/components/AppTextAnimation.vue'
-import AppPageTransitionImage from '@/components/AppPageTransitionImage.vue'
-import AppPageTransitionBg from '@/components/AppPageTransitionBg.vue'
-
 export default {
-  components: {
-    AppTextAnimation,
-    AppPageTransitionImage,
-    AppPageTransitionBg
-  },
   props: {
     /**
      * type : works/archiveで処理を切り替える
@@ -76,9 +66,6 @@ export default {
       default: '',
     },
   },
-  data: () => ({
-    CONSTANTS
-  }),
   computed: {
     setTagName() {
       if (this.type === 'works') {
@@ -117,11 +104,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .card-article {
   position: relative;
   width: 100%;

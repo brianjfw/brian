@@ -1,24 +1,54 @@
 export default {
   namespaced: true,
-  state: () => ({
-    isAnimation: false,
+  
+  state: {
+    isPickup: false,
+    isSceneAnimation: false,
     isTransition: false,
-    currentNumber: 1
-  }),
-  mutations: {
-    animation(state, value) {
-      state.isAnimation = value;
+    scene: '',
+    currentNumber: 1,
+    pos: {
+      x: 0,
+      y: 0,
     },
-    transition(state, value) {
-      state.isTransition = value;
-    },
-    currentNumber(state, value) {
-      state.currentNumber = value;
-    }
   },
+
   getters: {
-    animation: state => state.isAnimation,
+    state: state => state.isPickup,
+    sceneAnimationState: state => state.isSceneAnimation,
     transition: state => state.isTransition,
-    currentNumber: state => state.currentNumber
-  }
-};
+    scene: state => state.scene,
+    currnetNumber: state => state.currentNumber,
+    pos: state => state.pos,
+  },
+
+  mutations: {
+    open(state) {
+      state.isPickup = true;
+    },
+    close(state) {
+      state.isPickup = false;
+    },
+    sceneAnimationStart(state) {
+      state.isSceneAnimation = true;
+    },
+    sceneAnimationEnd(state) {
+      state.isSceneAnimation = false;
+    },
+    transitionStart(state) {
+      state.isTransition = true;
+    },
+    transitionEnd(state) {
+      state.isTransition = false;
+    },
+    setScene(state, scene) {
+      state.scene = scene;
+    },
+    setCurrentNumber(state, number) {
+      state.currentNumber = number;
+    },
+    setPos(state, pos) {
+      state.pos = pos;
+    },
+  },
+}

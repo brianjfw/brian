@@ -10,16 +10,16 @@
             </span>
             <span class="pc-only">
               <span class="contact-title-wrapper contact-title-wrapper-01">
-                <AppTextAnimation :state="isTextSegmentState" :rotate="CONSTANTS.BASEROTATE.right" :text="'I AM FRONTEND DEVELOPER'" :sp-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :rotate="$BASEROTATE.right" :text="'I AM FRONTEND DEVELOPER'" :sp-animation="false" />
               </span>
               <span class="contact-title-wrapper contact-title-wrapper-02">
-                <AppTextAnimation :state="isTextSegmentState" :start="0.12" :rotate="CONSTANTS.BASEROTATE.left" :text="'FOCUSED ON CREATING THINGS'" :sp-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :start="0.12" :rotate="$BASEROTATE.left" :text="'FOCUSED ON CREATING THINGS'" :sp-animation="false" />
               </span>
               <span class="contact-title-wrapper contact-title-wrapper-03">
-                <AppTextAnimation :state="isTextSegmentState" :start="0.24" :rotate="CONSTANTS.BASEROTATE.right" :text="'WITH INTERACTION & ANIMATION'" :sp-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :start="0.24" :rotate="$BASEROTATE.right" :text="'WITH INTERACTION & ANIMATION'" :sp-animation="false" />
               </span>
               <span class="contact-title-wrapper contact-title-wrapper-04">
-                <AppTextAnimation :state="isTextSegmentState" :start="0.36" :rotate="CONSTANTS.BASEROTATE.left" :text="'AS MY MAIN FOCUS.'" :sp-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :start="0.36" :rotate="$BASEROTATE.left" :text="'AS MY MAIN FOCUS.'" :sp-animation="false" />
               </span>
             </span>
             <span class="sp-only">
@@ -40,12 +40,12 @@
               <ul class="contact-info-list">
                 <li v-for="(data, index) in projectData" :key="data.id" class="contact-info-item js-click-target">
                   <AppPageTransitionImage :url="`works/${data.id}`" :index="index">
-                    <AppTextAnimation :state="isTextSegmentState" :start="0.48 + index * 0.12" :rotate="CONSTANTS.BASEROTATE.right" :text="data.title.full" />
+                    <AppTextAnimation :state="isTextSegmentState" :start="0.48 + index * 0.12" :rotate="$BASEROTATE.right" :text="data.title.full" />
                   </AppPageTransitionImage>
                 </li>
                 <li class="contact-info-item js-click-target">
                   <AppPageTransitionBg :url="`archive`" color="#000000">
-                    <AppTextAnimation :state="isTextSegmentState" :start="0.48 + projectData.length * 0.12" :rotate="CONSTANTS.BASEROTATE.right" :text="'ARCHIVE'" />
+                    <AppTextAnimation :state="isTextSegmentState" :start="0.48 + projectData.length * 0.12" :rotate="$BASEROTATE.right" :text="'ARCHIVE'" />
                   </AppPageTransitionBg>
                 </li>
               </ul>
@@ -53,7 +53,7 @@
             <div class="contact-info-name-area">
               <span class="pc-only">
                 <span class="contact-name">
-                  <AppTextAnimation :state="isTextSegmentState" :start="0.48" :rotate="CONSTANTS.BASEROTATE.right" :text="'HISAMI KURITA'" :sp-animation="false" />
+                  <AppTextAnimation :state="isTextSegmentState" :start="0.48" :rotate="$BASEROTATE.right" :text="'HISAMI KURITA'" :sp-animation="false" />
                 </span>
               </span>
               <span class="sp-only">
@@ -67,20 +67,20 @@
               :name="['・', 'DESIGNED BY', '(KENTO ISHIDUKA)']"
               :info="[
                 {
-                  link: contactData?.[1]?.list01?.link || '#',
-                  text: contactData?.[1]?.list01?.text || '',
+                  link: contactData[1].list01.link,
+                  text: contactData[1].list01.text,
                 },
                 {
-                  link: contactData?.[1]?.list02?.link || '#',
-                  text: contactData?.[1]?.list02?.text || '',
+                  link: contactData[1].list02.link,
+                  text: contactData[1].list02.text,
                 },
                 {
-                  link: contactData?.[1]?.list03?.link || '#',
-                  text: contactData?.[1]?.list03?.text || '',
+                  link: contactData[1].list03.link,
+                  text: contactData[1].list03.text,
                 },
               ]"
               :title="{
-                text: contactData?.[1]?.mainTitle?.title || '',
+                text: contactData[1].mainTitle.title,
                 link: '',
                 subtext: '',
               }"
@@ -95,22 +95,22 @@
               :name="['・', 'CODED BY', '(HISAMI KURITA)']"
               :info="[
                 {
-                  link: contactData?.[0]?.list01?.link || '#',
-                  text: contactData?.[0]?.list01?.text || '',
+                  link: contactData[0].list01.link,
+                  text: contactData[0].list01.text,
                 },
                 {
-                  link: contactData?.[0]?.list02?.link || '#',
-                  text: contactData?.[0]?.list02?.text || '',
+                  link: contactData[0].list02.link,
+                  text: contactData[0].list02.text,
                 },
                 {
-                  link: contactData?.[0]?.list03?.link || '#',
-                  text: contactData?.[0]?.list03?.text || '',
+                  link: contactData[0].list03.link,
+                  text: contactData[0].list03.text,
                 },
               ]"
               :title="{
-                text: contactData?.[0]?.mainTitle?.title || '',
-                link: contactData?.[0]?.mainTitle?.link || '',
-                subtext: contactData?.[0]?.mainTitle?.subtitle || '',
+                text: contactData[0].mainTitle.title,
+                link: contactData[0].mainTitle.link,
+                subtext: contactData[0].mainTitle.subtitle,
               }"
               :rotate="8"
               :xspeed="0.051"
@@ -124,24 +124,7 @@
 </template>
 
 <script>
-import { CONSTANTS } from '@/plugins/constants'
-import AppReadTitle from '@/components/AppReadTitle.vue'
-import AppTextAnimation from '@/components/AppTextAnimation.vue'
-import AppCircleBg from '@/components/AppCircleBg.vue'
-import AppCard from '@/components/AppCard.vue'
-import AppPageTransitionImage from '@/components/AppPageTransitionImage.vue'
-import AppPageTransitionBg from '@/components/AppPageTransitionBg.vue'
-
 export default {
-  name: 'ContactSection',
-  components: {
-    AppReadTitle,
-    AppTextAnimation,
-    AppCircleBg,
-    AppCard,
-    AppPageTransitionImage,
-    AppPageTransitionBg
-  },
   props: {
     projectData: {
       type: Array,
@@ -157,7 +140,6 @@ export default {
     return {
       isTextSegmentState: '',
       isCircleBgState: '',
-      CONSTANTS
     }
   },
 
@@ -179,7 +161,7 @@ export default {
     this.iObserver.observe(this.observe)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.iObserver.unobserve(this.observe)
     this.iObserver = null
   },
@@ -187,11 +169,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .contact {
   position: relative;
 }

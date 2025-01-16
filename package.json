@@ -2,44 +2,50 @@
   "name": "hisamikurita-portfolio",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "engines": {
-    "node": "20.x",
-    "npm": ">=10.0.0"
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   },
   "engineStrict": true,
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "node server.js",
     "preview": "vite preview",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
-    "lint:style": "stylelint \"**/*.{vue,css,scss}\" --ignore-path .gitignore",
+    "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
     "lint": "npm run lint:js && npm run lint:style"
   },
   "dependencies": {
     "@ashthornton/asscroll": "^2.0.2",
-    "@vitejs/plugin-vue": "^5.0.0",
-    "express": "^4.18.2",
+    "axios": "^1.6.7",
     "gsap": "^3.7.1",
     "imagesloaded": "^5.0.0",
-    "sass": "^1.69.7",
-    "scrolltrigger": "^1.0.1",
+    "mitt": "^3.0.1",
     "three": "^0.136.0",
-    "vite": "^5.0.0",
-    "vue": "^3.4.0",
-    "vue-router": "^4.2.0",
-    "vuex": "^4.1.0"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/eslint-parser": "^7.14.7",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "@babel/plugin-transform-runtime": "^7.25.9",
+    "@babel/preset-env": "^7.26.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "core-js": "^3.40.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-vue": "^9.19.0",
-    "prettier": "^3.1.0",
-    "stylelint": "^16.1.0",
+    "eslint-plugin-vue": "^9.21.1",
+    "prettier": "^3.2.5",
+    "sass": "^1.70.0",
+    "stylelint": "^16.2.1",
+    "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-standard": "^36.0.0",
-    "stylelint-config-standard-scss": "^13.0.0",
-    "stylelint-scss": "^6.0.0",
+    "stylelint-config-standard-scss": "^14.0.0",
+    "vite": "^5.1.4",
     "vite-plugin-glsl": "^1.2.1"
   }
 }

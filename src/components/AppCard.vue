@@ -23,20 +23,7 @@
 </template>
 
 <script>
-import CardMv from '@/components/CardMv.vue'
-import CardProject from '@/components/CardProject.vue'
-import CardContact from '@/components/CardContact.vue'
-import CardCompany from '@/components/CardCompany.vue'
-import CardWorks from '@/components/CardWorks.vue'
-
 export default {
-  components: {
-    CardMv,
-    CardProject,
-    CardContact,
-    CardCompany,
-    CardWorks,
-  },
   /**
    * componentName : 出力するコンポーネント名
    * type : CardProjectコンポーネントで works/archive で処理を切り替える
@@ -175,7 +162,7 @@ export default {
     })
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // SPの時は任意(spAnimation = false)で処理を返す
     // デフォルトではSPもアニメーションする
     if (!this.spAnimation && this.$SITECONFIG.isMobile) return
@@ -195,108 +182,45 @@ export default {
 
   methods: {
     createDragAnimation() {
-      try {
-        if (!this.$Draggable) {
-          console.warn('AppCard: Draggable plugin not available');
-          return;
-        }
-        
-        if (!this.wrapper) {
-          console.warn('AppCard: Wrapper element not available');
-          return;
-        }
+      this.drag = this.$Draggable.create(this.wrapper, {
+        type: 'x,y',
+        bounds: this.$parent.$el,
+        edgeResistance: 0.6,
+        inertia: true,
+        allowEventDefault: true,
 
-        this.drag = this.$Draggable.create(this.wrapper, {
-          type: 'x,y',
-          bounds: this.$parent.$el,
-          edgeResistance: 0.6,
-          inertia: true,
-          allowEventDefault: true,
-
-          onThrowUpdate: () => {
-            if (!this.drag?.[0]) return;
-            
-            this.cardAngle += (this.drag[0].deltaX + this.drag[0].deltaY) / 3.0
-            this.$gsap.to(this.wrapper, {
-              duration: 0.01,
-              ease: 'none',
-              rotate: this.cardAngle,
-            })
-            this.$gsap.set(this.observer, {
-              x: this.drag[0].x,
-              y: this.drag[0].y,
-            })
-          },
-        })
-      } catch (error) {
-        console.error('AppCard: Error creating drag animation:', error);
-      }
-    },
-
-    getEasing() {
-      return this.$EASING?.transform || 'power2.out';
-    },
-
-    getDuration(type = 'base') {
-      if (type === 'short') {
-        return this.$SITECONFIG?.shortDuration || 0.3;
-      }
-      return this.$SITECONFIG?.baseDuration || 0.6;
-    },
-
-    safeGsapAnimation(element, props) {
-      if (!this.isMounted || !this.isInitialized) {
-        console.warn('AppCard: Component not ready for animation');
-        return null;
-      }
-
-      if (!this.$gsap) {
-        console.warn('AppCard: GSAP not initialized');
-        return null;
-      }
-
-      if (!element) {
-        console.warn('AppCard: Animation target not found');
-        return null;
-      }
-
-      try {
-        return this.$gsap.to(element, {
-          ...props,
-          ease: props.ease || this.getEasing(),
-          duration: props.duration || this.getDuration(),
-        });
-      } catch (error) {
-        console.warn('AppCard: Animation error:', error);
-        return null;
-      }
+        onThrowUpdate: () => {
+          this.cardAngle += (this.drag[0].deltaX + this.drag[0].deltaY) / 3.0
+          this.$gsap.to(this.wrapper, {
+            duration: 0.01,
+            ease: 'none',
+            rotate: this.cardAngle,
+          })
+          this.$gsap.set(this.observer, {
+            x: this.drag[0].x,
+            y: this.drag[0].y,
+          })
+        },
+      })
     },
 
     fadeInAnimation() {
-      if (!this.isMounted || !this.isInitialized) return;
-      
-      this.state = 'center';
-      this.safeGsapAnimation(this.wrapper, {
+      this.state = 'center'
+      this.$gsap.to(this.wrapper, {
         duration: 1.5,
+        ease: this.$EASING.transform,
         y: -280,
-        rotate: 0
-      });
+        rotate: 0,
+      })
     },
 
     parallax() {
-      if (!this.isMounted || !this.isInitialized || !this.root) return;
-
-      try {
-        const rect = this.root.getBoundingClientRect();
-        this.safeGsapAnimation(this.root, {
-          duration: 0.333,
-          ease: 'none',
-          x: rect.top * this.xspeed,
-          y: rect.top * this.yspeed
-        });
-      } catch (error) {
-        console.warn('AppCard: Error during parallax:', error);
-      }
+      this.$gsap.to(this.root, {
+        duration: 0.333,
+        ease: 'none',
+        x: this.root.getBoundingClientRect().top * this.xspeed,
+        y: this.root.getBoundingClientRect().top * this.yspeed,
+      })
     },
 
     observe() {
@@ -353,9 +277,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .app-card {
   position: relative;
 }

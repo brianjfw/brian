@@ -70,6 +70,7 @@ import Stage from '../components/canvas/stage'
 import { preEvent } from '../assets/js/preEvent'
 
 export default {
+  name: 'DefaultLayout',
   data: () => {
     return {
       isAndroid: '',
@@ -127,7 +128,7 @@ export default {
     /**
      * 背景色が変わる遷移
      */
-    defaultTransitionState: function () {
+    defaultTransitionState () {
       // アニメーション開始
       if (this.defaultTransitionState) {
         this.$gsap.set(this.$refs.LayoutsNormalTransitionColorBg, {
@@ -148,7 +149,7 @@ export default {
     /**
      * 画像が変わる遷移
      */
-    imageTransitionState: function () {
+    imageTransitionState () {
       // アニメーション開始
       if (this.imageTransitionState) {
         const index = this.imageTransitionIndex > this.getProjectData.length - 1 ? 0 : this.imageTransitionIndex
@@ -177,7 +178,7 @@ export default {
     /**
      * ハンバーガーメニュー
      */
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       // ハンバガーメニューが開いた時
       if (this.hambergerMenuState) {
         this.$preDefaultEvent(false)
@@ -238,7 +239,7 @@ export default {
     /**
      * ページ遷移のアニメーション発火管理
      */
-    pickupTransitionState: function () {
+    pickupTransitionState () {
       const index = this.pickupCurrentNumber - 1.0
 
       if (this.pickupTransitionState) {
@@ -252,7 +253,7 @@ export default {
     /**
      * ピックアップ管理
      */
-    indexPickupIsAnimation: function () {
+    indexPickupIsAnimation () {
       const index = this.pickupCurrentNumber - 1.0
 
       // current
@@ -279,7 +280,7 @@ export default {
     /**
      * ピックアップのシーン管理
      */
-    indexPickupScene: function () {
+    indexPickupScene () {
       switch (this.indexPickupScene) {
         case 'next01':
           this.particle.setSceneFirst(1)
@@ -384,10 +385,34 @@ export default {
           }
         )
 
-        this.stage = new Stage(this.$refs.Webgl)
-        this.stage.init()
+        this.meshList = new Array(3).fill(null).map(
+          (_, i) => new Particle(
+            this.$refs.Webgl,
+            {
+              pc: this.pickupData?.[i]?.heroImg?.pc?.url || '',
+              sp: this.pickupData?.[i]?.heroImg?.sp?.url || '',
+            }
+          )
+        )
 
-        this.meshList = []
+        const stage = new Stage(this.$refs.Webgl)
+        stage.init()
+
+        // Set up resize handler
+        window.addEventListener('resize', () => {
+          for (let i = 0; i < this.meshList.length; i++) {
+            this.meshList[i].onResize()
+          }
+          stage.onResize()
+        })
+
+        // Set up RAF handler
+        this.mRaf = () => {
+          stage.onRaf()
+          for (let i = 0; i < this.meshList.length; i++) {
+            this.meshList[i].onRaf()
+          }
+        }
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error('Error initializing client-side features:', err)
@@ -421,20 +446,6 @@ export default {
       if(this.hambergerMenuState) return;
 
       this.meshList[2].onMouseMove(e)
-    }
-
-    window.addEventListener('resize', () => {
-      for (let i = 0; i < 3.0; i++) {
-        this.meshList[i].onResize()
-      }
-      stage.onResize()
-    })
-
-    this.mRaf = () => {
-      stage.onRaf()
-      for (let i = 0; i < 3.0; i++) {
-        this.meshList[i].onRaf()
-      }
     }
 
     // pickupに侵入する時にかくつかないようにRAFを1秒間まわしておく
@@ -526,12 +537,7 @@ export default {
 </script>
 
 <style lang="scss">
-@use '../assets/scss/constants/break-points' as *;
-@use '../assets/scss/constants/color' as *;
-@use '../assets/scss/constants/font' as *;
-@use '../assets/scss/functions/mixins' as *;
-
-:root {
+.default {
   --viewportWidth: 100vw;
   --viewportHeight: 100vh;
 }
@@ -703,5 +709,6 @@ export default {
 
 .footer-link.is-current {
   color: $gray;
+}
 }
 </style>

@@ -55,8 +55,8 @@ export default class Mesh {
   _setMesh() {
     this.geometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1);
     this.material = new THREE.RawShaderMaterial({
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
+      vertexShader,
+      fragmentShader,
       uniforms: {
         u_texture: {
           type: "t",

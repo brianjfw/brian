@@ -1,119 +1,121 @@
 <template>
-  <div class="app" :class="{ 'is-initialized': isInitialized }">
-    <BaseHeader />
-    <BaseMouse />
-    <div asscroll-container>
-      <div asscroll>
-        <router-view v-slot="{ Component }">
-          <transition name="page" mode="out-in">
-            <component :is="Component" />
-          </transition>
-        </router-view>
+  <div :class="[bodyClass, isAndroid, isWindows, isSafari]">
+    <div class="asscroll-container">
+      <div class="asscroll">
+        <div class="asscroll-contents">
+          <BaseOpenning />
+          <BaseMouse />
+          <BaseLoading />
+          <BaseHeader />
+          <BaseHambergerMenu />
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, getCurrentInstance } from 'vue';
-import BaseHeader from './components/BaseHeader.vue';
-import BaseMouse from './components/BaseMouse.vue';
-import ASScroll from '@ashthornton/asscroll';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+<script>
+import BaseOpenning from './components/BaseOpenning.vue'
+import BaseMouse from './components/BaseMouse.vue'
+import BaseLoading from './components/BaseLoading.vue'
+import BaseHeader from './components/BaseHeader.vue'
+import BaseHambergerMenu from './components/BaseHambergerMenu.vue'
+import { useEventBus } from '@/plugins/eventBus'
 
-gsap.registerPlugin(ScrollTrigger);
+export default {
+  name: 'App',
+  components: {
+    BaseOpenning,
+    BaseMouse,
+    BaseLoading,
+    BaseHeader,
+    BaseHambergerMenu
+  },
+  data() {
+    return {
+      bodyClass: '',
+      isAndroid: '',
+      isWindows: '',
+      isSafari: '',
+      eventBus: useEventBus()
+    }
+  },
+  mounted() {
+    // Initialize data
+    this.$store.dispatch('initializeData')
 
-const isInitialized = ref(false);
+    // Add device detection logic here
+    if (navigator.userAgent.toLowerCase().includes('android')) {
+      this.isAndroid = 'is-android'
+    }
+    if (navigator.userAgent.toLowerCase().includes('windows')) {
+      this.isWindows = 'is-windows'
+    }
+    if (navigator.userAgent.toLowerCase().includes('safari') && !navigator.userAgent.toLowerCase().includes('chrome')) {
+      this.isSafari = 'is-safari'
+    }
 
-onMounted(async () => {
-  const app = getCurrentInstance();
-  
-  // Wait a tick for DOM to be ready
-  await new Promise(resolve => setTimeout(resolve, 0));
-  
-  const asscroll = new ASScroll({
-    disableRaf: true,
-    touchScrollType: 'transform',
-    containerElement: document.querySelector('[asscroll-container]'),
-    scrollElements: document.querySelector('[asscroll]')
-  });
+    // Initialize ASScroll
+    this.initASScroll()
+  },
+  methods: {
+    initASScroll() {
+      this.$nextTick(() => {
+        const container = document.querySelector('.asscroll-container')
+        const scrollElement = document.querySelector('.asscroll')
+        
+        if (!container || !scrollElement) {
+          console.warn('ASScroll container or scroll element not found')
+          return
+        }
 
-  try {
-    await asscroll.enable();
-    
-    gsap.ticker.add(asscroll.update);
-
-    ScrollTrigger.defaults({
-      scroller: asscroll.containerElement
-    });
-
-    ScrollTrigger.scrollerProxy(asscroll.containerElement, {
-      scrollTop(value) {
-        return arguments.length ? asscroll.currentPos = value : asscroll.currentPos;
-      },
-      getBoundingClientRect() {
-        return { 
-          top: 0, 
-          left: 0, 
-          width: window.innerWidth, 
-          height: window.innerHeight 
-        };
-      }
-    });
-
-    asscroll.on('update', ScrollTrigger.update);
-    ScrollTrigger.addEventListener('refresh', asscroll.resize);
-
-    // Make available through Vue's globalProperties
-    app.appContext.app.config.globalProperties.$asscroll = asscroll;
-    app.appContext.app.config.globalProperties.$gsap = gsap;
-    app.appContext.app.config.globalProperties.$ScrollTrigger = ScrollTrigger;
-
-    isInitialized.value = true;
-  } catch (error) {
-    console.error('Error initializing ASScroll:', error);
+        try {
+          const asscroll = new this.$ASScroll({
+            containerElement: container,
+            scrollElements: scrollElement,
+            ease: 0.075
+          })
+          
+          // Store ASScroll instance
+          this.$asscroll = asscroll
+          
+          // Start ASScroll
+          asscroll.enable()
+          
+          // Emit event when ASScroll is ready using event bus
+          this.eventBus.emit('asscroll:ready', asscroll)
+        } catch (error) {
+          console.error('Failed to initialize ASScroll:', error)
+        }
+      })
+    }
   }
-});
+}
 </script>
 
 <style lang="scss">
-@use '@/assets/scss/reset/sanitize';
-@use '@/assets/scss/reset/reset';
-@use '@/assets/scss/reset/sanitize-extra';
-@use '@/assets/scss/utility/state';
-@use '@/assets/scss/global/base';
-
-.app {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  
-  &.is-initialized {
-    opacity: 1;
-  }
+:root {
+  --viewportWidth: 100vw;
+  --viewportHeight: 100vh;
 }
 
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.page-enter-from,
-.page-leave-to {
-  opacity: 0;
-}
-
-[asscroll-container] {
-  position: fixed;
-  top: 0;
-  left: 0;
+.asscroll-container {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-[asscroll] {
+.asscroll {
+  position: relative;
   width: 100%;
   height: 100%;
+}
+
+.asscroll-contents {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
 }
 </style> 

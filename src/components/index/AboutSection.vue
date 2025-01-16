@@ -9,22 +9,22 @@
             </span>
             <span class="pc-only">
               <span class="about-title-wrapper about-title-wrapper-01">
-                <AppTextAnimation :state="isTextSegmentState" :rotate="CONSTANTS.BASEROTATE.right" :text="'IN THE SUMMER OF 22, I STARTED PROGRAMMING. IT WAS LA'" :sp-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :rotate="$BASEROTATE.right" :text="'IN THE SUMMER OF 22, I STARTED PROGRAMMING. IT WAS LA'" :sp-animation="false" />
               </span>
               <span class="about-title-wrapper about-title-wrapper-02">
                 <AppTextAnimation
                   :state="isTextSegmentState"
                   :start="0.12"
-                  :rotate="CONSTANTS.BASEROTATE.left"
+                  :rotate="$BASEROTATE.left"
                   :text="'TER THAN MOST, BUT I THINK I FOUND SOMETHING THAT I WAS PASSION'"
                   :sp-animation="false"
                 />
               </span>
               <span class="about-title-wrapper about-title-wrapper-03">
-                <AppTextAnimation :state="isTextSegmentState" :start="0.24" :rotate="CONSTANTS.BASEROTATE.right" text="ATE ABOUT. I'VE BEEN WRITING CODE EVERY DAY EVER SINCE. MY STREN" :sp-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :start="0.24" :rotate="$BASEROTATE.right" text="ATE ABOUT. I'VE BEEN WRITING CODE EVERY DAY EVER SINCE. MY STREN" :sp-animation="false" />
               </span>
               <span class="about-title-wrapper about-title-wrapper-04">
-                <AppTextAnimation :state="isTextSegmentState" :start="0.36" :rotate="CONSTANTS.BASEROTATE.left" :text="'GTH IS INSATIABLE CURIOSITY.'" :sp-animation="false" />
+                <AppTextAnimation :state="isTextSegmentState" :start="0.36" :rotate="$BASEROTATE.left" :text="'GTH IS INSATIABLE CURIOSITY.'" :sp-animation="false" />
               </span>
             </span>
             <span class="sp-only">
@@ -64,26 +64,13 @@
 </template>
 
 <script>
-import { CONSTANTS } from '@/plugins/constants';
-import AppReadTitle from '@/components/AppReadTitle.vue';
-import AppBounceLine from '@/components/AppBounceLine.vue';
-import AppTextAnimation from '@/components/AppTextAnimation.vue';
-
 export default {
-  components: {
-    AppReadTitle,
-    AppBounceLine,
-    AppTextAnimation
-  },
-
   data: () => {
     return {
       isTextSegmentState: 'default',
       isTextUnderlineState: 'default',
-      CONSTANTS
     }
   },
-
   mounted() {
     /* text-animation */
     this.observe = this.$refs.AboutTitle
@@ -102,7 +89,7 @@ export default {
     this.iObserver.observe(this.observe)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.iObserver.unobserve(this.observe)
     this.iObserver = null
   },
@@ -110,11 +97,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 .about-bg {
   position: relative;
 

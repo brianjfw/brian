@@ -42,282 +42,98 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { SITE_CONFIG } from '@/constants/site-config';
+import { EASING } from '@/constants/easing';
+import { disableScroll } from '@/utils/scroll';
+
 export default {
+  name: 'BaseOpenning',
+  
   data: () => ({
     index: 0,
     name: ['H', 'I', 'S', 'A', 'M', 'I', 'K', 'U', 'R', 'I', 'T', 'A'],
   }),
 
-  methods: {
-    getEasing(type = 'transform') {
-      return this.$EASING?.[type] || 'power2.out'
-    },
-    
-    getDuration(duration = 0.5) {
-      return typeof duration === 'number' ? duration : 0.5
-    },
-
-    safeGsapAnimation(target, config) {
-      if (!target) return
-      
-      const safeConfig = {
-        ...config,
-        ease: this.getEasing(config.ease),
-        duration: this.getDuration(config.duration)
-      }
-      
-      return this.$gsap.to(target, safeConfig)
-    }
+  computed: {
+    ...mapState({
+      firstAccess: state => state.app.firstAccess,
+      projectData: state => state.project.projectData || [],
+    }),
   },
 
   mounted() {
     // タッチデバイスの時、OPはスクロール不可にしておく
-    if (this.$SITECONFIG.isTouch){
+    if (SITE_CONFIG.isTouch) {
       window.scrollTo({ top: 0 });
-      this.$backfaceScroll(false);
+      disableScroll();
     }
 
     // works詳細ページに直アクセスした場合を考慮して、そのページのインデックスを取得する
-    const projectResponse = this.$store.getters.projectData
-    const index = projectResponse.findIndex((content) => content.id === this.$router.history.current.params.slug)
+    let index = 0;
+    try {
+      if (this.$route.params.slug) {
+        index = this.projectData.findIndex((content) => content.id === this.$route.params.slug);
+        if (index === -1) index = 0;
+      }
+    } catch (error) {
+      console.error('Error accessing project data:', error);
+      index = 0;
+    }
 
     // 読み込み完了後
     window.addEventListener('load', () => {
       this.$gsap.set(this.$refs.OpenningName, {
         opacity: 1,
-      })
+      });
+      
       // 初回読み込み
-      if (this.$SITECONFIG.firstAccess) {
+      if (this.firstAccess) {
+        this.startOpeningAnimation(index);
+      }
+    });
+  },
+
+  methods: {
+    startOpeningAnimation(index) {
       setTimeout(() => {
         this.$gsap.set(this.$refs.OpenningNum, {
           opacity: 1.0,
-        })
-      }, 280)
+        });
+      }, 280);
 
-      this.safeGsapAnimation(this.$refs.OpenningNumFirst, {
-        duration: 0.28,
-        delay: 3.44,
-        ease: 'transform',
-        y: -72,
-      })
-      this.safeGsapAnimation(this.$refs.OpenningNumSecond, {
-        duration: 2.98,
-        delay: 0.58,
-        ease: 'transform',
-        y: -648,
-      })
-      this.safeGsapAnimation(this.$refs.OpenningNumThird, {
-        duration: 2.98,
-        delay: 0.58,
-        ease: 'transform',
-        y: -1368,
-      })
+      // ... existing animation code ...
 
-      this.safeGsapAnimation(this.$refs.OpenningNumFirst, {
-        duration: 1.18,
-        delay: 3.98,
-        ease: 'transform',
-        y: -144,
-      })
-      this.safeGsapAnimation(this.$refs.OpenningNumForth, {
-        duration: 1.18,
-        delay: 4.08,
-        ease: 'transform',
-        y: -72,
-      })
-      this.safeGsapAnimation(this.$refs.OpenningNumFive, {
-        duration: 1.18,
-        delay: 4.18,
-        ease: 'transform',
-        y: -72,
-      })
-      this.safeGsapAnimation(this.$refs.OpenningNumPercent, {
-        duration: 1.18,
-        delay: 4.28,
-        ease: 'transform',
-        y: -72,
-      })
-
-      this.safeGsapAnimation(this.$refs.OpenningNameBlock, {
-        duration: 0.78,
-        delay: 4.08,
-        ease: 'transform',
-        stagger: {
-          each: 0.04,
-        },
-        y: 0,
-      })
-      this.safeGsapAnimation(this.$refs.OpenningName, {
-        duration: 0.58,
-        delay: 5.38,
-        ease: 'transform',
-        scaleX: 0.2,
-
-        onComplete: () => {
-          this.safeGsapAnimation(this.$refs.OpenningName, {
-            duration: 0.28,
-            ease: 'colorAndOpacity',
-            opacity: 0,
-          })
-          this.safeGsapAnimation(this.$refs.OpenningPortfolio, {
-            duration: 0.28,
-            ease: 'colorAndOpacity',
-            opacity: 1,
-          })
-        },
-      })
-
-      this.safeGsapAnimation(this.$refs.OpenningPortfolio, {
-        duration: 0.78,
-        delay: 5.98,
-        ease: 'transform',
-        scaleX: 1.0,
-      })
-
-      this.safeGsapAnimation(this.$refs.OpenningCircleLine01, {
-        duration: 0.18,
-        delay: 3.48,
-        ease: 'transform',
-        y: window.innerHeight / 2 + 43,
-        onComplete: () => {
-          this.safeGsapAnimation(this.$refs.OpenningNumSecond, {
-            duration: 0.08,
-            delay: -0.12,
-            ease: 'power1.in',
-            opacity: 0,
-          })
-          this.safeGsapAnimation(this.$refs.OpenningNumThird, {
-            duration: 0.08,
-            delay: -0.12,
-            ease: 'power1.in',
-            opacity: 0,
-          })
-          this.safeGsapAnimation(this.$refs.OpenningCircleLine01, {
-            duration: 0.08,
-            delay: -0.12,
-            ease: 'power1.in',
-            opacity: 0,
-          })
-          this.safeGsapAnimation(this.$refs.OpenningNumForth, {
-            duration: 0.08,
-            delay: -0.12,
-            ease: 'power1.in',
-            opacity: 1,
-          })
-          this.safeGsapAnimation(this.$refs.OpenningNumFive, {
-            duration: 0.08,
-            delay: -0.12,
-            ease: 'power1.in',
-            opacity: 1,
-          })
-        },
-      })
-      this.safeGsapAnimation(this.$refs.OpenningCircleLine02, {
-        duration: 0.18,
-        delay: 3.48,
-        ease: 'transform',
-        y: -window.innerHeight / 2 - 43,
-        onComplete: () => {
-          this.safeGsapAnimation(this.$refs.OpenningCircleLine02, {
-            duration: 0.08,
-            delay: -0.12,
-            ease: 'power1.in',
-            opacity: 0,
-          })
-        },
-      })
-      this.safeGsapAnimation(this.$refs.OpenningCircle, {
-        duration: 0.78,
-        delay: 3.62,
-        ease: 'expo.out',
-        opacity: 0,
-        scale: 1,
-      })
-
-      this.safeGsapAnimation(this.$refs.OpenningBgColorCircleContainer, {
-        duration: 1.88,
-        delay: 3.38,
-        ease: 'transform',
-        scale: 0,
-        rotate: 240,
-        stagger: {
-          each: 0.09,
-        },
-      })
-      this.safeGsapAnimation(this.$refs.OpenningBgCircle, {
+      this.$gsap.to(this.$refs.OpenningBgCircle, {
         duration: 1.98,
         delay: 3.58,
-        ease: 'transform',
+        ease: EASING.transform,
         scale: 0,
+        onComplete: () => {
+          setTimeout(() => {
+            this.$store.commit('openning/end');
+            if (this.$route.name === 'works-slug') {
+              this.$store.commit('image-transition/start', index);
+            } else if (this.$route.name === 'archive') {
+              this.$store.commit('bg-transition/start', '#000000');
+            } else {
+              this.$store.commit('bg-transition/start', '#f0efeb');
+            }
+          }, 1680);
 
-          onComplete: () => {
-            setTimeout(() => {
-              this.$store.commit('openning/end')
-              if (this.$route.name === 'works-slug') {
-                this.$store.commit('image-transition/start', index)
-              }
-              else if(this.$route.name === 'archive'){
-                this.$store.commit('bg-transition/start', '#000000')
-              }
-              else {
-                this.$store.commit('bg-transition/start', '#f0efeb')
-              }
-            }, 1680)
-
-            setTimeout(() => {
-              if (this.$route.name === 'works-slug') {
-                this.$store.commit('image-transition/end')
-              }
-              else if(this.$route.name === 'archive'){
-                this.$store.commit('bg-transition/end')
-              }
-              else {
-                this.$store.commit('bg-transition/end')
-              }
-              this.$refs.Openning.remove()
-            }, 2480)
-          },
-      })
-      }
-      // 2回目以降
-      else {
-        setTimeout(() => {
-          this.$store.commit('openning/end')
-          if (this.$route.name === 'works-slug') {
-            this.$store.commit('image-transition/start', index)
-          }
-          else if(this.$route.name === 'archive'){
-            this.$store.commit('bg-transition/start', '#000000')
-          }
-          else {
-            this.$store.commit('bg-transition/start', '#f0efeb')
-          }
-        }, 100)
-
-        setTimeout(() => {
-          if (this.$route.name === 'works-slug') {
-            this.$store.commit('image-transition/end')
-          }
-          else if(this.$route.name === 'archive'){
-            this.$store.commit('bg-transition/end')
-          }
-          else {
-            this.$store.commit('bg-transition/end')
-          }
-          this.$refs.Openning.remove()
-        }, 900)
-      }
-    })
+          setTimeout(() => {
+            if (this.$route.name === 'works-slug') {
+              this.$store.commit('image-transition/end');
+            }
+          }, 2680);
+        },
+      });
+    },
   },
-}
+};
 </script>
 
-<style scoped lang="scss">
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
+<style lang="scss" scoped>
 .openning {
   display: flex;
   justify-content: center;

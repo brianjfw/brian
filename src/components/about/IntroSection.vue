@@ -9,7 +9,7 @@
         <div ref="IntroBg" class="intro-bg">
           <div ref="IntroBgClip" class="intro-bg-clip">
             <div class="intro-bg-wrapper">
-              <div ref="IntroBgCanvas" class="intro-bg-canvas" :data-pcimg="`/src/static/images/intro.webp`" :data-spimg="`/src/static/images/intro-sp.webp`"></div>
+              <div ref="IntroBgCanvas" class="intro-bg-canvas" :data-pcimg="`/images/intro.webp`" :data-spimg="`/images/intro-sp.webp`"></div>
             </div>
             <h2 class="intro-title">
               <span class="intro-title-read-area">
@@ -26,7 +26,7 @@
                   <AppTextAnimation :state="isTextSegmentState" :start="0.24" :rotate="$BASEROTATE.right" :text="'TIVE CODING AS A HOBBY ON MY DAYS O'" :sp-animation="false" />
                 </span>
                 <span class="intro-title-wrapper intro-title-wrapper-04">
-                  <AppTextAnimation :state="isTextSegmentState" :start="0.36" :rotate="$BASEROTATE.left" :text="'FFER. OTHER THAN THAT, I PLAY ANIME AND'" :sp-animation="false" />
+                  <AppTextAnimation :state="isTextSegmentState" :start="0.36" :rotate="$BASEROTATE.left" :text="'FF. OTHER THAN THAT, I PLAY ANIME AND'" :sp-animation="false" />
                 </span>
                 <span class="intro-title-wrapper intro-title-wrapper-05">
                   <AppTextAnimation :state="isTextSegmentState" :start="0.48" :rotate="$BASEROTATE.right" :text="'GAMES. MY SPECIAL SKILL IS GO.'" :sp-animation="false" />
@@ -91,20 +91,20 @@ export default {
     imageLoaded() {
       return this.$store.getters['imageLoaded/isLoad']
     },
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       return this.$store.getters['hambergerMenu/state']
     },
   },
 
   watch: {
-    imageLoaded: function () {
+    imageLoaded () {
       if (this.imageLoaded) {
         setTimeout(() => {
           this.setupScrollAnimation()
         }, 200) // アニメーションが発火しないことがあるので処理を0.2秒遅らせる
       }
     },
-    hambergerMenuState: function () {
+    hambergerMenuState () {
       /**
        * ハンバガーメニューが開いた時
        */
@@ -129,7 +129,7 @@ export default {
     },
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     // canvasリセット
     window.removeEventListener('mousemove', this.mMouse)
     this.$gsap.ticker.remove(this.mRaf)
@@ -340,11 +340,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "~/assets/scss/constants/break-points" as *;
-@use "~/assets/scss/constants/color" as *;
-@use "~/assets/scss/constants/font" as *;
-@use "~/assets/scss/functions/mixins" as *;
-
 :root {
   --viewportWidth: 100vw;
   --viewportHeight: 100vh;
@@ -353,10 +348,8 @@ export default {
 .intro {
   position: relative;
   z-index: 1;
-}
 
-@include sp() {
-  .intro {
+  @include sp() {
     overflow: hidden;
   }
 }
@@ -365,10 +358,8 @@ export default {
   position: relative;
   height: 5500px;
   margin: vw(600) 0 0 0;
-}
 
-@include sp() {
-  .intro-container {
+  @include sp() {
     margin: vw_sp(380) 0 0 0;
   }
 }
@@ -413,10 +404,8 @@ export default {
   white-space: nowrap;
   line-height: 1;
   transform: translateX(vw(1280));
-}
 
-@include sp() {
-  .intro-read-text {
+  @include sp() {
     width: vw_sp(2604);
     height: vw_sp(365);
     font-size: vw_sp(420);
@@ -441,15 +430,25 @@ export default {
   opacity: 0;
   pointer-events: none;
   will-change: width, height;
-}
 
-@include sp() {
-  .intro-bg {
+  @include sp() {
     width: vw_sp(81);
     height: vw_sp(365);
     border-radius: vw(36);
     transform: translate(vw_sp(121), vw_sp(39));
   }
+
+  // & img {
+  //   position: absolute;
+  //   top: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: calc(100% + 700px);
+  //   margin: auto;
+  //   object-fit: cover;
+  // }
 }
 
 .intro-bg-wrapper {
@@ -461,17 +460,15 @@ export default {
   left: 0;
   width: 100%;
   height: calc(100% + 700px);
-}
 
-.intro-bg-wrapper .canvas {
-  position: absolute;
-  top: 0;
-}
-
-.about-intro-section .canvas {
-  position: absolute;
-  top: 0;
-  height: 100%;
+  & canvas {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
 }
 
 .intro-bg-canvas {
@@ -500,10 +497,8 @@ export default {
   color: #eae0cc;
   font-size: vmin(128);
   font-family: $sixcaps;
-}
 
-@include sp() {
-  .intro-title {
+  @include sp() {
     top: calc(50% - 20px);
     right: 23px;
     font-size: vmin(170);
@@ -532,10 +527,8 @@ export default {
   text-indent: 180px;
   line-height: 1.2;
   letter-spacing: 0.02em;
-}
 
-@include sp() {
-  .intro-note {
+  @include sp() {
     right: 0;
     bottom: 40px;
     left: 0;
