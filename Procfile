@@ -1,1 +1,0 @@
-web: npm install --legacy-peer-deps && npm run build && serve --single --listen $PORT dist 
