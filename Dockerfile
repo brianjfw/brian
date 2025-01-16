@@ -18,4 +18,4 @@ RUN npm run build
 RUN npm install -g serve
 
 # Start the application
-CMD ["serve", "--single", "--listen", "$PORT", "dist"] 
+CMD serve --single --listen ${PORT:-3000} dist 
