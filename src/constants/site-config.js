@@ -1,4 +1,4 @@
-import { ref, reactive } from 'vue'
+import { reactive } from 'vue'
 import { reload } from "../assets/js/reload"
 import { preEvent } from "../assets/js/preEvent"
 
@@ -38,8 +38,8 @@ const deviceUtils = {
   }
 };
 
-// Create the initial config object
-const initialConfig = reactive({
+// Create and export the reactive config object
+export const SITE_CONFIG = reactive({
   // Device detection (with default values)
   isTouch: false,
   isNoTouch: true,
@@ -132,29 +132,23 @@ const initialConfig = reactive({
   }
 });
 
-// Create a ref for the reactive config
-const SITE_CONFIG_REF = ref(initialConfig);
-
-// Export the ref
-export const SITE_CONFIG = SITE_CONFIG_REF;
-
 // Export individual configurations for specific use cases
-export const BREAKPOINTS = initialConfig.breakpoints;
+export const BREAKPOINTS = SITE_CONFIG.breakpoints;
 export const ANIMATION_CONFIG = {
-  fullDuration: initialConfig.fullDuration,
-  baseDuration: initialConfig.baseDuration,
-  shortDuration: initialConfig.shortDuration,
-  baseEasing: initialConfig.baseEasing,
-  transformEasing: initialConfig.transformEasing,
-  colorAndOpacityEasing: initialConfig.colorAndOpacityEasing,
-  pageTransitionDuration: initialConfig.pageTransitionDuration
+  fullDuration: SITE_CONFIG.fullDuration,
+  baseDuration: SITE_CONFIG.baseDuration,
+  shortDuration: SITE_CONFIG.shortDuration,
+  baseEasing: SITE_CONFIG.baseEasing,
+  transformEasing: SITE_CONFIG.transformEasing,
+  colorAndOpacityEasing: SITE_CONFIG.colorAndOpacityEasing,
+  pageTransitionDuration: SITE_CONFIG.pageTransitionDuration
 };
 export const SITE_INFO = {
-  baseTitle: initialConfig.baseTitle,
-  baseDescription: initialConfig.baseDescription,
-  url: initialConfig.url,
-  allTextColor: initialConfig.allTextColor,
-  siteColor: { ...initialConfig.siteColor }
+  baseTitle: SITE_CONFIG.baseTitle,
+  baseDescription: SITE_CONFIG.baseDescription,
+  url: SITE_CONFIG.url,
+  allTextColor: SITE_CONFIG.allTextColor,
+  siteColor: { ...SITE_CONFIG.siteColor }
 };
 
 // Export a function to update viewport values

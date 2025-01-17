@@ -19,8 +19,8 @@ async function initializeApp() {
     await waitForDOMContentLoaded()
     
     // Initialize SITE_CONFIG first and wait for it
-    await SITE_CONFIG.value.init()
-    if (!SITE_CONFIG.value.isInitialized) {
+    await SITE_CONFIG.init()
+    if (!SITE_CONFIG.isInitialized) {
       throw new Error('Failed to initialize SITE_CONFIG')
     }
     
@@ -31,17 +31,8 @@ async function initializeApp() {
     const eventBus = useEventBus()
     app.config.globalProperties.$eventBus = eventBus
     
-    // Add SITE_CONFIG as global property - use the reactive object directly
-    app.config.globalProperties.$SITECONFIG = SITE_CONFIG.value
-    
-    // Add a global mixin to ensure SITE_CONFIG is available in all components
-    app.mixin({
-      computed: {
-        $SITECONFIG() {
-          return SITE_CONFIG.value
-        }
-      }
-    })
+    // Add SITE_CONFIG as global property
+    app.config.globalProperties.$SITECONFIG = SITE_CONFIG
     
     // Set up plugins and wait for them to initialize
     const plugins = await setupPlugins()
