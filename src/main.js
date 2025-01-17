@@ -61,13 +61,19 @@ async function initializeDependencies() {
     }
 
     // Initialize plugins after SITE_CONFIG
-    const plugins = await setupPlugins()
+    const plugins = await setupPlugins().catch(error => {
+      console.error('Plugin setup failed:', error)
+      return null
+    })
+
     if (!plugins) {
       throw new Error('Failed to initialize plugins')
     }
 
     // Initialize ASScroll
-    await setupASScroll()
+    await setupASScroll().catch(error => {
+      console.warn('ASScroll setup failed:', error)
+    })
 
     // Initialize store data
     await store.dispatch('initializeData')
@@ -93,6 +99,12 @@ async function mountApplication() {
     
     // Add SITE_CONFIG as a global property
     app.config.globalProperties.$SITECONFIG = SITE_CONFIG
+    
+    // Add plugin global properties
+    const { plugins } = result
+    Object.entries(plugins).forEach(([key, value]) => {
+      app.config.globalProperties[`$${key}`] = value
+    })
     
     // Use plugins
     app.use(store)

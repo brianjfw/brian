@@ -50,7 +50,7 @@ export async function setupPlugins() {
     isInitializing = true
 
     // Register GSAP plugins first
-    gsap.registerPlugin(CustomEase, Draggable, InertiaPlugin, ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin)
     gsap.ticker.fps(60)
 
     // Create EASING object after plugins are registered
