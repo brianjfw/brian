@@ -3,8 +3,8 @@ import { useEventBus } from './eventBus'
 
 let asscrollInstance = null
 let initializationAttempts = 0
-const MAX_ATTEMPTS = 10
-const RETRY_DELAY = 200
+const MAX_ATTEMPTS = 15
+const RETRY_DELAY = 300
 const eventBus = useEventBus()
 
 function waitForElements() {
@@ -35,22 +35,27 @@ export async function initASScroll() {
   try {
     // Wait for app to be ready first
     await new Promise(resolve => {
-      if (document.querySelector('.asscroll-container')) {
+      const container = document.querySelector('.asscroll-container')
+      if (container && container.children.length > 0) {
         resolve()
       } else {
-        eventBus.once('app:ready', resolve)
+        eventBus.once('app:ready', () => {
+          // Add a small delay after app:ready to ensure DOM is updated
+          setTimeout(resolve, 100)
+        })
       }
     })
-
-    // Small delay to ensure DOM is updated
-    await new Promise(resolve => setTimeout(resolve, 100))
     
     // Wait for DOM elements
     const { container, scrollElement } = await waitForElements()
     
     // Clean up any existing instance
     if (asscrollInstance) {
-      asscrollInstance.disable()
+      try {
+        asscrollInstance.disable()
+      } catch (error) {
+        console.warn('Error disabling existing ASScroll instance:', error)
+      }
       asscrollInstance = null
     }
     
@@ -97,17 +102,15 @@ export function destroyASScroll() {
 }
 
 export function setupASScroll(app) {
-  // Add global property
-  app.config.globalProperties.$asscroll = asscrollInstance
-  
   // Add global methods
+  app.config.globalProperties.$asscroll = null
   app.config.globalProperties.$getASScroll = getASScroll
   app.config.globalProperties.$destroyASScroll = destroyASScroll
   app.config.globalProperties.$initASScroll = initASScroll
   
   return {
     install(app) {
-      app.config.globalProperties.$asscroll = asscrollInstance
+      app.config.globalProperties.$asscroll = null
       app.config.globalProperties.$getASScroll = getASScroll
       app.config.globalProperties.$destroyASScroll = destroyASScroll
       app.config.globalProperties.$initASScroll = initASScroll

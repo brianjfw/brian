@@ -35,25 +35,6 @@ async function initializeApp() {
       app.config.globalProperties[`$${key}`] = value
     })
     
-    // Add backface scroll control
-    app.config.globalProperties.$backfaceScroll = function(enable) {
-      if (typeof window === 'undefined' || typeof document === 'undefined') return
-      
-      if (enable) {
-        document.body.style.position = ''
-        document.body.style.top = ''
-        document.body.style.left = ''
-        document.body.style.right = ''
-        window.scrollTo(0, parseInt(document.body.style.top || '0') * -1)
-      } else {
-        const scrollY = window.scrollY
-        document.body.style.position = 'fixed'
-        document.body.style.top = `-${scrollY}px`
-        document.body.style.left = '0'
-        document.body.style.right = '0'
-      }
-    }
-    
     // Initialize store and wait for data
     app.use(store)
     await store.dispatch('initializeData')
@@ -61,18 +42,23 @@ async function initializeApp() {
     // Set up router
     app.use(router)
     
-    // Mount app first
+    // Set up ASScroll plugin before mounting
+    app.use(setupASScroll)
+    
+    // Mount app
     const vm = app.mount('#app')
     
-    // Wait a bit longer for DOM elements to be created
-    await new Promise(resolve => setTimeout(resolve, 500))
+    // Wait for app to signal it's ready
+    await new Promise(resolve => {
+      if (vm.isAppReady) {
+        resolve()
+      } else {
+        eventBus.once('app:ready', resolve)
+      }
+    })
     
-    // Initialize ASScroll after DOM is ready
+    // Initialize ASScroll after app is ready
     try {
-      // Set up ASScroll plugin
-      app.use(setupASScroll)
-      
-      // Initialize ASScroll
       const asscroll = await initASScroll()
       if (asscroll) {
         app.config.globalProperties.$asscroll = asscroll
