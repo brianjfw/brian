@@ -1,3 +1,5 @@
+import { reactive } from 'vue'
+
 // Utility function to safely check window properties
 const checkWindow = (check) => {
   return typeof window !== 'undefined' && check();
@@ -58,11 +60,11 @@ const siteInfo = {
   }
 };
 
-// Content lists
+// Content lists with default empty arrays
 const contentLists = {
-  list01: [],  // Will be populated by store
-  list02: [],  // Will be populated by store
-  list03: []   // Will be populated by store
+  list01: [],
+  list02: [],
+  list03: []
 };
 
 // Breakpoints
@@ -71,18 +73,18 @@ const breakpoints = {
   tablet: 1280
 };
 
-// Create the SITE_CONFIG object with getters and state
-export const SITE_CONFIG = {
-  // Device detection (computed on demand)
-  get isTouch() { return deviceUtils.isTouch; },
-  get isNoTouch() { return deviceUtils.isNoTouch; },
-  get isPc() { return deviceUtils.isPc; },
-  get isMobile() { return deviceUtils.isMobile; },
-  get isTab() { return deviceUtils.isTab; },
-  get isIpad() { return deviceUtils.isIpad; },
-  get isAndroid() { return deviceUtils.isAndroid; },
-  get isWindows() { return deviceUtils.isWindows; },
-  get isSafari() { return deviceUtils.isSafari; },
+// Create a reactive SITE_CONFIG object
+export const SITE_CONFIG = reactive({
+  // Device detection (with default values)
+  isTouch: false,
+  isNoTouch: true,
+  isPc: true,
+  isMobile: false,
+  isTab: false,
+  isIpad: false,
+  isAndroid: false,
+  isWindows: false,
+  isSafari: false,
 
   // Static configurations
   ...animationConfig,
@@ -94,7 +96,7 @@ export const SITE_CONFIG = {
   firstAccess: true,
   isInitialized: false,
 
-  // Initialize method (for compatibility with existing code)
+  // Initialize method
   async init() {
     if (typeof window === 'undefined') return this;
     
@@ -103,10 +105,24 @@ export const SITE_CONFIG = {
       await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
     }
 
+    // Update device detection properties
+    this.isTouch = deviceUtils.isTouch;
+    this.isNoTouch = deviceUtils.isNoTouch;
+    this.isPc = deviceUtils.isPc;
+    this.isMobile = deviceUtils.isMobile;
+    this.isTab = deviceUtils.isTab;
+    this.isIpad = deviceUtils.isIpad;
+    this.isAndroid = deviceUtils.isAndroid;
+    this.isWindows = deviceUtils.isWindows;
+    this.isSafari = deviceUtils.isSafari;
+
+    // Update URL if needed
+    this.url = window.location.origin;
+
     this.isInitialized = true;
     return this;
   }
-};
+});
 
 // Export individual configurations for specific use cases
 export const BREAKPOINTS = breakpoints;

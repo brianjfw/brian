@@ -18,11 +18,21 @@ async function initializeApp() {
     // Wait for DOM to be ready
     await waitForDOMContentLoaded()
     
-    // Initialize SITE_CONFIG first
+    // Initialize SITE_CONFIG first and wait for it
     await SITE_CONFIG.init()
+    if (!SITE_CONFIG.isInitialized) {
+      throw new Error('Failed to initialize SITE_CONFIG')
+    }
+    
+    // Create app instance first so we can use Vue's reactivity system
+    const app = createApp(App)
     
     // Set up event bus
     const eventBus = useEventBus()
+    app.config.globalProperties.$eventBus = eventBus
+    
+    // Add SITE_CONFIG as global property
+    app.config.globalProperties.$SITECONFIG = SITE_CONFIG
     
     // Set up plugins and wait for them to initialize
     const plugins = await setupPlugins()
@@ -30,19 +40,10 @@ async function initializeApp() {
       throw new Error('Failed to initialize plugins')
     }
     
-    // Create app instance
-    const app = createApp(App)
-    
-    // Add event bus
-    app.config.globalProperties.$eventBus = eventBus
-    
-    // Add global properties
+    // Add plugin global properties
     Object.entries(plugins).forEach(([key, value]) => {
       app.config.globalProperties[`$${key}`] = value
     })
-    
-    // Add SITE_CONFIG as global property
-    app.config.globalProperties.$SITECONFIG = SITE_CONFIG
     
     // Initialize store and wait for data
     app.use(store)
@@ -94,4 +95,11 @@ async function initializeApp() {
 initializeApp().catch(error => {
   console.error('Failed to initialize app:', error)
   // Add error handling UI here if needed
+  document.body.innerHTML = `
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+      <h1>Failed to initialize application</h1>
+      <p>Please refresh the page. If the problem persists, contact support.</p>
+      <pre style="text-align: left; margin-top: 20px;">${error.stack}</pre>
+    </div>
+  `
 }) 
