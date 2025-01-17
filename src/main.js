@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { setupPlugins } from './plugins'
-import { setupASScroll, getASScroll } from './plugins/asscroll'
+import { setupASScroll, initASScroll } from './plugins/asscroll'
 import { useEventBus } from './plugins/eventBus'
 
 async function waitForDOMContentLoaded() {
@@ -20,7 +20,7 @@ async function initializeApp() {
     // Create app instance
     const app = createApp(App)
     
-    // Set up event bus
+    // Set up event bus first
     const eventBus = useEventBus()
     app.config.globalProperties.$eventBus = eventBus
     
@@ -35,6 +35,25 @@ async function initializeApp() {
       app.config.globalProperties[`$${key}`] = value
     })
     
+    // Add backface scroll control
+    app.config.globalProperties.$backfaceScroll = function(enable) {
+      if (typeof window === 'undefined' || typeof document === 'undefined') return
+      
+      if (enable) {
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.left = ''
+        document.body.style.right = ''
+        window.scrollTo(0, parseInt(document.body.style.top || '0') * -1)
+      } else {
+        const scrollY = window.scrollY
+        document.body.style.position = 'fixed'
+        document.body.style.top = `-${scrollY}px`
+        document.body.style.left = '0'
+        document.body.style.right = '0'
+      }
+    }
+    
     // Initialize store and wait for data
     app.use(store)
     await store.dispatch('initializeData')
@@ -46,11 +65,15 @@ async function initializeApp() {
     const vm = app.mount('#app')
     
     // Wait a tick for DOM elements to be created
-    await new Promise(resolve => setTimeout(resolve, 0))
+    await new Promise(resolve => setTimeout(resolve, 100))
     
     // Initialize ASScroll after DOM is ready
     try {
-      const asscroll = await setupASScroll(app)
+      // Set up ASScroll plugin
+      app.use(setupASScroll)
+      
+      // Initialize ASScroll
+      const asscroll = await initASScroll()
       if (asscroll) {
         app.config.globalProperties.$asscroll = asscroll
         eventBus.emit('asscroll:ready', asscroll)
