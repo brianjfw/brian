@@ -23,9 +23,15 @@ async function initializeApp() {
     if (!SITE_CONFIG.isInitialized) {
       throw new Error('Failed to initialize SITE_CONFIG')
     }
-    
-    // Create app instance
-    const app = createApp(App)
+
+    // Create app instance with SITE_CONFIG already injected
+    const app = createApp({
+      ...App,
+      beforeCreate() {
+        // Ensure SITE_CONFIG is available before any component initialization
+        this.$SITECONFIG = SITE_CONFIG
+      }
+    })
     
     // Set up event bus
     const eventBus = useEventBus()
@@ -94,7 +100,6 @@ async function initializeApp() {
 // Start initialization and handle errors
 initializeApp().catch(error => {
   console.error('Failed to initialize app:', error)
-  // Add error handling UI here if needed
   document.body.innerHTML = `
     <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
       <h1>Failed to initialize application</h1>
