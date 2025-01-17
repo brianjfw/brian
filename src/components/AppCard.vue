@@ -152,23 +152,28 @@ export default {
 
   mounted() {
     try {
+      // Initialize refs safely
       this.root = this.$refs.root
       this.wrapper = this.$refs.wrapper
       this.observer = this.$refs.observer
+
+      // Initialize other properties
       this.drag = null
       this.cardAngle = 0
       this.iObserverFadeIn = null
       this.iObserverParallax = null
 
-      // SPの時は任意(spAnimation = false)で,処理を返す
-      // デフォルトではSPもアニメーションする
+      // Check if animation should be skipped
       if (!this.spAnimation && this.isMobile) return
 
+      // Setup with delay
       this.$nextTick(() => {
         setTimeout(() => {
-          if (this.dragAnimation) this.createDragAnimation()
+          if (this.dragAnimation && this.wrapper) {
+            this.createDragAnimation()
+          }
           this.setupObservers()
-        }, 400) // アニメーションが発火しないことがあるので処理を0.4秒遅らせる
+        }, 400)
       })
     } catch (error) {
       console.error('Error in mounted hook:', error)
@@ -177,114 +182,69 @@ export default {
 
   beforeUnmount() {
     try {
-      // SPの時は任意(spAnimation = false)で処理を返す
-      // デフォルトではSPもアニメーションする
-      if (!this.spAnimation && this.isMobile) return
-
-      this.cleanup()
+      // Cleanup observers
+      if (this.iObserverFadeIn) {
+        this.iObserverFadeIn.disconnect()
+      }
+      if (this.iObserverParallax) {
+        this.iObserverParallax.disconnect()
+      }
+      // Cleanup drag
+      if (this.drag?.[0]) {
+        this.drag[0].kill()
+      }
     } catch (error) {
-      console.error('Error in beforeUnmount hook:', error)
+      console.error('Error cleaning up:', error)
     }
   },
 
   methods: {
-    cleanup() {
-      if (this.dragAnimation && this.drag?.[0]) {
-        this.drag[0].kill()
-        this.drag = null
-      }
-
-      this.$store?.commit('mouse/mouseleave')
-      
-      if (this.$gsap?.ticker) {
-        this.$gsap.ticker.remove(this.parallax)
-      }
-
-      this.removeObservers()
-    },
-
-    removeObservers() {
-      if (this.viewAnimation && this.iObserverFadeIn && this.observer) {
-        try {
-          this.iObserverFadeIn.unobserve(this.observer)
-        } catch (error) {
-          console.error('Error removing fade in observer:', error)
-        }
-        this.iObserverFadeIn = null
-      }
-
-      if (this.iObserverParallax && this.observer) {
-        try {
-          this.iObserverParallax.unobserve(this.observer)
-        } catch (error) {
-          console.error('Error removing parallax observer:', error)
-        }
-        this.iObserverParallax = null
-      }
-    },
-
     setupObservers() {
-      if (!this.observer) {
-        console.warn('Observer element not found')
-        return
-      }
-
       try {
-        if (this.viewAnimation) {
-          this.setupFadeInObserver()
+        // Only setup if elements exist
+        if (!this.observer || !this.root) {
+          console.warn('Required elements not found for observers')
+          return
         }
-        this.setupParallaxObserver()
+
+        // Setup fade in observer
+        if (this.viewAnimation) {
+          this.iObserverFadeIn = new IntersectionObserver(
+            entries => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  this.fadeInAnimation()
+                  this.iObserverFadeIn?.disconnect()
+                }
+              })
+            },
+            { threshold: 0.5 }
+          )
+          this.iObserverFadeIn.observe(this.observer)
+        }
+
+        // Setup parallax observer
+        this.iObserverParallax = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                this.parallax()
+              }
+            })
+          },
+          { threshold: 0 }
+        )
+        this.iObserverParallax.observe(this.root)
       } catch (error) {
         console.error('Error setting up observers:', error)
       }
     },
 
-    setupFadeInObserver() {
-      try {
-        this.iObserverFadeIn = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                this.fadeInAnimation()
-                if (this.iObserverFadeIn && this.observer) {
-                  this.iObserverFadeIn.unobserve(this.observer)
-                }
-              }
-            })
-          },
-          { rootMargin: '0%' }
-        )
-        this.iObserverFadeIn.observe(this.observer)
-      } catch (error) {
-        console.error('Error setting up fade in observer:', error)
-      }
-    },
-
-    setupParallaxObserver() {
-      try {
-        this.iObserverParallax = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting && this.$gsap?.ticker) {
-                this.$gsap.ticker.add(this.parallax)
-              } else if (this.$gsap?.ticker) {
-                this.$gsap.ticker.remove(this.parallax)
-              }
-            })
-          },
-          { rootMargin: '0%' }
-        )
-        this.iObserverParallax.observe(this.observer)
-      } catch (error) {
-        console.error('Error setting up parallax observer:', error)
-      }
-    },
-
     createDragAnimation() {
-      if (!this.wrapper || !this.$parent?.$el || !this.$Draggable) return
-
       try {
-        this.drag = this.$Draggable.create(this.wrapper, {
+        if (!this.wrapper || !this.$parent?.$el) return
+
+        this.drag = this.$Draggable?.create(this.wrapper, {
           type: 'x,y',
           bounds: this.$parent.$el,
           edgeResistance: 0.6,

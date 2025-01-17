@@ -32,15 +32,20 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      projectData: state => state.projectData || []
-    }),
-    ...mapGetters('app', ['firstAccess']),
+    projectData() {
+      return this.$store?.state?.projectData ?? []
+    },
+    firstAccess() {
+      return this.$store?.getters?.['app/firstAccess'] ?? false
+    },
     storeInitialized() {
       return this.$store?.getters?.isInitialized ?? false
     },
     configInitialized() {
       return this.$SITECONFIG?.isInitialized ?? false
+    },
+    isTouch() {
+      return this.$SITECONFIG?.isTouch ?? false
     }
   },
 
@@ -88,7 +93,7 @@ export default {
         })
 
         // Handle touch devices safely
-        if (this.$SITECONFIG?.isTouch) {
+        if (this.isTouch) {
           window.scrollTo({ top: 0 })
           if (typeof this.$preDefaultEvent === 'function') {
             this.$preDefaultEvent(false)
@@ -97,33 +102,16 @@ export default {
 
         // Get project index for direct access
         let index = 0
-        if (this.$route?.params?.slug && Array.isArray(this.projectData)) {
+        if (this.$route?.params?.slug) {
           const foundIndex = this.projectData.findIndex(content => content?.id === this.$route.params.slug)
           if (foundIndex !== -1) index = foundIndex
         }
 
         // Component is ready
         this.isReady = true
-
-        // Start animation if this is first access
-        if (this.firstAccess) {
-          this.startAnimation()
-        } else {
-          this.skipAnimation()
-        }
       } catch (error) {
-        console.error('Failed to initialize opening:', error)
-        // Set component as ready even if there was an error
-        this.isReady = true
+        console.error('Error initializing component:', error)
       }
-    },
-
-    startAnimation() {
-      // Your existing animation code here
-    },
-
-    skipAnimation() {
-      // Your existing skip animation code here
     }
   },
 

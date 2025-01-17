@@ -50,85 +50,39 @@ export const SITE_CONFIG = reactive({
   isAndroid: false,
   isWindows: false,
   isSafari: false,
-
-  // Animation configurations
-  fullDuration: 1.2,
-  baseDuration: 0.8,
-  shortDuration: 0.4,
-  baseEasing: 'power2.inOut',
-  transformEasing: 'power4.inOut',
-  colorAndOpacityEasing: 'power2.inOut',
-  pageTransitionDuration: 800,
-
-  // Site information and styling
-  baseTitle: 'Heather Hudson Art',
-  baseDescription: 'Portfolio website showcasing the artwork of Heather Hudson',
-  url: typeof window !== 'undefined' ? window.location.origin : '',
-  allTextColor: '#333333',
-  siteColor: {
-    primary: '#000000',
-    secondary: '#ffffff',
-    accent: '#666666'
-  },
-
-  // Content lists
-  list01: [],
-  list02: [],
-  list03: [],
-
-  // Breakpoints
-  breakPoint: 767,
-  breakpoints: {
-    mobile: 767,
-    tablet: 1280
-  },
   
-  // State
-  firstAccess: true,
+  // Site colors and styles
+  siteColor: '#000000',
+  allTextColor: '#000000',
+  list01: [],
+  url: '',
   isInitialized: false,
 
-  // Add the init method
+  // Initialize the config
   async init() {
-    if (typeof window === 'undefined') return this;
-    
-    // Wait for window to be ready
-    if (document.readyState === 'loading') {
-      await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+    try {
+      // Update device detection
+      Object.entries(deviceUtils).forEach(([key, getter]) => {
+        this[key] = getter;
+      });
+
+      // Set up reload and preEvent
+      this.reload = reload;
+      this.preEvent = preEvent;
+
+      // Set default colors if not already set
+      this.siteColor = this.siteColor || '#000000';
+      this.allTextColor = this.allTextColor || '#000000';
+      this.list01 = this.list01 || [];
+      this.url = window.location.origin;
+
+      // Mark as initialized
+      this.isInitialized = true;
+      return true;
+    } catch (error) {
+      console.error('Failed to initialize SITE_CONFIG:', error);
+      return false;
     }
-
-    // Update device detection properties
-    this.isTouch = deviceUtils.isTouch;
-    this.isNoTouch = deviceUtils.isNoTouch;
-    this.isPc = deviceUtils.isPc;
-    this.isMobile = deviceUtils.isMobile;
-    this.isTab = deviceUtils.isTab;
-    this.isIpad = deviceUtils.isIpad;
-    this.isAndroid = deviceUtils.isAndroid;
-    this.isWindows = deviceUtils.isWindows;
-    this.isSafari = deviceUtils.isSafari;
-
-    // Update URL if needed
-    this.url = window.location.origin;
-
-    // Set up event listeners
-    if (this.isNoTouch) {
-      window.addEventListener('wheel', preEvent, { passive: false });
-    }
-
-    // Set up breakpoint change listener
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
-    mediaQuery.addEventListener('change', reload);
-
-    // Check first access using sessionStorage
-    if (sessionStorage.getItem('visited')) {
-      this.firstAccess = false;
-    } else {
-      this.firstAccess = true;
-      sessionStorage.setItem('visited', '0');
-    }
-
-    this.isInitialized = true;
-    return this;
   }
 });
 
