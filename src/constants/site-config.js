@@ -2,34 +2,24 @@ import { reactive } from 'vue'
 import { reload } from "../assets/js/reload"
 import { preEvent } from "../assets/js/preEvent"
 
-// Create a function to get window-based values with fallbacks
-const getWindowValue = (getter, fallback) => {
-  try {
-    if (typeof window === 'undefined') return fallback
-    return getter()
-  } catch {
-    return fallback
-  }
-}
-
-// Initialize all values immediately with fallbacks
+// Initialize all values immediately
 const initialValues = {
-  // Device detection
-  isTouch: getWindowValue(() => 'ontouchstart' in window || navigator.maxTouchPoints > 0, false),
-  isNoTouch: getWindowValue(() => !('ontouchstart' in window) && navigator.maxTouchPoints === 0, true),
-  isPc: getWindowValue(() => window.innerWidth >= 767, true),
-  isMobile: getWindowValue(() => window.innerWidth <= 767, false),
-  isTab: getWindowValue(() => window.innerWidth <= 1280 && window.innerWidth >= 767, false),
-  isIpad: getWindowValue(() => /iPad/i.test(navigator.userAgent), false),
-  isAndroid: getWindowValue(() => /android/i.test(navigator.userAgent), false),
-  isWindows: getWindowValue(() => /windows/i.test(navigator.userAgent), false),
-  isSafari: getWindowValue(() => /^((?!chrome|android).)*safari/i.test(navigator.userAgent), false),
+  // Device detection (with safe defaults)
+  isTouch: false,
+  isNoTouch: true,
+  isPc: true,
+  isMobile: false,
+  isTab: false,
+  isIpad: false,
+  isAndroid: false,
+  isWindows: false,
+  isSafari: false,
 
   // Site colors and styles
   siteColor: '#000000',
   allTextColor: '#000000',
   list01: [],
-  url: getWindowValue(() => window.location.origin, ''),
+  url: '',
 
   // Animation configurations
   fullDuration: 1.2,
@@ -69,6 +59,7 @@ export const SITE_CONFIG = reactive({
     try {
       // Update window-dependent values
       if (typeof window !== 'undefined') {
+        // Device detection
         this.isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
         this.isNoTouch = !('ontouchstart' in window) && navigator.maxTouchPoints === 0
         this.isPc = window.innerWidth >= 767

@@ -16,7 +16,8 @@ const store = createStore({
     pickupData: [],
     awardData: {},
     awardDataLength: 0,
-    isInitialized: false
+    isInitialized: false,
+    isInitializing: false
   },
   
   mutations: {
@@ -37,12 +38,22 @@ const store = createStore({
     },
     setInitialized(state, value) {
       state.isInitialized = value
+    },
+    setInitializing(state, value) {
+      state.isInitializing = value
     }
   },
 
   actions: {
-    async initializeData({ commit }) {
+    async initializeData({ commit, state }) {
+      // Prevent double initialization
+      if (state.isInitialized || state.isInitializing) {
+        return
+      }
+
       try {
+        commit('setInitializing', true)
+
         // Load all data in parallel
         const [projectData, contactData, pickupData, awardResult] = await Promise.all([
           loadProjectData(),
@@ -67,6 +78,8 @@ const store = createStore({
         commit('getAwardData', {})
         commit('getAwardDataLength', 0)
         commit('setInitialized', true)
+      } finally {
+        commit('setInitializing', false)
       }
     }
   },
@@ -77,7 +90,8 @@ const store = createStore({
     pickupData: state => state.pickupData || [],
     awardData: state => state.awardData || {},
     awardDataLength: state => state.awardDataLength || 0,
-    isInitialized: state => state.isInitialized
+    isInitialized: state => state.isInitialized,
+    isInitializing: state => state.isInitializing
   },
 
   modules: {
@@ -91,8 +105,5 @@ const store = createStore({
     'image-transition': imageTransition
   }
 })
-
-// Initialize store data immediately
-store.dispatch('initializeData')
 
 export default store
