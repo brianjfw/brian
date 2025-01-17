@@ -3,8 +3,8 @@ import { useEventBus } from './eventBus'
 
 let asscrollInstance = null
 let initializationAttempts = 0
-const MAX_ATTEMPTS = 5
-const RETRY_DELAY = 100
+const MAX_ATTEMPTS = 10
+const RETRY_DELAY = 200
 const eventBus = useEventBus()
 
 function waitForElements() {
@@ -14,12 +14,15 @@ function waitForElements() {
       const scrollElement = document.querySelector('.asscroll')
       
       if (container && scrollElement) {
+        // Reset attempts counter on success
+        initializationAttempts = 0
         resolve({ container, scrollElement })
       } else if (initializationAttempts < MAX_ATTEMPTS) {
         initializationAttempts++
+        console.log(`Waiting for ASScroll elements... Attempt ${initializationAttempts}/${MAX_ATTEMPTS}`)
         setTimeout(check, RETRY_DELAY)
       } else {
-        reject(new Error('Could not find ASScroll elements after maximum attempts'))
+        reject(new Error(`Could not find ASScroll elements after ${MAX_ATTEMPTS} attempts`))
       }
     }
     check()
@@ -33,12 +36,19 @@ export async function initASScroll() {
     // Wait for DOM elements
     const { container, scrollElement } = await waitForElements()
     
+    // Clean up any existing instance
+    if (asscrollInstance) {
+      asscrollInstance.disable()
+      asscrollInstance = null
+    }
+    
     // Create ASScroll instance
     asscrollInstance = new ASScroll({
       containerElement: container,
       scrollElements: scrollElement,
       disableRaf: true,
-      touchScrollType: 'transform'
+      touchScrollType: 'transform',
+      ease: 0.075
     })
 
     // Initialize
@@ -49,6 +59,7 @@ export async function initASScroll() {
 
     // Emit ready event
     eventBus.emit('asscroll:enabled', asscrollInstance)
+    eventBus.emit('asscroll:ready', asscrollInstance)
 
     return asscrollInstance
   } catch (error) {
@@ -63,8 +74,13 @@ export function getASScroll() {
 
 export function destroyASScroll() {
   if (asscrollInstance) {
-    asscrollInstance.disable()
-    asscrollInstance = null
+    try {
+      asscrollInstance.disable()
+      asscrollInstance = null
+      initializationAttempts = 0
+    } catch (error) {
+      console.error('Error destroying ASScroll:', error)
+    }
   }
 }
 
@@ -72,20 +88,20 @@ export function setupASScroll(app) {
   // Add global property
   app.config.globalProperties.$asscroll = asscrollInstance
   
-  // Add global method to get instance
+  // Add global methods
   app.config.globalProperties.$getASScroll = getASScroll
-  
-  // Add global method to destroy instance
   app.config.globalProperties.$destroyASScroll = destroyASScroll
+  app.config.globalProperties.$initASScroll = initASScroll
   
   return {
     install(app) {
       app.config.globalProperties.$asscroll = asscrollInstance
       app.config.globalProperties.$getASScroll = getASScroll
       app.config.globalProperties.$destroyASScroll = destroyASScroll
+      app.config.globalProperties.$initASScroll = initASScroll
     }
   }
 }
 
-// Initialize on import
-initASScroll() 
+// Don't initialize on import anymore, let main.js control initialization
+// initASScroll() 
