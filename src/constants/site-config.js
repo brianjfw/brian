@@ -1,4 +1,6 @@
 import { ref, reactive } from 'vue'
+import { reload } from "../assets/js/reload"
+import { preEvent } from "../assets/js/preEvent"
 
 // Utility function to safely check window properties
 const checkWindow = (check) => {
@@ -107,6 +109,23 @@ const initialConfig = reactive({
 
     // Update URL if needed
     this.url = window.location.origin;
+
+    // Set up event listeners
+    if (this.isNoTouch) {
+      window.addEventListener('wheel', preEvent, { passive: false });
+    }
+
+    // Set up breakpoint change listener
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    mediaQuery.addEventListener('change', reload);
+
+    // Check first access using sessionStorage
+    if (sessionStorage.getItem('visited')) {
+      this.firstAccess = false;
+    } else {
+      this.firstAccess = true;
+      sessionStorage.setItem('visited', '0');
+    }
 
     this.isInitialized = true;
     return this;
