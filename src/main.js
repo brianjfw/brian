@@ -5,6 +5,7 @@ import store from './store'
 import { setupPlugins } from './plugins'
 import { setupASScroll, initASScroll } from './plugins/asscroll'
 import { useEventBus } from './plugins/eventBus'
+import { SITE_CONFIG } from './constants/site-config'
 
 async function waitForDOMContentLoaded() {
   if (document.readyState === 'loading') {
@@ -17,27 +18,40 @@ async function initializeApp() {
     // Wait for DOM to be ready
     await waitForDOMContentLoaded()
     
-    // Create app instance
-    const app = createApp(App)
+    // Initialize SITE_CONFIG first
+    await SITE_CONFIG.init()
     
-    // Set up event bus first
+    // Set up event bus
     const eventBus = useEventBus()
-    app.config.globalProperties.$eventBus = eventBus
     
     // Set up plugins and wait for them to initialize
     const plugins = await setupPlugins()
-    if (!plugins || !plugins.SITECONFIG) {
+    if (!plugins) {
       throw new Error('Failed to initialize plugins')
     }
+    
+    // Create app instance
+    const app = createApp(App)
+    
+    // Add event bus
+    app.config.globalProperties.$eventBus = eventBus
     
     // Add global properties
     Object.entries(plugins).forEach(([key, value]) => {
       app.config.globalProperties[`$${key}`] = value
     })
     
+    // Add SITE_CONFIG as global property
+    app.config.globalProperties.$SITECONFIG = SITE_CONFIG
+    
     // Initialize store and wait for data
     app.use(store)
     await store.dispatch('initializeData')
+    
+    // Ensure store is initialized
+    if (!store.getters.isInitialized) {
+      throw new Error('Failed to initialize store data')
+    }
     
     // Set up router
     app.use(router)
@@ -79,4 +93,5 @@ async function initializeApp() {
 // Start initialization
 initializeApp().catch(error => {
   console.error('Failed to initialize app:', error)
+  // Add error handling UI here if needed
 }) 

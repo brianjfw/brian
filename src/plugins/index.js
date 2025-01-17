@@ -1,4 +1,4 @@
-import { SITE_CONFIG } from './site-config'
+import { SITE_CONFIG } from '../constants/site-config'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CustomEase } from '../vendor/CustomEase'
@@ -20,14 +20,10 @@ const EASING = {
 
 export async function setupPlugins() {
   try {
-    // Initialize SITE_CONFIG
-    await SITE_CONFIG.init()
-
     return {
-      SITECONFIG: SITE_CONFIG,
-      BASEROTATE,
       gsap,
       EASING,
+      BASEROTATE,
       preDefaultEvent,
       ScrollTrigger,
       Draggable,

@@ -45,10 +45,24 @@ const animationConfig = {
   pageTransitionDuration: 800
 };
 
-// Site information
+// Site information and styling
 const siteInfo = {
   baseTitle: 'Heather Hudson Art',
-  baseDescription: 'Portfolio website showcasing the artwork of Heather Hudson'
+  baseDescription: 'Portfolio website showcasing the artwork of Heather Hudson',
+  url: typeof window !== 'undefined' ? window.location.origin : '',
+  allTextColor: '#333333',
+  siteColor: {
+    primary: '#000000',
+    secondary: '#ffffff',
+    accent: '#666666'
+  }
+};
+
+// Content lists
+const contentLists = {
+  list01: [],  // Will be populated by store
+  list02: [],  // Will be populated by store
+  list03: []   // Will be populated by store
 };
 
 // Breakpoints
@@ -57,7 +71,7 @@ const breakpoints = {
   tablet: 1280
 };
 
-// Create the SITE_CONFIG object with getters
+// Create the SITE_CONFIG object with getters and state
 export const SITE_CONFIG = {
   // Device detection (computed on demand)
   get isTouch() { return deviceUtils.isTouch; },
@@ -73,10 +87,25 @@ export const SITE_CONFIG = {
   // Static configurations
   ...animationConfig,
   ...siteInfo,
+  ...contentLists,
   breakPoint: breakpoints.mobile,
   
-  // State (managed by store)
-  firstAccess: true
+  // State
+  firstAccess: true,
+  isInitialized: false,
+
+  // Initialize method (for compatibility with existing code)
+  async init() {
+    if (typeof window === 'undefined') return this;
+    
+    // Wait for window to be ready
+    if (document.readyState === 'loading') {
+      await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+    }
+
+    this.isInitialized = true;
+    return this;
+  }
 };
 
 // Export individual configurations for specific use cases
@@ -84,7 +113,7 @@ export const BREAKPOINTS = breakpoints;
 export const ANIMATION_CONFIG = animationConfig;
 export const SITE_INFO = siteInfo;
 
-// Export a function to update viewport-specific values
+// Export a function to update viewport values
 export function updateViewportValues() {
   if (typeof window === 'undefined') return;
   
