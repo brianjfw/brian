@@ -20,219 +20,280 @@
 export default {
   computed: {
     mouseHover() {
-      return this.$store.getters['mouse/isHover']
+      return this.$store?.getters?.['mouse/isHover'] ?? false
     },
     mouseDown() {
-      return this.$store.getters['mouse/isDown']
+      return this.$store?.getters?.['mouse/isDown'] ?? false
     },
     mouseLoad() {
-      return this.$store.getters['mouse/isLoad']
+      return this.$store?.getters?.['mouse/isLoad'] ?? false
     },
     imageLoaded() {
-      return this.$store.getters['imageLoaded/isLoad']
+      return this.$store?.getters?.['imageLoaded/isLoad'] ?? false
     },
+    shortDuration() {
+      return this.$SITECONFIG?.shortDuration ?? 0.4
+    },
+    baseDuration() {
+      return this.$SITECONFIG?.baseDuration ?? 0.8
+    },
+    isNoTouch() {
+      return this.$SITECONFIG?.isNoTouch ?? false
+    },
+    isSp() {
+      return this.$SITECONFIG?.isSp ?? false
+    }
   },
   watch: {
     mouseHover() {
+      if (!this.mouseAction) return
+      
       if (this.mouseHover) {
-        this.$gsap.to(this.mouseAction, {
-          duration: this.$SITECONFIG.shortDuration,
-          ease: this.$EASING.transform,
+        this.$gsap?.to(this.mouseAction, {
+          duration: this.shortDuration,
+          ease: this.$EASING?.transform ?? 'power4.inOut',
           scale: 1,
         })
-        this.$gsap.fromTo(
-          this.mouseActionWrapper,
-          {
-            rotate: 8,
-          },
-          {
-            duration: this.$SITECONFIG.shortDuration,
-            delay: 0.2,
-            ease: this.$EASING.transform,
-            rotate: 0,
-          }
-        )
-        this.$gsap.fromTo(
-          this.mouseActionBlock,
-          {
-            y: 10,
-          },
-          {
-            duration: this.$SITECONFIG.shortDuration,
-            delay: 0.2,
-            ease: this.$EASING.transform,
-            y: 0,
-          }
-        )
+        if (this.mouseActionWrapper && this.mouseActionBlock) {
+          this.$gsap?.fromTo(
+            this.mouseActionWrapper,
+            { rotate: 8 },
+            {
+              duration: this.shortDuration,
+              delay: 0.2,
+              ease: this.$EASING?.transform ?? 'power4.inOut',
+              rotate: 0,
+            }
+          )
+          this.$gsap?.fromTo(
+            this.mouseActionBlock,
+            { y: 10 },
+            {
+              duration: this.shortDuration,
+              delay: 0.2,
+              ease: this.$EASING?.transform ?? 'power4.inOut',
+              y: 0,
+            }
+          )
+        }
       } else {
-        this.$gsap.to(this.mouseAction, {
-          duration: this.$SITECONFIG.shortDuration,
-          ease: this.$EASING.transform,
+        this.$gsap?.to(this.mouseAction, {
+          duration: this.shortDuration,
+          ease: this.$EASING?.transform ?? 'power4.inOut',
           scale: 0,
         })
       }
     },
     mouseDown() {
+      if (!this.mouseAction) return
+      
       if (this.mouseDown) {
-        this.$gsap.to(this.mouseAction, {
-          duration: this.$SITECONFIG.shortDuration,
-          ease: this.$EASING.transform,
+        this.$gsap?.to(this.mouseAction, {
+          duration: this.shortDuration,
+          ease: this.$EASING?.transform ?? 'power4.inOut',
           scale: 0,
         })
       }
     },
     mouseLoad() {
-      if (this.$SITECONFIG.isSp) return
+      if (this.isSp || !this.mouseLoading) return
 
       if (this.mouseLoad) {
-        this.mouseLoading.classList.add('is-loading')
+        this.mouseLoading.classList?.add('is-loading')
 
-        this.$gsap.to(this.mouseLoading, {
-          duration: this.$SITECONFIG.shortDuration,
-          ease: this.$EASING.transform,
+        this.$gsap?.to(this.mouseLoading, {
+          duration: this.shortDuration,
+          ease: this.$EASING?.transform ?? 'power4.inOut',
           scale: 1,
         })
-        this.$gsap.fromTo(
-          this.mouseLoadingWrapper,
-          {
-            rotate: 8,
-          },
-          {
-            duration: this.$SITECONFIG.shortDuration,
-            delay: 0.2,
-            ease: this.$EASING.transform,
-            rotate: 0,
-          }
-        )
-        this.$gsap.fromTo(
-          this.mouseLoadingBlock,
-          {
-            y: 10,
-          },
-          {
-            duration: this.$SITECONFIG.shortDuration,
-            delay: 0.2,
-            ease: this.$EASING.transform,
-            y: 0,
-          }
-        )
+        
+        if (this.mouseLoadingWrapper && this.mouseLoadingBlock) {
+          this.$gsap?.fromTo(
+            this.mouseLoadingWrapper,
+            { rotate: 8 },
+            {
+              duration: this.shortDuration,
+              delay: 0.2,
+              ease: this.$EASING?.transform ?? 'power4.inOut',
+              rotate: 0,
+            }
+          )
+          this.$gsap?.fromTo(
+            this.mouseLoadingBlock,
+            { y: 10 },
+            {
+              duration: this.shortDuration,
+              delay: 0.2,
+              ease: this.$EASING?.transform ?? 'power4.inOut',
+              y: 0,
+            }
+          )
+        }
       } else {
-        this.mouseLoading.classList.remove('is-loading')
+        this.mouseLoading.classList?.remove('is-loading')
 
-        this.$gsap.to(this.mouseLoading, {
-          duration: this.$SITECONFIG.shortDuration,
-          ease: this.$EASING.transform,
+        this.$gsap?.to(this.mouseLoading, {
+          duration: this.shortDuration,
+          ease: this.$EASING?.transform ?? 'power4.inOut',
           scale: 0,
         })
       }
     },
     imageLoaded() {
-      // タッチイベントではない時
-      if (this.$SITECONFIG.isNoTouch) {
-        // クリックできる要素を全てのコンポーネントから取得
-        this.mouseClickTarget = document.querySelectorAll('.js-click-target')
-        // ホールドできる要素を全てのコンポーネントから取得
-        this.mouseHoldTarget = document.querySelectorAll('.js-hold-target')
+      if (!this.isNoTouch) return
+      
+      try {
+        // Get click and hold targets
+        this.mouseClickTarget = document.querySelectorAll('.js-click-target') ?? []
+        this.mouseHoldTarget = document.querySelectorAll('.js-hold-target') ?? []
 
-        // イベント付与
-        setTimeout(() => {
-          this.$gsap.set(this.$refs.MouseArea, {
-            opacity: 1,
-          })
-          this.$gsap.to(this.$refs.MouseArea, {
-            duration: this.$SITECONFIG.baseDuration,
-            ease: this.$EASING.transform,
-            scale: 1,
-          })
-        }, 200)
-
-        for (let i = 0; i < this.mouseClickTarget.length; i++) {
-          this.mouseClickTarget[i].addEventListener('mousedown', this.onMouseDown)
+        // Initialize mouse area if it exists
+        if (this.$refs.MouseArea) {
+          setTimeout(() => {
+            this.$gsap?.set(this.$refs.MouseArea, {
+              opacity: 1,
+            })
+            this.$gsap?.to(this.$refs.MouseArea, {
+              duration: this.baseDuration,
+              ease: this.$EASING?.transform ?? 'power4.inOut',
+              scale: 1,
+            })
+          }, 200)
         }
 
-        for (let i = 0; i < this.mouseClickTarget.length; i++) {
-          this.mouseClickTarget[i].addEventListener('mouseup', this.onMouseUp)
-        }
-
-        for (let i = 0; i < this.mouseHoldTarget.length; i++) {
-          this.mouseHoldTarget[i].addEventListener('mousedown', this.onMouseHoldDown)
-        }
-
-        for (let i = 0; i < this.mouseHoldTarget.length; i++) {
-          this.mouseHoldTarget[i].addEventListener('mouseup', this.onMouseHoldUp)
-        }
+        // Add event listeners
+        this.addEventListeners()
+      } catch (error) {
+        console.error('Error initializing mouse targets:', error)
       }
     },
   },
-
-  mounted() {
-    this.mouseDefault = this.$refs.MouseImg
-    this.mouseClick = this.$refs.MouseImgClick
-    this.mouseHold = this.$refs.MouseImgHold
-    this.mouseAction = this.$refs.MouseAction
-    this.mouseActionWrapper = this.$refs.MouseActionWrapper
-    this.mouseActionBlock = this.$refs.MouseActionBlock
-    this.mouseLoading = this.$refs.MouseLoading
-    this.mouseLoadingWrapper = this.$refs.MouseLoadingWrapper
-    this.mouseLoadingBlock = this.$refs.MouseLoadingBlock
-    this.mouseArea = this.$refs.MouseArea
-    this.mouseHalfWidth = this.mouseArea.clientWidth / 2
-    this.mouseHalfHeight = this.mouseArea.clientHeight / 2
-
-    // タッチイベントではない時、マウス追従
-    if (this.$SITECONFIG.isNoTouch) window.addEventListener('mousemove', this.onMouseMove)
-  },
   methods: {
+    addEventListeners() {
+      if (!this.mouseClickTarget || !this.mouseHoldTarget) return
+      
+      this.mouseClickTarget.forEach(target => {
+        target.addEventListener('mousedown', this.onMouseDown)
+        target.addEventListener('mouseup', this.onMouseUp)
+      })
+
+      this.mouseHoldTarget.forEach(target => {
+        target.addEventListener('mousedown', this.onMouseHoldDown)
+        target.addEventListener('mouseup', this.onMouseHoldUp)
+      })
+
+      if (this.isNoTouch) {
+        window.addEventListener('mousemove', this.onMouseMove)
+      }
+    },
+    removeEventListeners() {
+      if (this.mouseClickTarget) {
+        this.mouseClickTarget.forEach(target => {
+          target.removeEventListener('mousedown', this.onMouseDown)
+          target.removeEventListener('mouseup', this.onMouseUp)
+        })
+      }
+
+      if (this.mouseHoldTarget) {
+        this.mouseHoldTarget.forEach(target => {
+          target.removeEventListener('mousedown', this.onMouseHoldDown)
+          target.removeEventListener('mouseup', this.onMouseHoldUp)
+        })
+      }
+
+      window.removeEventListener('mousemove', this.onMouseMove)
+    },
     onMouseDown() {
-      this.$gsap.to(this.mouseClick, {
+      if (!this.mouseClick || !this.mouseDefault) return
+      
+      this.$gsap?.to(this.mouseClick, {
         duration: 0.2,
-        ease: this.$EASING.transform,
+        ease: this.$EASING?.transform ?? 'power4.inOut',
         scale: 1,
       })
-      this.$gsap.to(this.mouseDefault, {
+      this.$gsap?.to(this.mouseDefault, {
         duration: 0.2,
-        ease: this.$EASING.transform,
+        ease: this.$EASING?.transform ?? 'power4.inOut',
         rotate: 15,
       })
     },
     onMouseUp() {
-      this.$gsap.to(this.mouseClick, {
+      if (!this.mouseClick || !this.mouseDefault) return
+      
+      this.$gsap?.to(this.mouseClick, {
         duration: 0.2,
-        ease: this.$EASING.transform,
+        ease: this.$EASING?.transform ?? 'power4.inOut',
         scale: 0,
       })
-      this.$gsap.to(this.mouseDefault, {
+      this.$gsap?.to(this.mouseDefault, {
         duration: 0.2,
-        ease: this.$EASING.transform,
+        ease: this.$EASING?.transform ?? 'power4.inOut',
         rotate: 0,
       })
     },
     onMouseHoldDown() {
-      this.$gsap.set(this.mouseDefault, {
+      if (!this.mouseDefault || !this.mouseHold) return
+      
+      this.$gsap?.set(this.mouseDefault, {
         opacity: 0,
       })
-      this.$gsap.set(this.mouseHold, {
+      this.$gsap?.set(this.mouseHold, {
         opacity: 1,
       })
     },
     onMouseHoldUp() {
-      this.$gsap.set(this.mouseDefault, {
+      if (!this.mouseDefault || !this.mouseHold) return
+      
+      this.$gsap?.set(this.mouseDefault, {
         opacity: 1,
       })
-      this.$gsap.set(this.mouseHold, {
+      this.$gsap?.set(this.mouseHold, {
         opacity: 0,
       })
     },
     onMouseMove(e) {
+      if (!this.mouseArea || typeof this.mouseHalfWidth === 'undefined' || typeof this.mouseHalfHeight === 'undefined') return
+      
       const posX = e.clientX - this.mouseHalfWidth
       const posY = e.clientY - this.mouseHalfHeight
 
-      this.$gsap.set(this.mouseArea, {
+      this.$gsap?.set(this.mouseArea, {
         x: posX,
         y: posY,
       })
     },
   },
+  mounted() {
+    try {
+      // Cache refs
+      this.mouseDefault = this.$refs.MouseImg
+      this.mouseClick = this.$refs.MouseImgClick
+      this.mouseHold = this.$refs.MouseImgHold
+      this.mouseAction = this.$refs.MouseAction
+      this.mouseActionWrapper = this.$refs.MouseActionWrapper
+      this.mouseActionBlock = this.$refs.MouseActionBlock
+      this.mouseLoading = this.$refs.MouseLoading
+      this.mouseLoadingWrapper = this.$refs.MouseLoadingWrapper
+      this.mouseLoadingBlock = this.$refs.MouseLoadingBlock
+      this.mouseArea = this.$refs.MouseArea
+
+      // Only set dimensions if mouseArea exists
+      if (this.mouseArea) {
+        this.mouseHalfWidth = this.mouseArea.clientWidth / 2
+        this.mouseHalfHeight = this.mouseArea.clientHeight / 2
+      }
+
+      // Add event listeners if needed
+      if (this.isNoTouch) {
+        this.addEventListeners()
+      }
+    } catch (error) {
+      console.error('Error in mounted hook:', error)
+    }
+  },
+  beforeUnmount() {
+    this.removeEventListeners()
+  }
 }
 </script>
 

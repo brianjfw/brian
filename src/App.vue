@@ -53,16 +53,16 @@ export default {
   },
   computed: {
     storeInitialized() {
-      return this.$store.getters.isInitialized
+      return this.$store?.getters?.isInitialized ?? false
     },
     configInitialized() {
-      return this.$SITECONFIG?.isInitialized
+      return this.$SITECONFIG?.isInitialized ?? false
     },
     isMobile() {
-      return this.$SITECONFIG?.isMobile || false
+      return this.$SITECONFIG?.isMobile ?? false
     },
     firstAccess() {
-      return this.$store.state.app?.firstAccess || false
+      return this.$store?.getters?.['app/firstAccess'] ?? false
     }
   },
   watch: {

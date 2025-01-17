@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { useEventBus } from '@/plugins/eventBus'
 
 export default {
@@ -33,14 +33,14 @@ export default {
 
   computed: {
     ...mapState({
-      firstAccess: state => state.app.firstAccess,
       projectData: state => state.projectData || []
     }),
+    ...mapGetters('app', ['firstAccess']),
     storeInitialized() {
-      return this.$store.getters.isInitialized
+      return this.$store?.getters?.isInitialized ?? false
     },
     configInitialized() {
-      return this.$SITECONFIG.isInitialized
+      return this.$SITECONFIG?.isInitialized ?? false
     }
   },
 
@@ -68,35 +68,38 @@ export default {
 
     async initializeComponent() {
       try {
-        // Wait for ASScroll to be ready
-        await new Promise(resolve => {
-          const checkASScroll = () => {
-            const asscroll = this.$getASScroll()
-            if (asscroll) {
-              resolve()
-            } else {
-              setTimeout(checkASScroll, 100)
+        // Wait for ASScroll to be ready with timeout
+        await Promise.race([
+          new Promise(resolve => {
+            const checkASScroll = () => {
+              const asscroll = this.$getASScroll?.() ?? null
+              if (asscroll) {
+                resolve()
+              } else {
+                setTimeout(checkASScroll, 100)
+              }
             }
-          }
-          checkASScroll()
+            checkASScroll()
+          }),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('ASScroll initialization timeout')), 5000))
+        ]).catch(error => {
+          console.warn('ASScroll not available:', error)
+          // Continue without ASScroll
         })
 
-        // Handle touch devices
-        if (this.$SITECONFIG.isTouch) {
+        // Handle touch devices safely
+        if (this.$SITECONFIG?.isTouch) {
           window.scrollTo({ top: 0 })
-          this.$preDefaultEvent(false)
+          if (typeof this.$preDefaultEvent === 'function') {
+            this.$preDefaultEvent(false)
+          }
         }
 
         // Get project index for direct access
         let index = 0
-        try {
-          if (this.$route.params.slug) {
-            index = this.projectData.findIndex(content => content.id === this.$route.params.slug)
-            if (index === -1) index = 0
-          }
-        } catch (error) {
-          console.error('Error accessing project data:', error)
-          index = 0
+        if (this.$route?.params?.slug && Array.isArray(this.projectData)) {
+          const foundIndex = this.projectData.findIndex(content => content?.id === this.$route.params.slug)
+          if (foundIndex !== -1) index = foundIndex
         }
 
         // Component is ready
@@ -110,6 +113,8 @@ export default {
         }
       } catch (error) {
         console.error('Failed to initialize opening:', error)
+        // Set component as ready even if there was an error
+        this.isReady = true
       }
     },
 

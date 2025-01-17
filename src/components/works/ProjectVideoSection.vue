@@ -52,104 +52,178 @@ export default {
   },
 
   computed: {
-    hambergerMenuState () {
-      return this.$store.getters['hambergerMenu/state']
+    hambergerMenuState() {
+      return this.$store?.getters?.['hambergerMenu/state'] ?? false
     },
+    isPc() {
+      return this.$SITECONFIG?.isPc ?? false
+    },
+    isNoTouch() {
+      return this.$SITECONFIG?.isNoTouch ?? false
+    },
+    fullDuration() {
+      return this.$SITECONFIG?.fullDuration ?? 1.2
+    }
   },
 
   watch: {
-    hambergerMenuState () {
-      /**
-       * PCかつタッチデバイスではない時
-       */
-      if (this.$SITECONFIG.isPc && this.$SITECONFIG.isNoTouch) {
-        /**
-         * ハンバガーメニューが開いた時
-         */
-        if (this.hambergerMenuState) {
-          this.iObserverLoopVideo.unobserve(this.$refs.ContentsLoopVideo)
-          window.removeEventListener('mousemove', this.onMoseMove)
-        } else if (!this.hambergerMenuState) {
-          /**
-           * ハンバガーメニューが閉じた時
-           */
-          this.iObserverLoopVideo.observe(this.$refs.ContentsLoopVideo)
-          window.addEventListener('mousemove', this.onMoseMove)
-        }
+    hambergerMenuState() {
+      if (!this.isPc || !this.isNoTouch) return
+
+      if (this.hambergerMenuState) {
+        this.removeVideoObserver()
+        this.removeMouseMoveListener()
+      } else {
+        this.setupVideoObserver()
+        this.addMouseMoveListener()
       }
     },
   },
+
   mounted() {
-    // 一回発火のテキストアニメーション
-    this.observe = this.$refs.ContentsLoopTitle
-    this.iObserverTextSegment = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              this.isTextSegmentState = 'center'
-              this.iObserverTextSegment.unobserve(this.observe)
-            }, 300)
-          }
-        })
-      },
-      { rootMargin: '0%' }
-    )
-    this.iObserverTextSegment.observe(this.observe)
-
-    // ループのテキストアニメーション、画面内に侵入してきた時のみ発火させる
-    this.iObserverLoopText = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            this.isLoopTextState = 'isActive'
-          } else {
-            this.isLoopTextState = 'isNoActive'
-          }
-        })
-      },
-      { rootMargin: '0%' }
-    )
-    this.iObserverLoopText.observe(this.observe)
-
-    // ビデオのマウスアニメーション、画面内に侵入してきた時のみ発火させる
-    if (this.$SITECONFIG.isPc && this.$SITECONFIG.isNoTouch) {
-      this.iObserverLoopVideo = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              window.addEventListener('mousemove', this.onMoseMove)
-            } else {
-              window.removeEventListener('mousemove', this.onMoseMove)
-            }
-          })
-        },
-        { rootMargin: '0%' }
-      )
-      this.iObserverLoopVideo.observe(this.$refs.ContentsLoopVideo)
-    }
+    this.setupObservers()
   },
 
   beforeUnmount() {
-    // リセット
-    this.iObserverTextSegment.unobserve(this.observe)
-    this.iObserverTextSegment = null
-    this.iObserverLoopText.unobserve(this.observe)
-    this.iObserverLoopText = null
-    if (this.$SITECONFIG.isPc && this.$SITECONFIG.isNoTouch) {
-      this.iObserverLoopVideo.unobserve(this.$refs.ContentsLoopVideo)
-      this.iObserverLoopVideo = null
-      window.removeEventListener('mousemove', this.onMoseMove)
-    }
+    this.cleanupObservers()
   },
 
   methods: {
+    setupObservers() {
+      try {
+        this.setupTextSegmentObserver()
+        this.setupLoopTextObserver()
+        if (this.isPc && this.isNoTouch) {
+          this.setupVideoObserver()
+        }
+      } catch (error) {
+        console.error('Error setting up observers:', error)
+      }
+    },
+
+    setupTextSegmentObserver() {
+      if (!this.$refs.ContentsLoopTitle) return
+
+      try {
+        this.observe = this.$refs.ContentsLoopTitle
+        this.iObserverTextSegment = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                setTimeout(() => {
+                  this.isTextSegmentState = 'center'
+                  this.removeTextSegmentObserver()
+                }, 300)
+              }
+            })
+          },
+          { rootMargin: '0%' }
+        )
+        this.iObserverTextSegment.observe(this.observe)
+      } catch (error) {
+        console.error('Error setting up text segment observer:', error)
+      }
+    },
+
+    setupLoopTextObserver() {
+      if (!this.$refs.ContentsLoopTitle) return
+
+      try {
+        this.observe = this.$refs.ContentsLoopTitle
+        this.iObserverLoopText = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              this.isLoopTextState = entry.isIntersecting ? 'isActive' : 'isNoActive'
+            })
+          },
+          { rootMargin: '0%' }
+        )
+        this.iObserverLoopText.observe(this.observe)
+      } catch (error) {
+        console.error('Error setting up loop text observer:', error)
+      }
+    },
+
+    setupVideoObserver() {
+      if (!this.$refs.ContentsLoopVideo) return
+
+      try {
+        this.iObserverLoopVideo = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                this.addMouseMoveListener()
+              } else {
+                this.removeMouseMoveListener()
+              }
+            })
+          },
+          { rootMargin: '0%' }
+        )
+        this.iObserverLoopVideo.observe(this.$refs.ContentsLoopVideo)
+      } catch (error) {
+        console.error('Error setting up video observer:', error)
+      }
+    },
+
+    removeTextSegmentObserver() {
+      if (this.iObserverTextSegment && this.observe) {
+        try {
+          this.iObserverTextSegment.unobserve(this.observe)
+        } catch (error) {
+          console.error('Error removing text segment observer:', error)
+        }
+      }
+    },
+
+    removeLoopTextObserver() {
+      if (this.iObserverLoopText && this.observe) {
+        try {
+          this.iObserverLoopText.unobserve(this.observe)
+        } catch (error) {
+          console.error('Error removing loop text observer:', error)
+        }
+      }
+    },
+
+    removeVideoObserver() {
+      if (this.iObserverLoopVideo && this.$refs.ContentsLoopVideo) {
+        try {
+          this.iObserverLoopVideo.unobserve(this.$refs.ContentsLoopVideo)
+        } catch (error) {
+          console.error('Error removing video observer:', error)
+        }
+      }
+    },
+
+    addMouseMoveListener() {
+      window.addEventListener('mousemove', this.onMoseMove)
+    },
+
+    removeMouseMoveListener() {
+      window.removeEventListener('mousemove', this.onMoseMove)
+    },
+
+    cleanupObservers() {
+      this.removeTextSegmentObserver()
+      this.removeLoopTextObserver()
+      this.removeVideoObserver()
+      this.removeMouseMoveListener()
+      
+      this.iObserverTextSegment = null
+      this.iObserverLoopText = null
+      this.iObserverLoopVideo = null
+      this.observe = null
+    },
+
     onMoseMove(e) {
+      if (!this.$refs.ContentsLoopVideo) return
+
       const x = (e.clientX / window.innerWidth - 0.5) * 2.0 * 5
       const y = (e.clientY / window.innerHeight - 0.5) * 2.0 * 5
 
-      this.$gsap.to(this.$refs.ContentsLoopVideo, {
-        duration: this.$SITECONFIG.fullDuration,
+      this.$gsap?.to(this.$refs.ContentsLoopVideo, {
+        duration: this.fullDuration,
         ease: 'power2.out',
         rotateX: y,
         rotateY: -x,

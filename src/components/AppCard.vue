@@ -131,8 +131,17 @@ export default {
 
   computed: {
     mouseDown() {
-      return this.$store.getters['mouse/isDown']
+      return this.$store?.getters?.['mouse/isDown'] ?? false
     },
+    isMobile() {
+      return this.$SITECONFIG?.isMobile ?? false
+    },
+    isTouch() {
+      return this.$SITECONFIG?.isTouch ?? false
+    },
+    easing() {
+      return this.$EASING?.transform ?? 'power4.inOut'
+    }
   },
 
   watch: {
@@ -142,135 +151,213 @@ export default {
   },
 
   mounted() {
-    this.root = this.$refs.root
-    this.wrapper = this.$refs.wrapper
-    this.observer = this.$refs.observer
-    this.drag = null
-    this.cardAngle = 0
-    this.iObserverFadeIn = null
-    this.iObserverParallax = null
+    try {
+      this.root = this.$refs.root
+      this.wrapper = this.$refs.wrapper
+      this.observer = this.$refs.observer
+      this.drag = null
+      this.cardAngle = 0
+      this.iObserverFadeIn = null
+      this.iObserverParallax = null
 
-    // SPの時は任意(spAnimation = false)で,処理を返す
-    // デフォルトではSPもアニメーションする
-    if (!this.spAnimation && this.$SITECONFIG.isMobile) return
+      // SPの時は任意(spAnimation = false)で,処理を返す
+      // デフォルトではSPもアニメーションする
+      if (!this.spAnimation && this.isMobile) return
 
-    this.$nextTick(() => {
-      setTimeout(() => {
-        if (this.dragAnimation) this.createDragAnimation()
-        this.observe()
-      }, 400) // アニメーションが発火しないことがあるので処理を0.4秒遅らせる
-    })
+      this.$nextTick(() => {
+        setTimeout(() => {
+          if (this.dragAnimation) this.createDragAnimation()
+          this.setupObservers()
+        }, 400) // アニメーションが発火しないことがあるので処理を0.4秒遅らせる
+      })
+    } catch (error) {
+      console.error('Error in mounted hook:', error)
+    }
   },
 
   beforeUnmount() {
-    // SPの時は任意(spAnimation = false)で処理を返す
-    // デフォルトではSPもアニメーションする
-    if (!this.spAnimation && this.$SITECONFIG.isMobile) return
-    if (this.dragAnimation) {
-      this.drag[0].kill()
-      this.drag = null
+    try {
+      // SPの時は任意(spAnimation = false)で処理を返す
+      // デフォルトではSPもアニメーションする
+      if (!this.spAnimation && this.isMobile) return
+
+      this.cleanup()
+    } catch (error) {
+      console.error('Error in beforeUnmount hook:', error)
     }
-    this.$store.commit('mouse/mouseleave')
-    this.$gsap.ticker.remove(this.parallax)
-    if (this.viewAnimation) {
-      this.iObserverFadeIn.unobserve(this.observer)
-      this.iObserverFadeIn = null
-    }
-    this.iObserverParallax.unobserve(this.observer)
-    this.iObserverParallax = null
   },
 
   methods: {
-    createDragAnimation() {
-      this.drag = this.$Draggable.create(this.wrapper, {
-        type: 'x,y',
-        bounds: this.$parent.$el,
-        edgeResistance: 0.6,
-        inertia: true,
-        allowEventDefault: true,
+    cleanup() {
+      if (this.dragAnimation && this.drag?.[0]) {
+        this.drag[0].kill()
+        this.drag = null
+      }
 
-        onThrowUpdate: () => {
-          this.cardAngle += (this.drag[0].deltaX + this.drag[0].deltaY) / 3.0
-          this.$gsap.to(this.wrapper, {
-            duration: 0.01,
-            ease: 'none',
-            rotate: this.cardAngle,
-          })
-          this.$gsap.set(this.observer, {
-            x: this.drag[0].x,
-            y: this.drag[0].y,
-          })
-        },
-      })
+      this.$store?.commit('mouse/mouseleave')
+      
+      if (this.$gsap?.ticker) {
+        this.$gsap.ticker.remove(this.parallax)
+      }
+
+      this.removeObservers()
     },
 
-    fadeInAnimation() {
-      this.state = 'center'
-      this.$gsap.to(this.wrapper, {
-        duration: 1.5,
-        ease: this.$EASING.transform,
-        y: -280,
-        rotate: 0,
-      })
+    removeObservers() {
+      if (this.viewAnimation && this.iObserverFadeIn && this.observer) {
+        try {
+          this.iObserverFadeIn.unobserve(this.observer)
+        } catch (error) {
+          console.error('Error removing fade in observer:', error)
+        }
+        this.iObserverFadeIn = null
+      }
+
+      if (this.iObserverParallax && this.observer) {
+        try {
+          this.iObserverParallax.unobserve(this.observer)
+        } catch (error) {
+          console.error('Error removing parallax observer:', error)
+        }
+        this.iObserverParallax = null
+      }
     },
 
-    parallax() {
-      this.$gsap.to(this.root, {
-        duration: 0.333,
-        ease: 'none',
-        x: this.root.getBoundingClientRect().top * this.xspeed,
-        y: this.root.getBoundingClientRect().top * this.yspeed,
-      })
+    setupObservers() {
+      if (!this.observer) {
+        console.warn('Observer element not found')
+        return
+      }
+
+      try {
+        if (this.viewAnimation) {
+          this.setupFadeInObserver()
+        }
+        this.setupParallaxObserver()
+      } catch (error) {
+        console.error('Error setting up observers:', error)
+      }
     },
 
-    observe() {
-      if (this.viewAnimation) {
+    setupFadeInObserver() {
+      try {
         this.iObserverFadeIn = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 this.fadeInAnimation()
-                this.iObserverFadeIn.unobserve(this.observer)
+                if (this.iObserverFadeIn && this.observer) {
+                  this.iObserverFadeIn.unobserve(this.observer)
+                }
               }
             })
           },
           { rootMargin: '0%' }
         )
         this.iObserverFadeIn.observe(this.observer)
+      } catch (error) {
+        console.error('Error setting up fade in observer:', error)
       }
+    },
 
-      this.iObserverParallax = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              this.$gsap.ticker.add(this.parallax)
-            } else {
-              this.$gsap.ticker.remove(this.parallax)
-            }
-          })
-        },
-        {
-          rootMargin: '0%',
-        }
-      )
-      this.iObserverParallax.observe(this.observer)
+    setupParallaxObserver() {
+      try {
+        this.iObserverParallax = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && this.$gsap?.ticker) {
+                this.$gsap.ticker.add(this.parallax)
+              } else if (this.$gsap?.ticker) {
+                this.$gsap.ticker.remove(this.parallax)
+              }
+            })
+          },
+          { rootMargin: '0%' }
+        )
+        this.iObserverParallax.observe(this.observer)
+      } catch (error) {
+        console.error('Error setting up parallax observer:', error)
+      }
+    },
+
+    createDragAnimation() {
+      if (!this.wrapper || !this.$parent?.$el || !this.$Draggable) return
+
+      try {
+        this.drag = this.$Draggable.create(this.wrapper, {
+          type: 'x,y',
+          bounds: this.$parent.$el,
+          edgeResistance: 0.6,
+          inertia: true,
+          allowEventDefault: true,
+
+          onThrowUpdate: () => {
+            if (!this.drag?.[0] || !this.wrapper || !this.observer) return
+
+            this.cardAngle += (this.drag[0].deltaX + this.drag[0].deltaY) / 3.0
+            this.$gsap?.to(this.wrapper, {
+              duration: 0.01,
+              ease: 'none',
+              rotate: this.cardAngle,
+            })
+            this.$gsap?.set(this.observer, {
+              x: this.drag[0].x,
+              y: this.drag[0].y,
+            })
+          },
+        })
+      } catch (error) {
+        console.error('Error creating drag animation:', error)
+      }
+    },
+
+    fadeInAnimation() {
+      if (!this.wrapper || !this.$gsap) return
+
+      try {
+        this.state = 'center'
+        this.$gsap.to(this.wrapper, {
+          duration: 1.5,
+          ease: this.easing,
+          y: -280,
+          rotate: 0,
+        })
+      } catch (error) {
+        console.error('Error in fade in animation:', error)
+      }
+    },
+
+    parallax() {
+      if (!this.root || !this.$gsap) return
+
+      try {
+        const rect = this.root.getBoundingClientRect()
+        this.$gsap.to(this.root, {
+          duration: 0.333,
+          ease: 'none',
+          x: rect.top * this.xspeed,
+          y: rect.top * this.yspeed,
+        })
+      } catch (error) {
+        console.error('Error in parallax:', error)
+      }
     },
 
     onMouseEnter() {
-      if (this.mouseDown || this.$SITECONFIG.isTouch) return
-      this.$store.commit('mouse/mouseenter')
+      if (this.mouseDown || this.isTouch) return
+      this.$store?.commit('mouse/mouseenter')
     },
     onMouseLeave() {
-      if (this.$SITECONFIG.isTouch) return
-      this.$store.commit('mouse/mouseleave')
+      if (this.isTouch) return
+      this.$store?.commit('mouse/mouseleave')
     },
     onMouseDown() {
-      if (this.$SITECONFIG.isTouch) return
-      this.$store.commit('mouse/mousedown')
+      if (this.isTouch) return
+      this.$store?.commit('mouse/mousedown')
     },
     onMouseUp() {
-      if (this.$SITECONFIG.isTouch) return
-      this.$store.commit('mouse/mouseup')
+      if (this.isTouch) return
+      this.$store?.commit('mouse/mouseup')
     },
   },
 }
