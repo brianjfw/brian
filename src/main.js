@@ -18,27 +18,21 @@ async function initializeApp() {
     // Wait for DOM to be ready
     await waitForDOMContentLoaded()
     
-    // Initialize SITE_CONFIG first and wait for it
-    await SITE_CONFIG.init()
-    if (!SITE_CONFIG.isInitialized) {
-      throw new Error('Failed to initialize SITE_CONFIG')
-    }
-
     // Create app instance with SITE_CONFIG already injected
-    const app = createApp({
-      ...App,
-      beforeCreate() {
-        // Ensure SITE_CONFIG is available before any component initialization
-        this.$SITECONFIG = SITE_CONFIG
-      }
-    })
+    const app = createApp(App)
+    
+    // Add SITE_CONFIG as global property BEFORE any initialization
+    app.config.globalProperties.$SITECONFIG = SITE_CONFIG
     
     // Set up event bus
     const eventBus = useEventBus()
     app.config.globalProperties.$eventBus = eventBus
     
-    // Add SITE_CONFIG as global property
-    app.config.globalProperties.$SITECONFIG = SITE_CONFIG
+    // Initialize SITE_CONFIG and wait for it
+    await SITE_CONFIG.init()
+    if (!SITE_CONFIG.isInitialized) {
+      throw new Error('Failed to initialize SITE_CONFIG')
+    }
     
     // Set up plugins and wait for them to initialize
     const plugins = await setupPlugins()
