@@ -38,57 +38,48 @@ export default {
       isAndroid: '',
       isWindows: '',
       isSafari: '',
+      asscrollInitialized: false,
       eventBus: useEventBus()
     }
   },
-  mounted() {
-    // Initialize data
-    this.$store.dispatch('initializeData')
-
-    // Add device detection logic here
-    if (navigator.userAgent.toLowerCase().includes('android')) {
+  created() {
+    // Device detection is now handled by SITE_CONFIG
+    if (this.$SITECONFIG.isAndroid) {
       this.isAndroid = 'is-android'
     }
-    if (navigator.userAgent.toLowerCase().includes('windows')) {
+    if (this.$SITECONFIG.isWindows) {
       this.isWindows = 'is-windows'
     }
-    if (navigator.userAgent.toLowerCase().includes('safari') && !navigator.userAgent.toLowerCase().includes('chrome')) {
+    if (this.$SITECONFIG.isSafari) {
       this.isSafari = 'is-safari'
     }
-
-    // Initialize ASScroll
-    this.initASScroll()
+  },
+  mounted() {
+    // Listen for ASScroll ready event
+    this.eventBus.on('asscroll:ready', this.onASScrollReady)
+  },
+  beforeDestroy() {
+    // Clean up event listeners
+    this.eventBus.off('asscroll:ready', this.onASScrollReady)
+    
+    // Clean up ASScroll
+    if (this.$asscroll) {
+      this.$asscroll.destroy()
+    }
   },
   methods: {
-    initASScroll() {
-      this.$nextTick(() => {
-        const container = document.querySelector('.asscroll-container')
-        const scrollElement = document.querySelector('.asscroll')
-        
-        if (!container || !scrollElement) {
-          console.warn('ASScroll container or scroll element not found')
-          return
-        }
-
-        try {
-          const asscroll = new this.$ASScroll({
-            containerElement: container,
-            scrollElements: scrollElement,
-            ease: 0.075
-          })
-          
-          // Store ASScroll instance
-          this.$asscroll = asscroll
-          
-          // Start ASScroll
-          asscroll.enable()
-          
-          // Emit event when ASScroll is ready using event bus
-          this.eventBus.emit('asscroll:ready', asscroll)
-        } catch (error) {
-          console.error('Failed to initialize ASScroll:', error)
-        }
+    onASScrollReady(asscroll) {
+      if (!asscroll || this.asscrollInitialized) return
+      
+      this.asscrollInitialized = true
+      
+      // Enable ASScroll
+      asscroll.enable({
+        newScrollElements: document.querySelector('.asscroll')
       })
+      
+      // Emit event for components that need ASScroll
+      this.eventBus.emit('asscroll:enabled', asscroll)
     }
   }
 }

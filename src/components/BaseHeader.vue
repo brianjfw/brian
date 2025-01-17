@@ -20,10 +20,12 @@
 import { useEventBus } from '@/plugins/eventBus'
 
 export default {
-  data: () => {
+  name: 'BaseHeader',
+  data() {
     return {
       name: ['H', 'I', 'S', 'A', 'M', 'I', 'K', 'U', 'R', 'I', 'T', 'A'],
-      eventBus: useEventBus()
+      eventBus: useEventBus(),
+      scrollListener: null
     }
   },
   computed: {
@@ -31,7 +33,7 @@ export default {
       return this.$store.getters['openning/state']
     },
     hambergerMenuState() {
-      return this.$store.getters['hambergerMenu/state']
+      return this.$store.state.hambergerMenu.isOpen
     },
     defaultTransitionState() {
       return this.$store.getters['bg-transition/state']
@@ -43,7 +45,7 @@ export default {
       return this.$store.getters['image-transition/state']
     },
     indexPickupState() {
-      return this.$store.getters['indexPickup/state']
+      return this.$store.state.indexPickup.isOpen
     },
   },
 
@@ -118,31 +120,46 @@ export default {
   },
 
   mounted() {
-    // Use event bus instead of $root
-    this.eventBus.on('asscroll:ready', (asscroll) => {
-      if (asscroll) {
-        asscroll.on('scroll', this.onScroll)
-      }
-    })
+    // Listen for ASScroll enabled event
+    this.eventBus.on('asscroll:enabled', this.initializeScrollListener)
   },
 
   beforeDestroy() {
-    // Clean up event listeners
-    if (this.$asscroll) {
-      this.$asscroll.off('scroll', this.onScroll)
-    }
-    this.eventBus.off('asscroll:ready')
+    this.cleanupScrollListener()
+    this.eventBus.off('asscroll:enabled', this.initializeScrollListener)
   },
 
   methods: {
-    onScroll() {
-      // ハンバーガーメニューが開いている時と遷移中は処理を返す
-      if (this.hambergerMenuState || this.indexPickupState) return
-
-      if (this.$asscroll.targetPos < 1.0) {
-        this.$refs.HeaderLogo.classList.add('is-top')
-      } else {
-        this.$refs.HeaderLogo.classList.remove('is-top')
+    initializeScrollListener(asscroll) {
+      if (!asscroll) return
+      
+      // Clean up existing listener if any
+      this.cleanupScrollListener()
+      
+      // Create new scroll listener
+      this.scrollListener = () => {
+        // Skip if menu is open or during pickup animation
+        if (this.hambergerMenuState || this.indexPickupState) return
+        
+        try {
+          if (asscroll.targetPos < 1.0) {
+            this.$refs.HeaderLogo?.classList.add('is-top')
+          } else {
+            this.$refs.HeaderLogo?.classList.remove('is-top')
+          }
+        } catch (error) {
+          console.warn('Error in scroll listener:', error)
+        }
+      }
+      
+      // Add scroll listener
+      asscroll.on('scroll', this.scrollListener)
+    },
+    
+    cleanupScrollListener() {
+      if (this.$asscroll && this.scrollListener) {
+        this.$asscroll.off('scroll', this.scrollListener)
+        this.scrollListener = null
       }
     },
 
@@ -153,14 +170,11 @@ export default {
         this.$router.go({ path: this.$router.currentRoute.path, force: true })
       } else {
         this.$preDefaultEvent(true)
-        this.$asscroll.disable()
+        if (this.$asscroll) {
+          this.$asscroll.disable()
+        }
         this.$store.commit('bg-transition/start', '#f0efeb')
         this.$store.commit('mouse/loading')
-
-        setTimeout(() => {
-          this.$router.push(`/`)
-          this.$store.commit('mouse/loadend')
-        }, this.$SITECONFIG.pageTransitionDuration)
       }
     },
   },

@@ -1,22 +1,29 @@
-const root = document.documentElement
-const viewportResize = () => {
-  const width = `${window.innerWidth}`
-  const height = `${window.innerHeight}`
-  root.style.setProperty('--viewportWidth', `${width}px`)
-  root.style.setProperty('--viewportHeight', `${height}px`)
+import { updateViewportValues } from '../constants/site-config';
+
+// Initial viewport update
+updateViewportValues();
+
+// Debounce function to limit update frequency
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
-viewportResize();
-window.addEventListener('resize', viewportResize);
 
-// SP用の縦リサイズ無効のHEIGHT
-let spWidth = `${window.innerWidth}`
-const spHeight = `${window.innerHeight}`
-root.style.setProperty('--viewportSpHeight', `${spHeight}px`)
+// Debounced viewport update function
+const debouncedUpdateViewport = debounce(updateViewportValues, 100);
 
-window.addEventListener('resize', () => {
-  if (spWidth !== window.innerWidth) {
-    spWidth = window.innerWidth;
+// Add resize listener
+window.addEventListener('resize', debouncedUpdateViewport);
 
-    root.style.setProperty('--viewportSpHeight', `${spHeight}px`)
-  }
+// Add orientation change listener for mobile devices
+window.addEventListener('orientationchange', () => {
+  // Small delay to ensure new dimensions are available
+  setTimeout(updateViewportValues, 100);
 });

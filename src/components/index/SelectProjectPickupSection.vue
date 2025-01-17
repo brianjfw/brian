@@ -96,7 +96,10 @@ export default {
       isCircleBgState02: '',
       isCircleBgState03: '',
       scroll: { value: 0 },
-      eventBus: useEventBus()
+      eventBus: useEventBus(),
+      isTransitioning: false,
+      scrollDuration: 1.2,
+      pickupScrollOffset: 0,
     }
   },
 
@@ -163,6 +166,26 @@ export default {
     this.removeSceneEvent()
     this.resetDefaultPreEvent()
     window.removeEventListener('resize', this.pResize)
+
+    // Cleanup animations
+    if (this.pickupToTopEnterScrollAnimation) {
+      this.pickupToTopEnterScrollAnimation.kill()
+    }
+    if (this.pickupToTopLeaveScrollAnimation) {
+      this.pickupToTopLeaveScrollAnimation.kill()
+    }
+    
+    // Remove ticker functions
+    if (this.$gsap) {
+      this.$gsap.ticker.remove(this.setHeight)
+      this.$gsap.ticker.remove(this.setPos)
+      this.$gsap.ticker.remove(this.pickupToTopEnterScroll)
+    }
+    
+    // Enable scrolling
+    if (this.$asscroll) {
+      this.$asscroll.enable()
+    }
   },
 
   methods: {
@@ -170,77 +193,82 @@ export default {
      * ピックアップセクションに上から侵入する時
      */
     pickupToTopEnterScroll() {
-      if (!this.$asscroll) return
-
-      // ターゲットの領域を計算
-      this.scroll.value = this.$asscroll.targetPos
-      const pickupPos = this.$refs.Pickup?.offsetTop
-      if (!pickupPos) return
-
-      const pickupTopPos = pickupPos - window.innerHeight
-
-      if (this.$asscroll.targetPos > pickupTopPos) {
-        if (this.$SITECONFIG.isMobile) this.$gsap.ticker.add(this.setHeight)
-        if (this.pickupToTopLeaveScrollAnimation) this.pickupToTopLeaveScrollAnimation.kill()
-        // 上から侵入する監視をストップ
-        this.$gsap.ticker.remove(this.pickupToTopEnterScroll)
-        // 慣性スクロールを無効にする
-        this.$asscroll.disable({ inputOnly: true })
-        // デフォルトのイベントをストップする
-        this.stopDefaultPreEvent()
-        // ホイールイベント不可、デフォルトの操作不可時間より長くしておく
-        this.disable(1700)
-        // 既存の処理とバッティングするので、ハンバーガーメニューを操作不能にしておく
-        this.$store.commit('hambergerMenu/disable')
-        // ピックアップに入ったことを知らせる
-        this.$store.commit('indexPickup/enter')
-        this.$store.commit('indexPickup/sceneAnimationState', true)
-        // this.$store.commit('indexPickup/setPickupPos', pickupPos)
-
-        // スクロール処理
-        this.pickupToTopEnterScrollAnimation = this.$gsap.to(this.scroll, {
-          value: pickupPos,
-          duration: this.scrollDuartion,
-          ease: this.$EASING.transform,
-          onUpdate: () => {
-            this.$asscroll.scrollTo(this.scroll.value)
-          },
-          onComplete: () => {
-            // タッチデバイスの時、背景固定
-            // setTimeout(() => {
-            //   if (this.$SITECONFIG.isTouch) this.$backfaceScroll(false)
-            // }, 100)
-            // 次のシーンへ移動させる
-            this.pickupSceneNext()
-            // シーン用のイベントを付与する
-            this.addSceneEvent()
-            this.$gsap.ticker.add(this.setPos)
-            // ハンバーガーメニューを操作可能にする
-            this.$store.commit('hambergerMenu/enable')
-            // タッチはできるようにする
-            window.removeEventListener('touchstart', preEventTouch, {
-              passive: false,
-            })
-          },
-        })
-
-        // 侵入した時の最初のサークルアニメーション
-        if (this.$SITECONFIG.isPc) {
-          this.$gsap.to(this.$refs.PickupCircleEnter, {
-            duration: this.$SITECONFIG.baseDuration * 1.2,
+      if (!this.$asscroll || this.isTransitioning) return
+      
+      const pickupTopPos = this.$refs.PickupWrapper.offsetTop
+      const pickupPos = pickupTopPos + this.pickupScrollOffset
+      
+      try {
+        if (this.$asscroll.targetPos > pickupTopPos) {
+          // Prevent multiple transitions
+          if (this.isTransitioning) return
+          this.isTransitioning = true
+          
+          if (this.$SITECONFIG.isMobile) {
+            this.$gsap.ticker.add(this.setHeight)
+          }
+          
+          if (this.pickupToTopLeaveScrollAnimation) {
+            this.pickupToTopLeaveScrollAnimation.kill()
+          }
+          
+          // Stop monitoring scroll from top
+          this.$gsap.ticker.remove(this.pickupToTopEnterScroll)
+          
+          // Disable inertial scrolling
+          if (this.$asscroll) {
+            this.$asscroll.disable({ inputOnly: true })
+          }
+          
+          // Stop default events
+          this.stopDefaultPreEvent()
+          
+          // Disable for longer than default operation
+          this.disable(1700)
+          
+          // Disable hamburger menu to prevent conflicts
+          this.$store.commit('hambergerMenu/disable')
+          
+          // Notify pickup entry
+          this.$store.commit('indexPickup/enter')
+          this.$store.commit('indexPickup/sceneAnimationState', true)
+          
+          // Scroll animation
+          this.pickupToTopEnterScrollAnimation = this.$gsap.to(this.scroll, {
+            value: pickupPos,
+            duration: this.scrollDuration,
             ease: this.$EASING.transform,
-            delay: 0.2,
-            y: window.innerHeight / 2,
-            scale: Math.max(window.innerWidth, window.innerHeight) / 54.0,
-          })
-        } else if (this.$SITECONFIG.isMobile) {
-          this.$gsap.to(this.$refs.PickupCircleEnter, {
-            duration: this.$SITECONFIG.baseDuration * 1.2,
-            ease: this.$EASING.transform,
-            delay: 0.2,
-            scale: 1.2,
+            onUpdate: () => {
+              if (this.$asscroll) {
+                this.$asscroll.scrollTo(this.scroll.value)
+              }
+            },
+            onComplete: () => {
+              // Move to next scene
+              this.pickupSceneNext()
+              
+              // Add scene events
+              this.addSceneEvent()
+              
+              if (this.$gsap) {
+                this.$gsap.ticker.add(this.setPos)
+              }
+              
+              // Re-enable hamburger menu
+              this.$store.commit('hambergerMenu/enable')
+              
+              // Enable touch
+              window.removeEventListener('touchstart', this.preEventTouch, {
+                passive: false,
+              })
+              
+              this.isTransitioning = false
+            },
           })
         }
+      } catch (error) {
+        console.warn('Error in pickupToTopEnterScroll:', error)
+        this.isTransitioning = false
       }
     },
 
@@ -248,66 +276,48 @@ export default {
      * ピックアップセクションの上から離れる時
      */
     pickupToTopLeaveScroll() {
-      if (this.pickupToTopEnterScrollAnimation) this.pickupToTopEnterScrollAnimation.kill()
-      // タッチデバイスの時、背景固定解除
-      // if (this.$SITECONFIG.isTouch) this.$backfaceScroll(true)
-      if (this.$SITECONFIG.isMobile) this.$gsap.ticker.remove(this.setHeight)
-      // ホイールイベント不可、デフォルトの操作不可時間より長くしておく
-      this.disable(3000)
-      // ハンバーガーメニューを操作不能にする
-      this.$store.commit('hambergerMenu/disable')
-      // ピックアップを出たことを知らせる
-      this.$store.commit('indexPickup/leave')
-      // シーン用のイベントを削除する
-      this.removeSceneEvent()
-      this.$gsap.ticker.remove(this.setPos)
-
-      // ターゲットの領域を計算
-      const pickupPos = this.$refs.Pickup.offsetTop
-      const pickupTopPos = pickupPos - window.innerHeight
-
-      // スクロール処理
-      this.pickupToTopLeaveScrollAnimation = this.$gsap.to(this.scroll, {
-        value: pickupTopPos - this.scrollBuffer, // 領域判定がシビアなので離れる時にバッファーを設けてスクロールさせる
-        duration: this.scrollDuartion,
-        ease: this.$EASING.transform,
-        onUpdate: () => {
-          this.$asscroll.scrollTo(this.scroll.value)
-        },
-        onComplete: () => {
-          setTimeout(() => {
-            // 慣性スクロール有効
-            this.$asscroll.enable()
+      if (!this.$asscroll || this.isTransitioning) return
+      
+      const pickupTopPos = this.$refs.PickupWrapper.offsetTop
+      
+      try {
+        // Scroll animation
+        this.pickupToTopLeaveScrollAnimation = this.$gsap.to(this.scroll, {
+          value: pickupTopPos - this.scrollBuffer,
+          duration: this.scrollDuration,
+          ease: this.$EASING.transform,
+          onUpdate: () => {
+            if (this.$asscroll) {
+              this.$asscroll.scrollTo(this.scroll.value)
+            }
+          },
+          onComplete: () => {
             setTimeout(() => {
-              // ハンバーガーメニューを操作可能にする
-              this.$store.commit('hambergerMenu/enable')
-            }, 500)
-            // 上から侵入する監視を加える
-            this.$gsap.ticker.add(this.pickupToTopEnterScroll)
-            // デフォルトのイベントを戻す
-            this.resetDefaultPreEvent()
-            // ピックアップを出たことを知らせる
-            this.$store.commit('indexPickup/sceneAnimationState', false)
-          }, 200)
-        },
-      })
-
-      // 侵入した時の最初のサークルアニメーション
-      if (this.$SITECONFIG.isPc) {
-        this.$gsap.to(this.$refs.PickupCircleEnter, {
-          duration: this.$SITECONFIG.baseDuration * 1.2,
-          ease: this.$EASING.transform,
-          delay: 0.2,
-          y: 0,
-          scale: 1,
+              // Enable inertial scroll
+              if (this.$asscroll) {
+                this.$asscroll.enable()
+              }
+              
+              setTimeout(() => {
+                // Re-enable hamburger menu
+                this.$store.commit('hambergerMenu/enable')
+              }, 500)
+              
+              // Add monitoring for top entry
+              if (this.$gsap) {
+                this.$gsap.ticker.add(this.pickupToTopEnterScroll)
+              }
+              
+              // Reset default events
+              this.resetDefaultPreEvent()
+              
+              // Notify scene animation end
+              this.$store.commit('indexPickup/sceneAnimationState', false)
+            }, 200)
+          },
         })
-      } else {
-        this.$gsap.to(this.$refs.PickupCircleEnter, {
-          duration: this.$SITECONFIG.baseDuration * 1.2,
-          ease: this.$EASING.transform,
-          delay: 0.2,
-          scale: 0,
-        })
+      } catch (error) {
+        console.warn('Error in pickupToTopLeaveScroll:', error)
       }
     },
 
