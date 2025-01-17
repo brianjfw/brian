@@ -18,21 +18,21 @@ async function initializeApp() {
     // Wait for DOM to be ready
     await waitForDOMContentLoaded()
     
-    // Create app instance first so we can use Vue's reactivity system
+    // Initialize SITE_CONFIG first and wait for it
+    await SITE_CONFIG.value.init()
+    if (!SITE_CONFIG.value.isInitialized) {
+      throw new Error('Failed to initialize SITE_CONFIG')
+    }
+    
+    // Create app instance
     const app = createApp(App)
     
     // Set up event bus
     const eventBus = useEventBus()
     app.config.globalProperties.$eventBus = eventBus
     
-    // Initialize SITE_CONFIG first and wait for it
-    await SITE_CONFIG.init()
-    if (!SITE_CONFIG.isInitialized) {
-      throw new Error('Failed to initialize SITE_CONFIG')
-    }
-    
     // Add SITE_CONFIG as global property
-    app.config.globalProperties.$SITECONFIG = SITE_CONFIG
+    app.config.globalProperties.$SITECONFIG = SITE_CONFIG.value
     
     // Set up plugins and wait for them to initialize
     const plugins = await setupPlugins()

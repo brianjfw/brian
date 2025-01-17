@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { ref } from 'vue'
 
 // Utility function to safely check window properties
 const checkWindow = (check) => {
@@ -36,8 +36,8 @@ const deviceUtils = {
   }
 };
 
-// Create the SITE_CONFIG object
-const config = {
+// Create the initial config object
+const initialConfig = {
   // Device detection (with default values)
   isTouch: false,
   isNoTouch: true,
@@ -86,11 +86,11 @@ const config = {
   isInitialized: false
 };
 
-// Create a reactive SITE_CONFIG object
-export const SITE_CONFIG = reactive(config);
+// Create a ref for SITE_CONFIG
+export const SITE_CONFIG = ref(initialConfig);
 
 // Add the init method
-SITE_CONFIG.init = async function() {
+SITE_CONFIG.value.init = async function() {
   if (typeof window === 'undefined') return this;
   
   // Wait for window to be ready
@@ -117,22 +117,22 @@ SITE_CONFIG.init = async function() {
 };
 
 // Export individual configurations for specific use cases
-export const BREAKPOINTS = config.breakpoints;
+export const BREAKPOINTS = initialConfig.breakpoints;
 export const ANIMATION_CONFIG = {
-  fullDuration: config.fullDuration,
-  baseDuration: config.baseDuration,
-  shortDuration: config.shortDuration,
-  baseEasing: config.baseEasing,
-  transformEasing: config.transformEasing,
-  colorAndOpacityEasing: config.colorAndOpacityEasing,
-  pageTransitionDuration: config.pageTransitionDuration
+  fullDuration: initialConfig.fullDuration,
+  baseDuration: initialConfig.baseDuration,
+  shortDuration: initialConfig.shortDuration,
+  baseEasing: initialConfig.baseEasing,
+  transformEasing: initialConfig.transformEasing,
+  colorAndOpacityEasing: initialConfig.colorAndOpacityEasing,
+  pageTransitionDuration: initialConfig.pageTransitionDuration
 };
 export const SITE_INFO = {
-  baseTitle: config.baseTitle,
-  baseDescription: config.baseDescription,
-  url: config.url,
-  allTextColor: config.allTextColor,
-  siteColor: { ...config.siteColor }
+  baseTitle: initialConfig.baseTitle,
+  baseDescription: initialConfig.baseDescription,
+  url: initialConfig.url,
+  allTextColor: initialConfig.allTextColor,
+  siteColor: { ...initialConfig.siteColor }
 };
 
 // Export a function to update viewport values
