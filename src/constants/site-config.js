@@ -36,45 +36,8 @@ const deviceUtils = {
   }
 };
 
-// Animation configurations
-const animationConfig = {
-  fullDuration: 1.2,
-  baseDuration: 0.8,
-  shortDuration: 0.4,
-  baseEasing: 'power2.inOut',
-  transformEasing: 'power4.inOut',
-  colorAndOpacityEasing: 'power2.inOut',
-  pageTransitionDuration: 800
-};
-
-// Site information and styling
-const siteInfo = {
-  baseTitle: 'Heather Hudson Art',
-  baseDescription: 'Portfolio website showcasing the artwork of Heather Hudson',
-  url: typeof window !== 'undefined' ? window.location.origin : '',
-  allTextColor: '#333333',
-  siteColor: {
-    primary: '#000000',
-    secondary: '#ffffff',
-    accent: '#666666'
-  }
-};
-
-// Content lists with default empty arrays
-const contentLists = {
-  list01: [],
-  list02: [],
-  list03: []
-};
-
-// Breakpoints
-const breakpoints = {
-  mobile: 767,
-  tablet: 1280
-};
-
-// Create a reactive SITE_CONFIG object
-export const SITE_CONFIG = reactive({
+// Create the SITE_CONFIG object
+const config = {
   // Device detection (with default values)
   isTouch: false,
   isNoTouch: true,
@@ -86,48 +49,91 @@ export const SITE_CONFIG = reactive({
   isWindows: false,
   isSafari: false,
 
-  // Static configurations
-  ...animationConfig,
-  ...siteInfo,
-  ...contentLists,
-  breakPoint: breakpoints.mobile,
+  // Animation configurations
+  fullDuration: 1.2,
+  baseDuration: 0.8,
+  shortDuration: 0.4,
+  baseEasing: 'power2.inOut',
+  transformEasing: 'power4.inOut',
+  colorAndOpacityEasing: 'power2.inOut',
+  pageTransitionDuration: 800,
+
+  // Site information and styling
+  baseTitle: 'Heather Hudson Art',
+  baseDescription: 'Portfolio website showcasing the artwork of Heather Hudson',
+  url: typeof window !== 'undefined' ? window.location.origin : '',
+  allTextColor: '#333333',
+  siteColor: {
+    primary: '#000000',
+    secondary: '#ffffff',
+    accent: '#666666'
+  },
+
+  // Content lists
+  list01: [],
+  list02: [],
+  list03: [],
+
+  // Breakpoints
+  breakPoint: 767,
+  breakpoints: {
+    mobile: 767,
+    tablet: 1280
+  },
   
   // State
   firstAccess: true,
-  isInitialized: false,
+  isInitialized: false
+};
 
-  // Initialize method
-  async init() {
-    if (typeof window === 'undefined') return this;
-    
-    // Wait for window to be ready
-    if (document.readyState === 'loading') {
-      await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
-    }
+// Create a reactive SITE_CONFIG object
+export const SITE_CONFIG = reactive(config);
 
-    // Update device detection properties
-    this.isTouch = deviceUtils.isTouch;
-    this.isNoTouch = deviceUtils.isNoTouch;
-    this.isPc = deviceUtils.isPc;
-    this.isMobile = deviceUtils.isMobile;
-    this.isTab = deviceUtils.isTab;
-    this.isIpad = deviceUtils.isIpad;
-    this.isAndroid = deviceUtils.isAndroid;
-    this.isWindows = deviceUtils.isWindows;
-    this.isSafari = deviceUtils.isSafari;
-
-    // Update URL if needed
-    this.url = window.location.origin;
-
-    this.isInitialized = true;
-    return this;
+// Add the init method
+SITE_CONFIG.init = async function() {
+  if (typeof window === 'undefined') return this;
+  
+  // Wait for window to be ready
+  if (document.readyState === 'loading') {
+    await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
   }
-});
+
+  // Update device detection properties
+  this.isTouch = deviceUtils.isTouch;
+  this.isNoTouch = deviceUtils.isNoTouch;
+  this.isPc = deviceUtils.isPc;
+  this.isMobile = deviceUtils.isMobile;
+  this.isTab = deviceUtils.isTab;
+  this.isIpad = deviceUtils.isIpad;
+  this.isAndroid = deviceUtils.isAndroid;
+  this.isWindows = deviceUtils.isWindows;
+  this.isSafari = deviceUtils.isSafari;
+
+  // Update URL if needed
+  this.url = window.location.origin;
+
+  this.isInitialized = true;
+  return this;
+};
 
 // Export individual configurations for specific use cases
-export const BREAKPOINTS = breakpoints;
-export const ANIMATION_CONFIG = animationConfig;
-export const SITE_INFO = siteInfo;
+export const BREAKPOINTS = config.breakpoints;
+export const ANIMATION_CONFIG = {
+  fullDuration: config.fullDuration,
+  baseDuration: config.baseDuration,
+  shortDuration: config.shortDuration,
+  baseEasing: config.baseEasing,
+  transformEasing: config.transformEasing,
+  colorAndOpacityEasing: config.colorAndOpacityEasing,
+  pageTransitionDuration: config.pageTransitionDuration
+};
+export const SITE_INFO = {
+  baseTitle: config.baseTitle,
+  baseDescription: config.baseDescription,
+  url: config.url,
+  allTextColor: config.allTextColor,
+  siteColor: { ...config.siteColor }
+};
 
 // Export a function to update viewport values
 export function updateViewportValues() {

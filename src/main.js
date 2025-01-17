@@ -18,18 +18,18 @@ async function initializeApp() {
     // Wait for DOM to be ready
     await waitForDOMContentLoaded()
     
-    // Initialize SITE_CONFIG first and wait for it
-    await SITE_CONFIG.init()
-    if (!SITE_CONFIG.isInitialized) {
-      throw new Error('Failed to initialize SITE_CONFIG')
-    }
-    
     // Create app instance first so we can use Vue's reactivity system
     const app = createApp(App)
     
     // Set up event bus
     const eventBus = useEventBus()
     app.config.globalProperties.$eventBus = eventBus
+    
+    // Initialize SITE_CONFIG first and wait for it
+    await SITE_CONFIG.init()
+    if (!SITE_CONFIG.isInitialized) {
+      throw new Error('Failed to initialize SITE_CONFIG')
+    }
     
     // Add SITE_CONFIG as global property
     app.config.globalProperties.$SITECONFIG = SITE_CONFIG
@@ -91,7 +91,7 @@ async function initializeApp() {
   }
 }
 
-// Start initialization
+// Start initialization and handle errors
 initializeApp().catch(error => {
   console.error('Failed to initialize app:', error)
   // Add error handling UI here if needed
@@ -99,7 +99,7 @@ initializeApp().catch(error => {
     <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
       <h1>Failed to initialize application</h1>
       <p>Please refresh the page. If the problem persists, contact support.</p>
-      <pre style="text-align: left; margin-top: 20px;">${error.stack}</pre>
+      <pre style="text-align: left; margin-top: 20px; max-width: 800px; overflow: auto;">${error.stack}</pre>
     </div>
   `
 }) 
