@@ -3,9 +3,18 @@
     <div ref="ContentsLoopTitle" class="contents-loop-title">
       <span ref="ContentsLoopVideo" class="contents-loop-video">
         <span class="contents-loop-video-shadow" :style="`box-shadow:0 22px 60px 0px ${currentProject.siteColor.shadowColor}`"></span>
-        <span class="contents-loop-video-wrapper"
-          ><video :poster="`/images/poster-${currentProject.id}.webp`" :src="`/movie/${currentProject.id}.mp4`" playsinline autoplay loop muted disablePictureInPicture disableRemotePlayback></video
-        ></span>
+        <span class="contents-loop-video-wrapper">
+          <video 
+            :poster="getPosterUrl(currentProject.id)" 
+            :src="getVideoUrl(currentProject.id)" 
+            playsinline 
+            autoplay 
+            loop 
+            muted 
+            disablePictureInPicture 
+            disableRemotePlayback
+          ></video>
+        </span>
       </span>
       <AppLoopText :loop="isLoopTextState" :text="currentProject.title.short" />
     </div>
@@ -35,6 +44,10 @@ export default {
     return {
       isTextSegmentState: 'default',
       isLoopTextState: 'default',
+      observe: null,
+      iObserverTextSegment: null,
+      iObserverLoopText: null,
+      iObserverLoopVideo: null,
     }
   },
 
@@ -141,6 +154,12 @@ export default {
         rotateX: y,
         rotateY: -x,
       })
+    },
+    getPosterUrl(id) {
+      return `/images/poster-${id}.webp`
+    },
+    getVideoUrl(id) {
+      return `/movie/${id}.mp4`
     },
   },
 }

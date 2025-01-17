@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ImagesLoaded from 'imagesloaded'
+import { imageLoader } from '@/utils/imageLoader'
 import IndexMainVisualSection from '@/components/index/MainVisualSection.vue'
 import IndexAboutSection from '@/components/index/AboutSection.vue'
 import IndexSelectProjectPickupSection from '@/components/index/SelectProjectPickupSection.vue'
@@ -40,10 +40,10 @@ export default {
       return this.$store.getters.pickupData
     },
     defaultTransitionState() {
-      return this.$store.getters['bg-transition/state']
+      return this.$store.state['bg-transition'].isActive
     },
     imageTransitionState() {
-      return this.$store.getters['image-transition/state']
+      return this.$store.state['image-transition'].isActive
     },
     openningEnd() {
       return this.$store.getters['openning/state']
@@ -72,29 +72,45 @@ export default {
     },
   },
 
-  mounted() {
-    this.$nextTick(() => {
-      const images = document.querySelectorAll('.index img')
-      const imagesLoaded = ImagesLoaded(images)
-
-      // 画像の読み込みが全て完了した時
-      imagesLoaded.on('always', () => {
-        // 遷移のアニメーションを終了させる
-        if (this.defaultTransitionState) this.$store.commit('bg-transition/end')
-        if (this.imageTransitionState) this.$store.commit('image-transition/end')
-        this.$store.commit('mouse/loadend')
-
-        this.$store.commit('imageLoaded/loaded')
-      })
-    })
+  async mounted() {
+    try {
+      // Load all images in the index page
+      await imageLoader.loadImages('.index')
+      
+      // Update state once images are loaded
+      this.imagesLoaded = true
+      
+      // Handle transitions
+      if (this.defaultTransitionState) {
+        this.$store.commit('bg-transition/end')
+      }
+      if (this.imageTransitionState) {
+        this.$store.commit('image-transition/end')
+      }
+      
+      this.$store.commit('mouse/loadend')
+      this.$store.commit('imageLoaded/loaded')
+    } catch (error) {
+      console.error('Failed to load images:', error)
+      this.loadError = true
+      // Still end transitions even if some images failed
+      if (this.defaultTransitionState) {
+        this.$store.commit('bg-transition/end')
+      }
+      if (this.imageTransitionState) {
+        this.$store.commit('image-transition/end')
+      }
+      this.$store.commit('mouse/loadend')
+    }
   },
 
-  beforeUnmount() {
-    // リセット
+  beforeDestroy() {
     this.$preDefaultEvent(false)
-    this.$asscroll.disable()
+    if (this.$asscroll) {
+      this.$asscroll.disable()
+    }
     this.$store.commit('imageLoaded/init')
-  },
+  }
 }
 </script>
 

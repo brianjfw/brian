@@ -5,22 +5,43 @@ import store from './store'
 import eventBus from './plugins/eventBus'
 import { BASEROTATE } from './constants/rotations'
 import { gsap, EASING } from './plugins/gsap'
-import ASScroll from '@ashthornton/asscroll'
-import { SITE_CONFIG } from './constants/site-config'
+import { setupASScroll, getASScroll } from './plugins/asscroll'
+import { SITE_CONFIG, setupPlugins } from './plugins'
 import { preDefaultEvent } from './utils/events'
 
-const app = createApp(App)
+async function initializeApp() {
+  const app = createApp(App)
 
-// Add global properties
-app.config.globalProperties.$BASEROTATE = BASEROTATE
-app.config.globalProperties.$gsap = gsap
-app.config.globalProperties.$EASING = EASING
-app.config.globalProperties.$ASScroll = ASScroll
-app.config.globalProperties.$SITECONFIG = SITE_CONFIG
-app.config.globalProperties.$preDefaultEvent = preDefaultEvent
+  // Initialize plugins and config
+  const config = setupPlugins(app)
 
-app.use(router)
-app.use(store)
-app.use(eventBus)
+  // Wait for store initialization
+  await store.dispatch('initializeData')
 
-app.mount('#app') 
+  // Add global properties
+  app.config.globalProperties.$BASEROTATE = BASEROTATE
+  app.config.globalProperties.$gsap = gsap
+  app.config.globalProperties.$EASING = EASING
+  app.config.globalProperties.$SITECONFIG = config
+  app.config.globalProperties.$preDefaultEvent = preDefaultEvent
+
+  // Setup plugins
+  app.use(router)
+  app.use(store)
+  app.use(eventBus)
+  app.use(setupASScroll(app))
+
+  // Mount app
+  app.mount('#app')
+
+  // Initialize ASScroll after mount
+  const asscroll = getASScroll()
+  if (asscroll) {
+    app.config.globalProperties.$asscroll = asscroll
+  }
+}
+
+// Initialize app
+initializeApp().catch(error => {
+  console.error('Failed to initialize app:', error)
+}) 

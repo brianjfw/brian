@@ -1,17 +1,22 @@
 <template>
-  <div :class="[bodyClass, isAndroid, isWindows, isSafari]">
-    <div class="asscroll-container">
-      <div class="asscroll">
-        <div class="asscroll-contents">
-          <BaseOpenning />
-          <BaseMouse />
-          <BaseLoading />
-          <BaseHeader />
-          <BaseHambergerMenu />
-          <router-view></router-view>
-        </div>
+  <div id="app">
+    <template v-if="isAppReady">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </template>
+    <template v-else-if="initializationError">
+      <div class="initialization-error">
+        Failed to initialize application. Please refresh the page.
       </div>
-    </div>
+    </template>
+    <template v-else>
+      <div class="loading">
+        Loading...
+      </div>
+    </template>
   </div>
 </template>
 
@@ -34,79 +39,97 @@ export default {
   },
   data() {
     return {
-      bodyClass: '',
-      isAndroid: '',
-      isWindows: '',
-      isSafari: '',
-      asscrollInitialized: false,
-      eventBus: useEventBus()
+      isAppReady: false,
+      initializationError: null
     }
   },
-  created() {
-    // Device detection is now handled by SITE_CONFIG
-    if (this.$SITECONFIG.isAndroid) {
-      this.isAndroid = 'is-android'
-    }
-    if (this.$SITECONFIG.isWindows) {
-      this.isWindows = 'is-windows'
-    }
-    if (this.$SITECONFIG.isSafari) {
-      this.isSafari = 'is-safari'
+  computed: {
+    storeInitialized() {
+      return this.$store.getters.isInitialized
+    },
+    configInitialized() {
+      return this.$SITECONFIG.isInitialized
     }
   },
-  mounted() {
-    // Listen for ASScroll ready event
-    this.eventBus.on('asscroll:ready', this.onASScrollReady)
-  },
-  beforeDestroy() {
-    // Clean up event listeners
-    this.eventBus.off('asscroll:ready', this.onASScrollReady)
-    
-    // Clean up ASScroll
-    if (this.$asscroll) {
-      this.$asscroll.destroy()
+  watch: {
+    storeInitialized: {
+      handler(newVal) {
+        if (newVal) this.checkInitialization()
+      },
+      immediate: true
+    },
+    configInitialized: {
+      handler(newVal) {
+        if (newVal) this.checkInitialization()
+      },
+      immediate: true
     }
   },
   methods: {
-    onASScrollReady(asscroll) {
-      if (!asscroll || this.asscrollInitialized) return
-      
-      this.asscrollInitialized = true
-      
-      // Enable ASScroll
-      asscroll.enable({
-        newScrollElements: document.querySelector('.asscroll')
-      })
-      
-      // Emit event for components that need ASScroll
-      this.eventBus.emit('asscroll:enabled', asscroll)
+    checkInitialization() {
+      if (this.storeInitialized && this.configInitialized) {
+        this.isAppReady = true
+      }
+    },
+    async initializeApp() {
+      try {
+        // Wait for store and config initialization
+        await Promise.all([
+          new Promise(resolve => {
+            if (this.storeInitialized) resolve()
+            this.$watch('storeInitialized', newVal => {
+              if (newVal) resolve()
+            })
+          }),
+          new Promise(resolve => {
+            if (this.configInitialized) resolve()
+            this.$watch('configInitialized', newVal => {
+              if (newVal) resolve()
+            })
+          })
+        ])
+
+        // App is ready
+        this.isAppReady = true
+      } catch (error) {
+        console.error('Failed to initialize app:', error)
+        this.initializationError = error
+      }
     }
+  },
+  created() {
+    this.initializeApp()
   }
 }
 </script>
 
 <style lang="scss">
-:root {
-  --viewportWidth: 100vw;
-  --viewportHeight: 100vh;
+.initialization-error {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #ff0000;
+  font-size: 16px;
 }
 
-.asscroll-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 16px;
 }
 
-.asscroll {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-.asscroll-contents {
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style> 

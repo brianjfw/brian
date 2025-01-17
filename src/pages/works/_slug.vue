@@ -18,20 +18,16 @@
 </template>
 
 <script>
-import ImagesLoaded from 'imagesloaded'
+import { imageLoader } from '@/utils/imageLoader'
 
 export default {
-  name: 'WorksDetailPage',
-
-  head() {
+  name: 'WorksPage',
+  data() {
     return {
-      title: `Hisami Kurita Portfolio | ${this.currentProject.title.full}`,
-      meta: [
-        { hid: 'og:title', property: 'og:title', content: `Hisami Kurita Portfolio | ${this.currentProject.title.full}` },
-      ]
+      imagesLoaded: false,
+      loadError: false
     }
   },
-
   computed: {
     /**
      * 現在のプロジェクトを取得
@@ -63,75 +59,99 @@ export default {
     },
 
     indexPickupIsAnimation() {
-      return this.$store.getters['indexPickup/sceneAnimationState']
+      return this.$store.state.indexPickup.isAnimating
     },
     defaultTransitionState() {
-      return this.$store.getters['bg-transition/state']
+      return this.$store.state['bg-transition'].isActive
     },
     imageTransitionState() {
-      return this.$store.getters['image-transition/state']
+      return this.$store.state['image-transition'].isActive
     },
     pickupTransitionState() {
-      return this.$store.getters['indexPickup/transition']
+      return this.$store.state.indexPickup.isTransitioning
     },
     openningEnd() {
-      return this.$store.getters['openning/state']
-    },
-    imageLoaded() {
-      return this.$store.getters['imageLoaded/isLoad']
-    },
+      return this.$store.state.openning.isComplete
+    }
   },
-
   watch: {
     openningEnd() {
       setTimeout(() => {
-        // スクロール可能にする
-        if (this.$SITECONFIG.isTouch) this.$backfaceScroll(true)
-        this.$asscroll.enable({ reset: true })
+        if (this.$SITECONFIG.isTouch) {
+          this.$backfaceScroll(true)
+        }
+        if (this.$asscroll) {
+          this.$asscroll.enable({ reset: true })
+        }
       }, 1200)
     },
-    imageLoaded() {
-      if (this.imageLoaded) {
-        if (!this.openningEnd) return // アクセス時はopenningEndが発火するので、処理を返す
-
-        // スクロール可能にする
-        if (this.$SITECONFIG.isTouch) this.$backfaceScroll(true)
-        this.$asscroll.enable({ reset: true })
+    imagesLoaded(newVal) {
+      if (newVal && !this.openningEnd) {
+        if (this.$SITECONFIG.isTouch) {
+          this.$backfaceScroll(true)
+        }
+        if (this.$asscroll) {
+          this.$asscroll.enable({ reset: true })
+        }
       }
-    },
+    }
   },
-
-  mounted() {
-    this.$nextTick(() => {
-      const images = document.querySelectorAll('.works img')
-      const imagesLoaded = ImagesLoaded(images)
-
-      // 画像の読み込みが全て完了した時
-      imagesLoaded.on('always', () => {
-        setTimeout(() => {
-          // 遷移のアニメーションを終了させる
-          if (this.defaultTransitionState) this.$store.commit('bg-transition/end')
-          if (this.imageTransitionState) this.$store.commit('image-transition/end')
-          if (this.pickupTransitionState) this.$store.commit('indexPickup/transition', false)
-          this.$store.commit('mouse/loadend')
-
-          this.$store.commit('imageLoaded/loaded')
-        }, 100) // worksのみ慣性スクロールがバグりがちなので、処理を0.1s遅らせる
-
-        setTimeout(() => {
-          if (this.indexPickupIsAnimation) this.$store.commit('indexPickup/sceneAnimationState', false)
-        }, 1200) // パーティクルを時間差で削除
-      })
-    })
+  async mounted() {
+    try {
+      // Load all images in the works page
+      await imageLoader.loadImages('.works')
+      
+      // Update state once images are loaded
+      this.imagesLoaded = true
+      
+      // Small delay to prevent scroll issues
+      setTimeout(() => {
+        // Handle transitions
+        if (this.defaultTransitionState) {
+          this.$store.commit('bg-transition/end')
+        }
+        if (this.imageTransitionState) {
+          this.$store.commit('image-transition/end')
+        }
+        if (this.pickupTransitionState) {
+          this.$store.commit('indexPickup/transition', false)
+        }
+        
+        this.$store.commit('mouse/loadend')
+        this.$store.commit('imageLoaded/loaded')
+      }, 100)
+      
+      // Remove particle with delay
+      setTimeout(() => {
+        if (this.indexPickupIsAnimation) {
+          this.$store.commit('indexPickup/sceneAnimationState', false)
+        }
+      }, 1200)
+    } catch (error) {
+      console.error('Failed to load images:', error)
+      this.loadError = true
+      
+      // Still end transitions even if some images failed
+      if (this.defaultTransitionState) {
+        this.$store.commit('bg-transition/end')
+      }
+      if (this.imageTransitionState) {
+        this.$store.commit('image-transition/end')
+      }
+      if (this.pickupTransitionState) {
+        this.$store.commit('indexPickup/transition', false)
+      }
+      this.$store.commit('mouse/loadend')
+    }
   },
-
-  beforeUnmount() {
-    // リセット
+  beforeDestroy() {
     this.$preDefaultEvent(false)
-    this.$asscroll.disable()
+    if (this.$asscroll) {
+      this.$asscroll.disable()
+    }
     this.$store.commit('indexPickup/setScene', 'init')
     this.$store.commit('imageLoaded/init')
-  },
+  }
 }
 </script>
 

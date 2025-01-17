@@ -28,6 +28,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: ['three']
+    },
+    assetsInlineLimit: 0
+  },
+  publicDir: 'public',
+  server: {
+    watch: {
+      usePolling: true
     }
   }
 }) 

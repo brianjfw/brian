@@ -2,7 +2,7 @@ import { reload } from '../assets/js/reload'
 import { preEvent } from '../assets/js/preEvent'
 
 // Site configuration
-const SITECONFIG = {
+export const SITECONFIG = {
   breakPoint: 767,
   isPc: false,
   isMobile: false,
@@ -16,36 +16,39 @@ const SITECONFIG = {
   halfBaseDuration: 0.5,
   pageTransitionDuration: 800,
   firstAccess: false,
+  isInitialized: false
 }
 
 // Device detection
-const checkDevice = {
-  isAndroid: navigator.userAgent.toLowerCase().includes('android'),
-  isWindows: navigator.userAgent.toLowerCase().includes('windows'),
-  isSafari: navigator.userAgent.toLowerCase().includes('safari') && !navigator.userAgent.toLowerCase().includes('chrome')
+export const checkDevice = {
+  isAndroid: typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('android'),
+  isWindows: typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('windows'),
+  isSafari: typeof navigator !== 'undefined' && navigator.userAgent.toLowerCase().includes('safari') && !navigator.userAgent.toLowerCase().includes('chrome'),
+  isIpad: typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 }
 
 // Initialize configuration
 function initConfig() {
+  if (typeof window === 'undefined') return
+
   // PC detection
-  if (window.innerWidth >= SITECONFIG.breakPoint) {
-    SITECONFIG.isPc = true
-  }
+  SITECONFIG.isPc = window.innerWidth >= SITECONFIG.breakPoint
+
   // Mobile detection
-  if (window.innerWidth <= SITECONFIG.breakPoint) {
-    SITECONFIG.isMobile = true
-  }
+  SITECONFIG.isMobile = window.innerWidth <= SITECONFIG.breakPoint
+
   // Tablet detection
-  if (window.innerWidth <= 1280 && window.innerWidth >= SITECONFIG.breakPoint) {
-    SITECONFIG.isTab = true
-  }
+  SITECONFIG.isTab = window.innerWidth <= 1280 && window.innerWidth >= SITECONFIG.breakPoint
 
   // Touch event detection
-  if ('ontouchstart' in document.documentElement) {
+  if (typeof document !== 'undefined' && 'ontouchstart' in document.documentElement) {
     SITECONFIG.isTouch = true
   } else {
     SITECONFIG.isNoTouch = true
   }
+
+  // iPad detection
+  SITECONFIG.isIpad = checkDevice.isIpad
 
   // Handle non-touch device wheel events
   if (SITECONFIG.isNoTouch) {
@@ -54,15 +57,25 @@ function initConfig() {
 
   // Handle breakpoint changes
   const mediaQuery = window.matchMedia('(max-width: 767px)')
-  mediaQuery.addEventListener('change', reload)
+  mediaQuery.addEventListener('change', () => {
+    // Update config before reloading
+    SITECONFIG.isPc = window.innerWidth >= SITECONFIG.breakPoint
+    SITECONFIG.isMobile = window.innerWidth <= SITECONFIG.breakPoint
+    SITECONFIG.isTab = window.innerWidth <= 1280 && window.innerWidth >= SITECONFIG.breakPoint
+    reload()
+  })
 
   // First visit detection
-  if (sessionStorage.getItem('visited')) {
-    SITECONFIG.firstAccess = false
-  } else {
-    SITECONFIG.firstAccess = true
-    sessionStorage.setItem('visited', 0)
+  if (typeof sessionStorage !== 'undefined') {
+    if (sessionStorage.getItem('visited')) {
+      SITECONFIG.firstAccess = false
+    } else {
+      SITECONFIG.firstAccess = true
+      sessionStorage.setItem('visited', '0')
+    }
   }
+
+  SITECONFIG.isInitialized = true
 }
 
 export function setupPlugins(app) {
@@ -75,6 +88,8 @@ export function setupPlugins(app) {
 
   // Add backface scroll control
   app.config.globalProperties.$backfaceScroll = function(enable) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return
+
     if (enable) {
       document.body.style.position = ''
       document.body.style.top = ''
@@ -89,4 +104,7 @@ export function setupPlugins(app) {
       document.body.style.right = '0'
     }
   }
+
+  // Return initialized config
+  return SITECONFIG
 } 
