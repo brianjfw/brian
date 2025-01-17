@@ -7,16 +7,10 @@ import { InertiaPlugin } from '../vendor/InertiaPlugin'
 import { BASEROTATE } from '../constants/rotations'
 import { preDefaultEvent } from '../utils/events'
 
-// Create EASING object
-const EASING = {
-  transform: CustomEase.create('transform', 'M0,0 C0.44,0.05 0.17,1 1,1'),
-  transformReverse: CustomEase.create('transformReverse', 'M0,0 C0,0.852 0.87,0.542 1,1'),
-  colorAndOpacity: CustomEase.create('colorAndOpacity', 'M0,0 C0.26,0.16 0.1,1 1,1'),
-}
-
 // Track initialization state
 let isInitialized = false
 let isInitializing = false
+let EASING = null
 
 export async function setupPlugins() {
   // Prevent double initialization
@@ -55,9 +49,16 @@ export async function setupPlugins() {
   try {
     isInitializing = true
 
-    // Register GSAP plugins
+    // Register GSAP plugins first
     gsap.registerPlugin(CustomEase, Draggable, InertiaPlugin, ScrollTrigger)
     gsap.ticker.fps(60)
+
+    // Create EASING object after plugins are registered
+    EASING = {
+      transform: CustomEase.create('transform', 'M0,0 C0.44,0.05 0.17,1 1,1'),
+      transformReverse: CustomEase.create('transformReverse', 'M0,0 C0,0.852 0.87,0.542 1,1'),
+      colorAndOpacity: CustomEase.create('colorAndOpacity', 'M0,0 C0.26,0.16 0.1,1 1,1'),
+    }
 
     // Wait for SITE_CONFIG to be ready
     if (!SITE_CONFIG.isInitialized) {
