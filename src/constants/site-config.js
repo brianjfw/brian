@@ -14,11 +14,15 @@ export const SITE_CONFIG = reactive({
   isDesktop: true,
   isTouch: false,
   isIpad: false,
+  isNoTouch: true,
+  isPc: true,
   
   // Breakpoints
   breakpoints: {
     mobile: 768,
     tablet: 1024,
+    right: 1280,
+    left: 0
   },
 
   // Animation durations
@@ -46,6 +50,7 @@ export const SITE_CONFIG = reactive({
   // State
   isInitialized: false,
   isInitializing: false,
+  firstAccess: true,
 
   // Initialize method
   async init() {
@@ -62,7 +67,9 @@ export const SITE_CONFIG = reactive({
       this.isTablet = /ipad|tablet/.test(ua)
       this.isDesktop = !this.isMobile && !this.isTablet
       this.isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+      this.isNoTouch = !this.isTouch
       this.isIpad = /ipad/.test(ua)
+      this.isPc = window.innerWidth >= this.breakpoints.mobile
 
       // Set up window resize listener
       const handleResize = () => {
@@ -70,10 +77,22 @@ export const SITE_CONFIG = reactive({
         this.isMobile = width <= this.breakpoints.mobile
         this.isTablet = width > this.breakpoints.mobile && width <= this.breakpoints.tablet
         this.isDesktop = width > this.breakpoints.tablet
+        this.isPc = width >= this.breakpoints.mobile
       }
 
       window.addEventListener('resize', handleResize)
       handleResize() // Initial check
+
+      // Check first access using sessionStorage
+      if (sessionStorage.getItem('visited')) {
+        this.firstAccess = false
+      } else {
+        this.firstAccess = true
+        sessionStorage.setItem('visited', '0')
+      }
+
+      // Set URL
+      this.url = window.location.origin
 
       // Mark as initialized
       this.isInitialized = true
@@ -85,6 +104,9 @@ export const SITE_CONFIG = reactive({
       this.isDesktop = true
       this.isTouch = false
       this.isIpad = false
+      this.isNoTouch = true
+      this.isPc = true
+      this.firstAccess = false
       this.isInitialized = true // Mark as initialized even if there's an error
     } finally {
       this.isInitializing = false
