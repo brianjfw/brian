@@ -10,9 +10,9 @@
         ></span
       ></span
     >
-    <img ref="MouseImgClick" src="@/assets/images/mouse-click.webp" width="88" height="143" alt="" class="mouse-img-click" />
-    <img ref="MouseImgHold" src="@/assets/images/mouse-hold.webp" width="200" height="170" alt="" class="mouse-img-hold" />
-    <img ref="MouseImg" src="@/assets/images/mouse.webp" width="191" height="234" alt="" class="mouse-img" />
+    <img ref="MouseImgClick" src="/images/mouse-click.webp" width="88" height="143" alt="" class="mouse-img-click" />
+    <img ref="MouseImgHold" src="/images/mouse-hold.webp" width="200" height="170" alt="" class="mouse-img-hold" />
+    <img ref="MouseImg" src="/images/mouse.webp" width="191" height="234" alt="" class="mouse-img" />
   </div>
 </template>
 
