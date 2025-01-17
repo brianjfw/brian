@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 
 // Utility function to safely check window properties
 const checkWindow = (check) => {
@@ -37,7 +37,7 @@ const deviceUtils = {
 };
 
 // Create the initial config object
-const initialConfig = {
+const initialConfig = reactive({
   // Device detection (with default values)
   isTouch: false,
   isNoTouch: true,
@@ -83,38 +83,41 @@ const initialConfig = {
   
   // State
   firstAccess: true,
-  isInitialized: false
-};
+  isInitialized: false,
 
-// Create a ref for SITE_CONFIG
-export const SITE_CONFIG = ref(initialConfig);
+  // Add the init method
+  async init() {
+    if (typeof window === 'undefined') return this;
+    
+    // Wait for window to be ready
+    if (document.readyState === 'loading') {
+      await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+    }
 
-// Add the init method
-SITE_CONFIG.value.init = async function() {
-  if (typeof window === 'undefined') return this;
-  
-  // Wait for window to be ready
-  if (document.readyState === 'loading') {
-    await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+    // Update device detection properties
+    this.isTouch = deviceUtils.isTouch;
+    this.isNoTouch = deviceUtils.isNoTouch;
+    this.isPc = deviceUtils.isPc;
+    this.isMobile = deviceUtils.isMobile;
+    this.isTab = deviceUtils.isTab;
+    this.isIpad = deviceUtils.isIpad;
+    this.isAndroid = deviceUtils.isAndroid;
+    this.isWindows = deviceUtils.isWindows;
+    this.isSafari = deviceUtils.isSafari;
+
+    // Update URL if needed
+    this.url = window.location.origin;
+
+    this.isInitialized = true;
+    return this;
   }
+});
 
-  // Update device detection properties
-  this.isTouch = deviceUtils.isTouch;
-  this.isNoTouch = deviceUtils.isNoTouch;
-  this.isPc = deviceUtils.isPc;
-  this.isMobile = deviceUtils.isMobile;
-  this.isTab = deviceUtils.isTab;
-  this.isIpad = deviceUtils.isIpad;
-  this.isAndroid = deviceUtils.isAndroid;
-  this.isWindows = deviceUtils.isWindows;
-  this.isSafari = deviceUtils.isSafari;
+// Create a ref for the reactive config
+const SITE_CONFIG_REF = ref(initialConfig);
 
-  // Update URL if needed
-  this.url = window.location.origin;
-
-  this.isInitialized = true;
-  return this;
-};
+// Export the ref
+export const SITE_CONFIG = SITE_CONFIG_REF;
 
 // Export individual configurations for specific use cases
 export const BREAKPOINTS = initialConfig.breakpoints;
