@@ -33,6 +33,18 @@ export async function initASScroll() {
   if (typeof window === 'undefined') return null
   
   try {
+    // Wait for app to be ready first
+    await new Promise(resolve => {
+      if (document.querySelector('.asscroll-container')) {
+        resolve()
+      } else {
+        eventBus.once('app:ready', resolve)
+      }
+    })
+
+    // Small delay to ensure DOM is updated
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
     // Wait for DOM elements
     const { container, scrollElement } = await waitForElements()
     

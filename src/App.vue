@@ -1,12 +1,19 @@
 <template>
   <div id="app">
-    <template v-if="isAppReady">
-      <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </template>
+    <div v-if="isAppReady" class="asscroll-container">
+      <div class="asscroll">
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+        <BaseOpenning v-if="firstAccess" />
+        <BaseMouse v-if="!isMobile" />
+        <BaseLoading />
+        <BaseHeader />
+        <BaseHambergerMenu />
+      </div>
+    </div>
     <template v-else-if="initializationError">
       <div class="initialization-error">
         Failed to initialize application. Please refresh the page.
@@ -40,7 +47,8 @@ export default {
   data() {
     return {
       isAppReady: false,
-      initializationError: null
+      initializationError: null,
+      eventBus: useEventBus()
     }
   },
   computed: {
@@ -48,7 +56,13 @@ export default {
       return this.$store.getters.isInitialized
     },
     configInitialized() {
-      return this.$SITECONFIG.isInitialized
+      return this.$SITECONFIG?.isInitialized
+    },
+    isMobile() {
+      return this.$SITECONFIG?.isMobile || false
+    },
+    firstAccess() {
+      return this.$store.state.app?.firstAccess || false
     }
   },
   watch: {
@@ -69,6 +83,10 @@ export default {
     checkInitialization() {
       if (this.storeInitialized && this.configInitialized) {
         this.isAppReady = true
+        // Emit event to notify ASScroll that container is ready
+        this.$nextTick(() => {
+          this.eventBus.emit('app:ready')
+        })
       }
     },
     async initializeApp() {
@@ -91,6 +109,11 @@ export default {
 
         // App is ready
         this.isAppReady = true
+        
+        // Notify ASScroll after DOM update
+        this.$nextTick(() => {
+          this.eventBus.emit('app:ready')
+        })
       } catch (error) {
         console.error('Failed to initialize app:', error)
         this.initializationError = error
@@ -99,6 +122,9 @@ export default {
   },
   created() {
     this.initializeApp()
+  },
+  beforeUnmount() {
+    this.eventBus.off('app:ready')
   }
 }
 </script>
@@ -131,5 +157,19 @@ export default {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.asscroll-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.asscroll {
+  position: relative;
+  z-index: 1;
 }
 </style> 

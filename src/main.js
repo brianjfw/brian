@@ -64,8 +64,8 @@ async function initializeApp() {
     // Mount app first
     const vm = app.mount('#app')
     
-    // Wait a tick for DOM elements to be created
-    await new Promise(resolve => setTimeout(resolve, 100))
+    // Wait a bit longer for DOM elements to be created
+    await new Promise(resolve => setTimeout(resolve, 500))
     
     // Initialize ASScroll after DOM is ready
     try {
