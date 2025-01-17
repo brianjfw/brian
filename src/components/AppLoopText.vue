@@ -36,28 +36,49 @@ export default {
       return this.$store.state.hambergerMenu.isOpen
     }
   },
-  mounted() {
-    this.eventBus.on('asscroll:enabled', this.initializeScrollListener)
+  async mounted() {
+    if (this.$SITECONFIG.isSp) {
+      this.scrollSpeed = 0.5
+    } else {
+      this.scrollSpeed = 1
+    }
+
+    try {
+      // Wait for ASScroll to be ready
+      await new Promise(resolve => {
+        const checkASScroll = () => {
+          const asscroll = this.$getASScroll()
+          if (asscroll) {
+            resolve()
+          } else {
+            setTimeout(checkASScroll, 100)
+          }
+        }
+        checkASScroll()
+      })
+
+      // Initialize scroll listener
+      this.initializeScrollListener()
+    } catch (error) {
+      console.error('Failed to initialize loop text:', error)
+    }
   },
   beforeDestroy() {
     this.cleanupScrollListener()
-    this.eventBus.off('asscroll:enabled', this.initializeScrollListener)
   },
   methods: {
-    initializeScrollListener(asscroll) {
-      if (!asscroll) return
-      
-      // Clean up existing listener if any
-      this.cleanupScrollListener()
+    initializeScrollListener() {
+      if (this.scrollListener || !this.$getASScroll()) return
       
       // Initialize scroll position
+      const asscroll = this.$getASScroll()
       this.startPos = asscroll.currentPos
       this.tweenPosition.value = asscroll.currentPos
       
       // Create scroll listener
       this.scrollListener = () => {
         if (this.hambergerMenuState) return
-        this.handleScroll(asscroll)
+        this.handleScroll(this.$getASScroll())
       }
       
       // Add scroll listener
@@ -66,11 +87,14 @@ export default {
     },
     
     cleanupScrollListener() {
-      if (this.$asscroll && this.scrollListener) {
-        this.$asscroll.off('scroll', this.scrollListener)
+      if (this.scrollListener) {
+        const asscroll = this.$getASScroll()
+        if (asscroll) {
+          asscroll.off('scroll', this.scrollListener)
+        }
         this.scrollListener = null
+        this.isEnabled = false
       }
-      this.isEnabled = false
     },
     
     handleScroll(asscroll) {

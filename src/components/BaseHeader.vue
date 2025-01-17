@@ -71,7 +71,15 @@ export default {
       try {
         // Wait for ASScroll to be ready
         await new Promise(resolve => {
-          this.eventBus.once('asscroll:ready', resolve)
+          const checkASScroll = () => {
+            const asscroll = this.$getASScroll()
+            if (asscroll) {
+              resolve()
+            } else {
+              setTimeout(checkASScroll, 100)
+            }
+          }
+          checkASScroll()
         })
 
         // Initialize scroll listener
@@ -85,33 +93,32 @@ export default {
     },
 
     initializeScrollListener() {
-      if (this.scrollListener) return
+      if (this.scrollListener || !this.$getASScroll()) return
 
+      // Create scroll listener
       this.scrollListener = () => {
         if (this.hambergerMenuState || this.indexPickupState) return
-
-        const header = this.$refs.HeaderLogo
-        if (!header) return
-
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         
-        if (scrollTop > 0) {
-          header.classList.remove('is-top')
+        const asscroll = this.$getASScroll()
+        if (!asscroll) return
+        
+        if (asscroll.currentPos <= 0) {
+          this.$refs.HeaderLogo.classList.add('is-top')
         } else {
-          header.classList.add('is-top')
+          this.$refs.HeaderLogo.classList.remove('is-top')
         }
       }
 
       // Add scroll listener
-      window.addEventListener('scroll', this.scrollListener)
-      
-      // Initial check
-      this.scrollListener()
+      this.$getASScroll().on('scroll', this.scrollListener)
     },
 
     cleanupScrollListener() {
       if (this.scrollListener) {
-        window.removeEventListener('scroll', this.scrollListener)
+        const asscroll = this.$getASScroll()
+        if (asscroll) {
+          asscroll.off('scroll', this.scrollListener)
+        }
         this.scrollListener = null
       }
     }

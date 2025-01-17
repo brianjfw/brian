@@ -70,7 +70,15 @@ export default {
       try {
         // Wait for ASScroll to be ready
         await new Promise(resolve => {
-          this.eventBus.once('asscroll:ready', resolve)
+          const checkASScroll = () => {
+            const asscroll = this.$getASScroll()
+            if (asscroll) {
+              resolve()
+            } else {
+              setTimeout(checkASScroll, 100)
+            }
+          }
+          checkASScroll()
         })
 
         // Handle touch devices

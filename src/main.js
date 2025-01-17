@@ -2,46 +2,35 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import eventBus from './plugins/eventBus'
-import { BASEROTATE } from './constants/rotations'
-import { gsap, EASING } from './plugins/gsap'
+import { setupPlugins } from './plugins'
 import { setupASScroll, getASScroll } from './plugins/asscroll'
-import { SITE_CONFIG, setupPlugins } from './plugins'
-import { preDefaultEvent } from './utils/events'
 
 async function initializeApp() {
   const app = createApp(App)
-
-  // Initialize plugins and config
-  const config = setupPlugins(app)
-
-  // Wait for store initialization
-  await store.dispatch('initializeData')
-
-  // Add global properties
-  app.config.globalProperties.$BASEROTATE = BASEROTATE
-  app.config.globalProperties.$gsap = gsap
-  app.config.globalProperties.$EASING = EASING
-  app.config.globalProperties.$SITECONFIG = config
-  app.config.globalProperties.$preDefaultEvent = preDefaultEvent
-
-  // Setup plugins
-  app.use(router)
+  
+  // Set up plugins first
+  const plugins = await setupPlugins()
+  app.config.globalProperties.$SITECONFIG = plugins.SITECONFIG
+  
+  // Initialize store and wait for data
   app.use(store)
-  app.use(eventBus)
-  app.use(setupASScroll(app))
-
+  await store.dispatch('initializeData')
+  
+  // Set up router
+  app.use(router)
+  
   // Mount app
-  app.mount('#app')
-
-  // Initialize ASScroll after mount
-  const asscroll = getASScroll()
+  const vm = app.mount('#app')
+  
+  // Initialize ASScroll after app is mounted
+  const asscroll = await setupASScroll(app)
   if (asscroll) {
     app.config.globalProperties.$asscroll = asscroll
   }
+  
+  return vm
 }
 
-// Initialize app
 initializeApp().catch(error => {
   console.error('Failed to initialize app:', error)
 }) 
