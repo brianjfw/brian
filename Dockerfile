@@ -1,27 +1,23 @@
-FROM node:18-alpine
+# Use the official Node.js 16 image as the base image
+FROM node:16-alpine
 
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package files
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Install dependencies with legacy peer deps
-RUN npm install --legacy-peer-deps
+# Install dependencies
+RUN npm install
 
-# Copy the public directory first to ensure assets are available
-COPY public ./public
-
-# Copy the rest of the application
+# Copy the entire application code to the working directory
 COPY . .
 
-# Build the application
+# Build the Nuxt.js application
 RUN npm run build
 
-# Install serve globally
-RUN npm install -g serve
+# Expose the port that the Nuxt.js application will listen on
+EXPOSE 3000
 
-# Expose the port
-EXPOSE ${PORT:-3000}
-
-# Start the application
-CMD serve --single --listen ${PORT:-3000} dist 
+# Command to start the Nuxt.js application
+CMD ["npm", "start"]

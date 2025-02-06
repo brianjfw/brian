@@ -1,0 +1,148 @@
+{
+  "projects": [
+    {
+      "id": "project-1",
+      "title": {
+        "short": "Project 1",
+        "long": "The First Project"
+      },
+      "desc": "Description of project 1.",
+      "hambergerMenuImg": {
+        "url": "/images/hambergermenu-project1.webp",
+        "width": 180,
+        "height": 180
+      },
+      "slug": "project-1-slug",
+      "content": "Detailed content for project 1.",
+      "mainImg": {
+        "url": "/images/project1-main.webp",
+        "width": 800,
+        "height": 600
+      },
+      "subImg": {
+        "url": "/images/project1-sub.webp",
+        "width": 400,
+        "height": 300
+      }
+    },
+    {
+      "id": "project-2",
+      "title": {
+        "short": "Project 2",
+        "long": "The Second Project"
+      },
+      "desc": "Description of project 2.",
+      "hambergerMenuImg": {
+        "url": "/images/hambergermenu-project2.webp",
+        "width": 180,
+        "height": 180
+      },
+      "slug": "project-2-slug",
+      "content": "Detailed content for project 2.",
+      "mainImg": {
+        "url": "/images/project2-main.webp",
+        "width": 800,
+        "height": 600
+      },
+      "subImg": {
+        "url": "/images/project2-sub.webp",
+        "width": 400,
+        "height": 300
+      }
+    }
+  ],
+  "archive-projects": [
+    {
+      "id": "archive-1",
+      "title": {
+        "short": "Archive 1",
+        "long": "The First Archive"
+      },
+      "desc": "Description of archive 1.",
+      "hambergerMenuImg": {
+        "url": "/images/hambergermenu-archive1.webp",
+        "width": 180,
+        "height": 180
+      },
+      "slug": "archive-1-slug",
+      "content": "Detailed content for archive 1.",
+      "mainImg": {
+        "url": "/images/archive1-main.webp",
+        "width": 800,
+        "height": 600
+      },
+      "subImg": {
+        "url": "/images/archive1-sub.webp",
+        "width": 400,
+        "height": 300
+      }
+    },
+    {
+      "id": "archive-2",
+      "title": {
+        "short": "Archive 2",
+        "long": "The Second Archive"
+      },
+      "desc": "Description of archive 2.",
+      "hambergerMenuImg": {
+        "url": "/images/hambergermenu-archive2.webp",
+        "width": 180,
+        "height": 180
+      },
+      "slug": "archive-2-slug",
+      "content": "Detailed content for archive 2.",
+      "mainImg": {
+        "url": "/images/archive2-main.webp",
+        "width": 800,
+        "height": 600
+      },
+      "subImg": {
+        "url": "/images/archive2-sub.webp",
+        "width": 400,
+        "height": 300
+      }
+    }
+  ],
+  "contact": [
+    {
+      "id": "contact-1",
+      "mainTitle": {
+        "title": "Hisami Kurita",
+        "link": "https://example.com",
+        "subtitle": "Frontend Developer"
+      },
+      "list01": {
+        "link": "https://twitter.com",
+        "text": "Twitter"
+      },
+      "list02": {
+        "link": "https://github.com",
+        "text": "GitHub"
+      },
+      "list03": {
+        "link": "https://codepen.io",
+        "text": "CodePen"
+      }
+    },
+    {
+      "id": "contact-2",
+      "mainTitle": {
+        "title": "Kento Ishiduka",
+        "link": "",
+        "subtitle": ""
+      },
+      "list01": {
+        "link": "https://twitter.com/kent_ish",
+        "text": "Twitter"
+      },
+      "list02": {
+        "link": "https://www.instagram.com/kento_ishiduka/",
+        "text": "Instagram"
+      },
+      "list03": {
+        "link": "https://www.facebook.com/kentoishiduka0711",
+        "text": "Facebook"
+      }
+    }
+  ]
+} 
