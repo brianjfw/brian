@@ -142,12 +142,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// @import '../assets/scss/constants/animation.scss';
-// @import '../assets/scss/constants/break-points.scss';
-// @import '../assets/scss/constants/color.scss';
-// @import '../assets/scss/constants/font.scss';
-// @import '../assets/scss/functions/function';
-
 @use '../assets/scss/constants/animation.scss';
 @use '../assets/scss/constants/break-points.scss';
 @use '../assets/scss/constants/color.scss';
