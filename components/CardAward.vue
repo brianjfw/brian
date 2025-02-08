@@ -1,71 +1,5 @@
-<template>
-  <div class="card-award">
-    <article class="card-award-article" :class="'card-award-article-' + modifier">
-      <div class="card-award-inner">
-        <div class="card-award-title-wrapper-01">
-          <span v-if="group === 'AWWWARDS'">
-            <img src="/images/awwwards.webp" width="112" height="66" alt="AWWWARDS" />
-          </span>
-          <span v-else-if="group === 'CSS DESIGN AWARDS'">
-            <img src="/images/cssda.webp" width="156" height="118" alt="CSS DESIGN AWARDS" />
-          </span>
-          <span v-else-if="group === 'CSS WINNER'">
-            <img src="/images/csswinner.webp" width="156" height="98" alt="CSS WINNER" />
-          </span>
-        </div>
-        <p class="card-award-title-wrapper-02">{{ rank }}</p>
-        <p class="card-award-title-wrapper-03">{{ date }}</p>
-        <h2 class="card-award-title-wrapper-04">{{ title }}</h2>
-        <div class="card-award-title-wrapper-05">
-          <span v-if="rank === 'HONORARABLE MENTION'">HM</span>
-          <span v-else-if="rank === 'MOBILE EXELLENCE'">ME</span>
-          <span v-else-if="rank === 'SITE OF THE DAY'">SOTD</span>
-          <span v-else-if="rank === 'SPECIAL KDOS'">KDS</span>
-          <span v-else-if="rank === 'UI DESIGN AWARD'">UI AWD</span>
-          <span v-else-if="rank === 'UX DESIGN AWARD'">UX AWD</span>
-          <span v-else-if="rank === 'INNOVATION AWARD'">INN AWD</span>
-          <span v-else-if="rank === 'WEBSITE OF THE DAY'">WOTD</span>
-        </div>
-      </div>
-    </article>
-  </div>
-</template>
+<style lang="scss" scoped>
 
-<script>
-export default {
-  /**
-   * group : グループ(AWWWARDS/CSS DESIGN AWARDS/CSS WINNER)
-   * title : タイトル
-   * rank : ランク
-   * date : 日付
-   * modifier : 見た目を変更するクラス
-   */
-  props: {
-    group: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    rank: {
-      type: String,
-      required: true,
-    },
-    date: {
-      type: String,
-      required: true,
-    },
-    modifier: {
-      type: String,
-      default: '',
-    },
-  },
-}
-</script>
-
-<style scoped lang="scss">
 $awwwwardsLogo: 28px;
 $awwwwardsLogoBottomMargin: 24px;
 $cssdaLogo: 39px;
@@ -84,8 +18,8 @@ $csswinnerLogoBottomMargin: 21px;
   width: 234px;
   height: 320px;
   padding: 28px 18px;
-  background-color: $white;
-  color: $black;
+  background-color: colors.$white;
+  color: colors.$black;
   border-radius: 10px;
 }
 
@@ -119,7 +53,7 @@ $csswinnerLogoBottomMargin: 21px;
 }
 
 .card-award-title-wrapper-04 {
-  color: $white;
+  color: colors.$white;
 }
 
 .card-award-title-wrapper-05 {
@@ -282,3 +216,70 @@ $csswinnerLogoBottomMargin: 21px;
   }
 }
 </style>
+
+<template>
+  <div class="card-award">
+    <article class="card-award-article" :class="'card-award-article-' + modifier">
+      <div class="card-award-inner">
+        <div class="card-award-title-wrapper-01">
+          <span v-if="group === 'AWWWARDS'">
+            <img src="/images/awwwards.webp" width="112" height="66" alt="AWWWARDS" />
+          </span>
+          <span v-else-if="group === 'CSS DESIGN AWARDS'">
+            <img src="/images/cssda.webp" width="156" height="118" alt="CSS DESIGN AWARDS" />
+          </span>
+          <span v-else-if="group === 'CSS WINNER'">
+            <img src="/images/csswinner.webp" width="156" height="98" alt="CSS WINNER" />
+          </span>
+        </div>
+        <p class="card-award-title-wrapper-02">{{ rank }}</p>
+        <p class="card-award-title-wrapper-03">{{ date }}</p>
+        <h2 class="card-award-title-wrapper-04">{{ title }}</h2>
+        <div class="card-award-title-wrapper-05">
+          <span v-if="rank === 'HONORARABLE MENTION'">HM</span>
+          <span v-else-if="rank === 'MOBILE EXELLENCE'">ME</span>
+          <span v-else-if="rank === 'SITE OF THE DAY'">SOTD</span>
+          <span v-else-if="rank === 'SPECIAL KDOS'">KDS</span>
+          <span v-else-if="rank === 'UI DESIGN AWARD'">UI AWD</span>
+          <span v-else-if="rank === 'UX DESIGN AWARD'">UX AWD</span>
+          <span v-else-if="rank === 'INNOVATION AWARD'">INN AWD</span>
+          <span v-else-if="rank === 'WEBSITE OF THE DAY'">WOTD</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</template>
+
+<script>
+export default {
+  /**
+   * group : グループ(AWWWARDS/CSS DESIGN AWARDS/CSS WINNER)
+   * title : タイトル
+   * rank : ランク
+   * date : 日付
+   * modifier : 見た目を変更するクラス
+   */
+  props: {
+    group: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    rank: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: String,
+      required: true,
+    },
+    modifier: {
+      type: String,
+      default: '',
+    },
+  },
+}
+</script>

@@ -1,3 +1,192 @@
+<style lang="scss" scoped>
+:root {
+  --viewportWidth: 0;
+  --viewportHeight: 0;
+}
+
+.pickup {
+  position: relative;
+
+  @include state.sp() {
+    overflow: hidden;
+  }
+}
+
+.pickup-bg {
+  background-color: colors.$lightBlue;
+}
+
+.pickup-inner {
+  height: var(--viewportHeight, 100vh);
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.pickup .l-container {
+  height: 100%;
+}
+
+.pickup-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
+
+  & a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.pickup-clip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.pickup-title-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 45.4%;
+  transform: translate3d(-50%, -50%, 0);
+  font-size: vmin(206);
+  font-family: fonts.$sixcaps;
+  text-align: center;
+  line-height: 0.98;
+
+  @include mixins.tab-vertical() {
+    left: 44%;
+    font-size: vmin(160);
+  }
+
+  @include state.sp() {
+    top: calc(65px + 38%);
+    left: 50%;
+    font-size: vmin_sp(126);
+  }
+}
+
+.pickup-section-number {
+  position: absolute;
+  top: 0;
+  right: 155px;
+
+  @include state.sp() {
+    right: 20px;
+  }
+}
+
+.pickup-section-number-wrapper {
+  position: absolute;
+  top: 70px;
+  right: 0;
+
+  @include state.sp() {
+    top: 72px;
+    right: 0;
+  }
+}
+
+.pickup-section-text {
+  position: absolute;
+  bottom: 0;
+  left: 40px;
+  font-size: 12px;
+
+  @include state.sp() {
+    left: 0;
+    width: 100%;
+    font-size: 10px;
+  }
+}
+
+.pickup-section-text-wrapper {
+  position: absolute;
+  bottom: 86px;
+  left: 0;
+
+  @include state.sp() {
+    display: flex;
+    justify-content: space-between;
+    bottom: 0;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    width: vw_sp(670);
+  }
+}
+
+.pickup-section-text-title {
+  display: block;
+  margin: 0 0 60px 0;
+  font-size: 20px;
+
+  @include state.sp() {
+    margin: 0;
+    font-size: 18px;
+  }
+}
+
+.pickup-circle-bg-enter {
+  display: block;
+  position: absolute;
+  top: -130px;
+  right: 0;
+  left: -10%;
+  margin: 0 auto;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  pointer-events: none;
+
+  @include state.sp() {
+    top: 50%;
+    right: auto;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0) scale(0);
+    width: 120vmax;
+    height: 120vmax;
+  }
+}
+
+.pickup-circle-bg-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+//z-index
+
+@for $i from 1 through 3 {
+  .is-pickup-scene-0#{$i} {
+    & .pickup-title-wrapper-0#{$i} {
+      z-index: 1;
+    }
+
+    .pickup-section-text-wrapper-0#{$i} {
+      z-index: 1;
+    }
+
+    .pickup-section-number-wrapper-0#{$i} {
+      z-index: 1;
+    }
+
+    & .pickup-link-0#{$i} {
+      pointer-events: auto;
+      user-select: auto;
+    }
+  }
+}
+</style>
+
 <template>
   <div ref="Pickup" class="pickup is-pickup-scene-00">
     <!--背景サークルー(侵入時の背景サークルとDOMを分ける)-->
@@ -144,17 +333,16 @@ export default {
 
     this.$nextTick(() => {
       this.iObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              this.isTextSegmentState[1] = 'center'
-              this.iObserver.unobserve(this.observe)
-            }
-          })
+        this.handleIntersect,
+        {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0,
         },
-        { rootMargin: '0%' }
       )
-      this.iObserver.observe(this.observe)
+      if (this.$refs.Pickup) {
+        this.iObserver.observe(this.$refs.Pickup)
+      }
     })
   },
 
@@ -174,7 +362,9 @@ export default {
     this.removeSceneEvent()
     this.resetDefaultPreEvent()
     window.removeEventListener('resize', this.pResize)
-    this.iObserver.unobserve(this.observe)
+    if (this.iObserver) {
+      this.iObserver.unobserve(this.$refs.Pickup)
+    }
     this.iObserver = null
   },
 
@@ -185,6 +375,7 @@ export default {
     pickupToTopEnterScroll() {
       // ターゲットの領域を計算
       this.scroll.value = this.$asscroll.targetPos
+      if (!this.$refs.Pickup) return;
       const pickupPos = this.$refs.Pickup.offsetTop
       const pickupTopPos = pickupPos - window.innerHeight
 
@@ -685,195 +876,15 @@ export default {
         this.$router.push(`/works/${data.id}`)
       }, 500)
     },
+
+    handleIntersect(entries) {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          this.isTextSegmentState[1] = 'center'
+          this.iObserver.unobserve(this.observe)
+        }
+      })
+    },
   },
 }
 </script>
-
-<style scoped lang="scss">
-:root {
-  --viewportWidth: 0;
-  --viewportHeight: 0;
-}
-
-.pickup {
-  position: relative;
-
-  @include sp() {
-    overflow: hidden;
-  }
-}
-
-.pickup-bg {
-  background-color: $lightBlue;
-}
-
-.pickup-inner {
-  height: var(--viewportHeight, 100vh);
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-.pickup .l-container {
-  height: 100%;
-}
-
-.pickup-link {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
-  pointer-events: none;
-  user-select: none;
-
-  & a {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.pickup-clip {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.pickup-title-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 45.4%;
-  transform: translate3d(-50%, -50%, 0);
-  font-size: vmin(206);
-  font-family: $sixcaps;
-  text-align: center;
-  line-height: 0.98;
-
-  @include tab-vertical() {
-    left: 44%;
-    font-size: vmin(160);
-  }
-
-  @include sp() {
-    top: calc(65px + 38%);
-    left: 50%;
-    font-size: vmin_sp(126);
-  }
-}
-
-.pickup-section-number {
-  position: absolute;
-  top: 0;
-  right: 155px;
-
-  @include sp() {
-    right: 20px;
-  }
-}
-
-.pickup-section-number-wrapper {
-  position: absolute;
-  top: 70px;
-  right: 0;
-
-  @include sp() {
-    top: 72px;
-    right: 0;
-  }
-}
-
-.pickup-section-text {
-  position: absolute;
-  bottom: 0;
-  left: 40px;
-  font-size: 12px;
-
-  @include sp() {
-    left: 0;
-    width: 100%;
-    font-size: 10px;
-  }
-}
-
-.pickup-section-text-wrapper {
-  position: absolute;
-  bottom: 86px;
-  left: 0;
-
-  @include sp() {
-    display: flex;
-    justify-content: space-between;
-    bottom: 0;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    width: vw_sp(670);
-  }
-}
-
-.pickup-section-text-title {
-  display: block;
-  margin: 0 0 60px 0;
-  font-size: 20px;
-
-  @include sp() {
-    margin: 0;
-    font-size: 18px;
-  }
-}
-
-.pickup-circle-bg-enter {
-  display: block;
-  position: absolute;
-  top: -130px;
-  right: 0;
-  left: -10%;
-  margin: 0 auto;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  pointer-events: none;
-
-  @include sp() {
-    top: 50%;
-    right: auto;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0) scale(0);
-    width: 120vmax;
-    height: 120vmax;
-  }
-}
-
-.pickup-circle-bg-area {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-//z-index
-
-@for $i from 1 through 3 {
-  .is-pickup-scene-0#{$i} {
-    & .pickup-title-wrapper-0#{$i} {
-      z-index: 1;
-    }
-
-    .pickup-section-text-wrapper-0#{$i} {
-      z-index: 1;
-    }
-
-    .pickup-section-number-wrapper-0#{$i} {
-      z-index: 1;
-    }
-
-    & .pickup-link-0#{$i} {
-      pointer-events: auto;
-      user-select: auto;
-    }
-  }
-}
-</style>

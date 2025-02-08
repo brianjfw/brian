@@ -1,82 +1,15 @@
-<template>
-  <div class="card-article">
-    <a :href="link" target="_blank" rel="noopener" class="card-link">
-      <span class="card-inner">
-        <span class="card-title-wrapper-01">
-          <span v-for="(char, index) of name" :key="index" class="card-title-wrapper-01-block" v-text="char"></span>
-        </span>
-        <span class="card-title-wrapper-02">
-          <span v-for="(char, index) of desc" :key="index" class="card-title-wrapper-02-block" v-text="char"></span>
-        </span>
-        <span class="card-title-wrapper-03">
-          <span class="pc-only">
-            <AppTextAnimation :state="state" :rotate="$BASEROTATE.left" :text="title" :sp-animation="false" />
-            <span class="card-sub-title">
-              <AppTextAnimation :state="state" :start="0.28" :rotate="$BASEROTATE.left" :text="subtitle" :sp-animation="false" />
-            </span>
-          </span>
-          <span class="sp-only">
-            {{ title }}
-            <span class="card-sub-title">
-              {{ subtitle }}
-            </span>
-          </span>
-        </span>
-      </span>
-    </a>
-  </div>
-</template>
+<style lang="scss" scoped>
 
-<script>
-export default {
-  /**
-   * name : 会社名
-   * title : 会社タイトル
-   * subTitle : 会社サブタイトル
-   * link : 会社URL
-   * desc : 会社説明
-   * state : テキストアニメーションの状態を変更するprops
-   */
-  props: {
-    name: {
-      type: Array,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    subtitle: {
-      type: String,
-      required: true,
-    },
-    link: {
-      type: String,
-      required: true,
-    },
-    desc: {
-      type: Array,
-      required: true,
-    },
-    state: {
-      type: String,
-      default: '',
-    },
-  },
-}
-</script>
-
-<style scoped lang="scss">
 .card-article {
   position: relative;
   width: 100%;
   height: 100%;
   padding: 28px 18px;
   background-color: #d9d9d9;
-  color: $black;
+  color: colors.$black;
   border-radius: 14px;
 
-  @include sp() {
+  @include state.sp() {
     padding: 20px 16px;
     border-radius: 7px;
   }
@@ -99,9 +32,9 @@ export default {
 .card-title-wrapper-01 {
   display: block;
   margin: 0 0 60px 0;
-  color: $darkBlack;
+  color: colors.$darkBlack;
 
-  @include sp() {
+  @include state.sp() {
     margin: 0 0 40px 0;
   }
 }
@@ -112,7 +45,7 @@ export default {
   font-family: $helvetica;
   line-height: 1.2;
 
-  @include sp() {
+  @include state.sp() {
     font-size: 17px;
   }
 
@@ -121,7 +54,7 @@ export default {
     text-indent: -4px;
     line-height: 1;
 
-    @include sp() {
+    @include state.sp() {
       display: inline-block;
       margin: 0 0 0 -4px;
       font-size: 28px;
@@ -132,7 +65,7 @@ export default {
 }
 
 .card-title-wrapper-02 {
-  color: $darkBlack;
+  color: colors.$darkBlack;
 }
 
 .card-title-wrapper-02-block {
@@ -143,7 +76,7 @@ export default {
   letter-spacing: 0.02em;
   line-height: 1.24;
 
-  @include sp() {
+  @include state.sp() {
     width: 180px;
     font-size: 10px;
   }
@@ -154,11 +87,11 @@ export default {
   bottom: -11px;
   left: 0;
   width: 100%;
-  color: $darkBlack;
+  color: colors.$darkBlack;
   font-size: 120px;
   font-family: $sixcaps;
 
-  @include sp() {
+  @include state.sp() {
     bottom: -5px;
     font-size: 80px;
   }
@@ -171,7 +104,7 @@ export default {
     font-family: $helvetica;
     letter-spacing: 0.02em;
 
-    @include sp() {
+    @include state.sp() {
       top: 7px;
       font-size: 10px;
     }
@@ -186,4 +119,46 @@ export default {
   }
 }
 /* stylelint-enable */
+
+.card-read {
+  color: colors.$darkBlack;
+}
 </style>
+
+<template>
+  <div :class="`card-company ${addClass}`">
+    <div class="card-company-inner">
+      <div class="card-company-content">
+        <h2 class="card-company-title">{{ companyTitle }}</h2>
+        <p class="card-company-text" v-html="companyText" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  /**
+   * name : 会社名
+   * title : 会社タイトル
+   * subTitle : 会社サブタイトル
+   * link : 会社URL
+   * desc : 会社説明
+   * state : テキストアニメーションの状態を変更するprops
+   */
+  props: {
+    addClass: {
+      type: String,
+      default: '',
+    },
+    companyTitle: {
+      type: String,
+      default: '',
+    },
+    companyText: {
+      type: String,
+      default: '',
+    },
+  },
+}
+</script>

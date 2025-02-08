@@ -17,8 +17,26 @@ export default {
       type: Number,
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+    },
   },
-
+  data: () => ({
+    textState: '',
+    text: [],
+  }),
+  created() {
+    this.text = this.computedText;
+  },
+  computed: {
+    computedText() {
+      if (this.type === 'contact') {
+        return ['・', 'CONTACT']
+      }
+      return []
+    }
+  },
   methods: {
     onClick(e) {
       e.preventDefault()

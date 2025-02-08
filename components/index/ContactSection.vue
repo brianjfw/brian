@@ -1,3 +1,184 @@
+<style lang="scss" scoped>
+
+.contact {
+  position: relative;
+}
+
+.contact-bg {
+  padding: 450px 0 0 0;
+
+  @include mixins.tab() {
+    padding: 335px 0 0 0;
+  }
+
+  @include state.sp() {
+    padding: 225px 0 80px 0;
+  }
+}
+
+.contact-title {
+  position: relative;
+  margin: 0 0 140px 0;
+  color: colors.$darkPink;
+  font-size: vw(180);
+  font-family: fonts.$sixcaps;
+
+  @include mixins.tab() {
+    font-size: vw(170);
+  }
+
+  @include mixins.tab-vertical() {
+    font-size: vw(150);
+  }
+
+  @include state.sp() {
+    margin: 0 0 58px 0;
+    font-size: vw_sp(180);
+  }
+}
+
+.contact-title-read-area {
+  position: absolute;
+  top: 8px;
+  left: 2px;
+  color: colors.$white;
+
+  @include state.sp() {
+    top: 2px;
+    left: 0;
+  }
+}
+
+.contact-title-wrapper {
+  display: block;
+
+  @include state.sp() {
+    white-space: nowrap;
+  }
+}
+
+.contact-title-wrapper-01 {
+  padding: 0 0 0 290px;
+
+  @include mixins.tab() {
+    padding: 0 0 0 vw(290);
+  }
+}
+
+.contact-title-wrapper-02 {
+  padding: 0 0 0 33px;
+}
+
+.contact-title-wrapper-04 {
+  padding: 0 0 0 40px;
+}
+
+.contact-title-wrapper-01-sp {
+  margin: 0 0 0 48px;
+}
+
+.contact-info-area {
+  display: flex;
+
+  @include state.sp() {
+    justify-content: space-between;
+  }
+}
+
+.contact-info-index-area {
+  margin: vw(32) 40px 0 0;
+
+  @include mixins.tab-vertical() {
+    margin: vw(16) 40px 0 0;
+  }
+
+  @include state.sp() {
+    margin: 10px 40px 0 0;
+  }
+}
+
+.contact-info-index {
+  display: block;
+  margin: 0 0 56px 0;
+
+  @include mixins.tab-vertical() {
+    margin: 0 0 20px 0;
+  }
+
+  @include state.sp() {
+    margin: 0 0 59px 0;
+  }
+}
+
+.contact-info-list {
+  font-size: 12px;
+
+  @include state.sp() {
+    font-size: 10px;
+  }
+}
+
+.contact-info-item {
+  @include state.sp() {
+    display: block;
+    margin: 0 0 2px 0;
+  }
+}
+
+.contact-info-name-area {
+  position: relative;
+}
+
+.contact-name {
+  margin: -26px 0 0 0;
+  color: colors.$darkPink;
+  font-size: vw(400);
+  font-family: fonts.$sixcaps;
+  letter-spacing: -0.02em;
+
+  @include mixins.tab() {
+    font-size: vw(380);
+  }
+
+  @include mixins.tab-vertical() {
+    font-size: vw(320);
+  }
+
+  @include state.sp() {
+    font-size: vw_sp(400);
+    white-space: nowrap;
+  }
+}
+
+.contact-card-item-01 {
+  position: absolute;
+  top: 69.5%;
+  left: 24%;
+  transform: rotate(-10deg);
+  width: 0;
+  height: 0;
+
+  @include state.sp() {
+    top: 48%;
+    left: 38%;
+  }
+}
+
+.contact-card-item-02 {
+  position: absolute;
+  top: 60%;
+  right: 38%;
+  transform: rotate(10deg);
+  width: 0;
+  height: 0;
+
+  @include state.sp() {
+    top: 46%;
+    right: 50%;
+  }
+}
+</style>
+
 <template>
   <div ref="Contact" class="contact">
     <AppCircleBg :state="isCircleBgState" :modifier="'index-contact'" />
@@ -167,183 +348,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="scss">
-.contact {
-  position: relative;
-}
-
-.contact-bg {
-  padding: 450px 0 0 0;
-
-  @include tab() {
-    padding: 335px 0 0 0;
-  }
-
-  @include sp() {
-    padding: 225px 0 80px 0;
-  }
-}
-
-.contact-title {
-  position: relative;
-  margin: 0 0 140px 0;
-  color: $darkPink;
-  font-size: vw(180);
-  font-family: $sixcaps;
-
-  @include tab() {
-    font-size: vw(170);
-  }
-
-  @include tab-vertical() {
-    font-size: vw(150);
-  }
-
-  @include sp() {
-    margin: 0 0 58px 0;
-    font-size: vw_sp(180);
-  }
-}
-
-.contact-title-read-area {
-  position: absolute;
-  top: 8px;
-  left: 2px;
-  color: $white;
-
-  @include sp() {
-    top: 2px;
-    left: 0;
-  }
-}
-
-.contact-title-wrapper {
-  display: block;
-
-  @include sp() {
-    white-space: nowrap;
-  }
-}
-
-.contact-title-wrapper-01 {
-  padding: 0 0 0 290px;
-
-  @include tab {
-    padding: 0 0 0 vw(290);
-  }
-}
-
-.contact-title-wrapper-02 {
-  padding: 0 0 0 33px;
-}
-
-.contact-title-wrapper-04 {
-  padding: 0 0 0 40px;
-}
-
-.contact-title-wrapper-01-sp {
-  margin: 0 0 0 48px;
-}
-
-.contact-info-area {
-  display: flex;
-
-  @include sp() {
-    justify-content: space-between;
-  }
-}
-
-.contact-info-index-area {
-  margin: vw(32) 40px 0 0;
-
-  @include tab-vertical() {
-    margin: vw(16) 40px 0 0;
-  }
-
-  @include sp() {
-    margin: 10px 40px 0 0;
-  }
-}
-
-.contact-info-index {
-  display: block;
-  margin: 0 0 56px 0;
-
-  @include tab-vertical() {
-    margin: 0 0 20px 0;
-  }
-
-  @include sp() {
-    margin: 0 0 59px 0;
-  }
-}
-
-.contact-info-list {
-  font-size: 12px;
-
-  @include sp() {
-    font-size: 10px;
-  }
-}
-
-.contact-info-item {
-  @include sp() {
-    display: block;
-    margin: 0 0 2px 0;
-  }
-}
-
-.contact-info-name-area {
-  position: relative;
-}
-
-.contact-name {
-  margin: -26px 0 0 0;
-  color: $darkPink;
-  font-size: vw(400);
-  font-family: $sixcaps;
-  letter-spacing: -0.02em;
-
-  @include tab() {
-    font-size: vw(380);
-  }
-
-  @include tab-vertical() {
-    font-size: vw(320);
-  }
-
-  @include sp() {
-    font-size: vw_sp(400);
-    white-space: nowrap;
-  }
-}
-
-.contact-card-item-01 {
-  position: absolute;
-  top: 69.5%;
-  left: 24%;
-  transform: rotate(-10deg);
-  width: 0;
-  height: 0;
-
-  @include sp() {
-    top: 48%;
-    left: 38%;
-  }
-}
-
-.contact-card-item-02 {
-  position: absolute;
-  top: 60%;
-  right: 38%;
-  transform: rotate(10deg);
-  width: 0;
-  height: 0;
-
-  @include sp() {
-    top: 46%;
-    right: 50%;
-  }
-}
-</style>

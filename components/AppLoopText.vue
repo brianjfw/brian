@@ -1,18 +1,47 @@
+<style lang="scss" scoped>
+
+.app-loop-text {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.app-loop-text-wrapper {
+  display: inline-block;
+  padding: 0 100%;
+}
+
+.app-loop-text-block {
+  display: inline-block;
+  font-family: fonts.$helvetica;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+}
+</style>
+
+<!-- クローンを動的に生成するクラスはscopedから外す -->
+<style >
+@use '../assets/scss/functions/function.scss';
+
+.app-loop-text-block {
+  padding: 0 vw(6);
+}
+</style>
+
 <template>
-  <span ref="root" class="app-loop-text">
-    <span ref="wrapper" class="app-loop-text-wrapper">
-      <span ref="rotate" class="app-loop-text-rotate">
-        <span ref="translate" class="app-loop-text-translate">
-          <span ref="block" class="app-loop-text-block">
-            {{ text }}
-          </span>
-        </span>
-      </span>
-    </span>
-  </span>
+  <div ref="root" class="app-loop-text" :class="`app-loop-text-${direction}`">
+    <div ref="wrapper" class="app-loop-text-wrapper">
+      <span v-for="(char, index) in text" :key="index" class="app-loop-text-block" v-text="char"></span>
+    </div>
+  </div>
 </template>
 
 <script>
+import { gsap } from 'gsap'
+
 export default {
   /**
    * text : 中身のテキスト
@@ -49,70 +78,43 @@ export default {
     /**
      * 親コンポーネントからアニメーションの状態管理をする
      */
-    loop() {
-      if (this.loop === 'isActive') {
-        this.tweenPosition.value = this.$asscroll.currentPos
-        this.$asscroll.on('scroll', this.onScroll)
-        this.$gsap.ticker.add(this.render)
-      } else if (this.loop === 'isNoActive') {
-        this.$asscroll.off('scroll', this.onScroll)
-        this.$gsap.ticker.remove(this.render)
+    loop: function () {
+      if (this.loop === 'start') {
+        this.toRight()
+      } else {
+        this.reset()
       }
     },
   },
 
   mounted() {
-    this.position = { value: 0 }
-    this.tweenPosition = { value: 0 }
-    this.initDirection = 0
-    this.scrollDirection = { value: -1 }
-    this.scrollDirectionFlag = false
-    this.startPos = 0
-    this.scrollSpeed = 0
-    this.tweenScrollSpeed = 0
-    this.iObserver = null
-    this.observer = null
-    this.rootEl = this.$refs.root
-    this.wrapperEl = this.$refs.wrapper
-    this.rotateEl = this.$refs.rotate
-    this.translateEl = this.$refs.translate
-    this.blockEl = this.$refs.block
-    this.textValue = ''
-    this.cloneTextEl = null
+    this.$nextTick(() => {
+      if (!this.animation) return
 
-    // PCとSPで速度を出し分ける
-    if (this.$SITECONFIG.isPc) {
-      this.scrollSpeed = 2.0
-      this.tweenScrollSpeed = 0.04
-    } else {
-      this.scrollSpeed = 1.0
-      this.tweenScrollSpeed = 0.02
-    }
+      this.textWrapper = this.$refs.textWrapper
+      this.textWrapperWidth = this.textWrapper.clientWidth
 
-    // propsから最初のテキストが流れる方向を決める
-    if (this.direction === 'right') {
-      this.initDirection = -1.0
-    } else if (this.direction === 'left') {
-      this.initDirection = 1.0
-    }
+      this.$gsap.set(this.$refs.text01, {
+        x: 0,
+      })
 
-    // アニメーションさせる要素の初期値を設定する
-    this.$gsap.set(this.rotateEl, {
-      rotate: 3,
-      transformOrigin: 'left',
+      this.$gsap.set(this.$refs.text02, {
+        x: this.textWrapperWidth,
+      })
+
+      this.initText()
+      this.createText()
     })
-    this.$gsap.set(this.translateEl, {
-      yPercent: 103.8,
-    })
-
-    this.initText()
-    this.observe()
   },
 
   beforeDestroy() {
-    this.$asscroll.off('scroll', this.onScroll)
-    this.$gsap.ticker.remove(this.render)
-    this.iObserver.unobserve(this.observer)
+    if (this.tl) {
+      this.tl.kill()
+    }
+    this.tl = null
+    this.observe = null
+    this.textWrapper = null
+    this.textWrapperRect = null
   },
 
   methods: {
@@ -129,16 +131,33 @@ export default {
      * テキストをウィンドウの横幅を超えるまで生成する
      */
     createText() {
-      while (window.innerWidth > this.blockEl.getBoundingClientRect().width) {
-        this.textValue += `${this.blockEl.textContent} `
-        this.blockEl.innerHTML = this.textValue
-      }
+      this.$nextTick(() => {
+        if (!this.$refs.textWrapper) return;
+        this.textWrapperRect = this.$refs.textWrapper.getBoundingClientRect()
+
+        this.x = this.speed * this.textWrapperRect.width
+        this.tl = gsap.timeline({ repeat: -1 })
+        this.tl.to(this.$refs.text01, {
+          duration: this.duration,
+          x: -this.textWrapperRect.width,
+          ease: 'none',
+        })
+        this.tl.to(
+          this.$refs.text02,
+          {
+            duration: this.duration,
+            x: 0,
+            ease: 'none',
+          },
+          '<'
+        )
+      })
     },
     initText() {
-      this.createText()
-      for (let i = 0; i < 2; i++) {
-        this.cloneText()
-      }
+      this.$nextTick(() => {
+        if (!this.$refs.textWrapper) return;
+        this.createText()
+      })
     },
     /**
      * 上下のスクロールでテキストが左右に流れる方向を変更する
@@ -244,31 +263,22 @@ export default {
       )
       this.iObserver.observe(this.observer)
     },
+
+    toRight() {
+      this.$gsap.set(this.$refs.wrapper, {
+        x: this.direction === 'right' ? 0 : '-50%',
+      })
+      this.$gsap.to(this.$refs.wrapper, {
+        duration: 16,
+        ease: 'none',
+        x: this.direction === 'right' ? '-50%' : 0,
+        repeat: -1,
+      })
+    },
+
+    reset() {
+      this.$gsap.killTweensOf(this.$refs.wrapper)
+    },
   },
 }
 </script>
-
-<style scoped lang="scss">
-.app-loop-text {
-  display: block;
-  width: max-content;
-  overflow: hidden;
-}
-
-.app-loop-text-wrapper {
-  display: block;
-  will-change: transform;
-}
-
-.app-loop-text-translate {
-  display: flex;
-  position: relative;
-}
-</style>
-
-<!-- クローンを動的に生成するクラスはscopedから外す -->
-<style lang="scss">
-.app-loop-text-block {
-  padding: 0 vw(6);
-}
-</style>

@@ -1,3 +1,173 @@
+<style lang="scss" scoped>
+
+$gap: 60px;
+$gap-sp: 26px;
+
+.archive {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: colors.$darkBlack;
+}
+
+.archive-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: colors.$darkBlack;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.archive * {
+  user-select: none;
+}
+
+.archive-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, #{vw(220)});
+  grid-row-gap: $gap;
+  grid-column-gap: $gap;
+  position: relative;
+  width: calc((#{vw(220)} * 6) + (#{$gap} * 5));
+  padding: $gap * 0.5;
+  box-sizing: content-box;
+  z-index: 1;
+
+  @include mixins.sp() {
+    grid-template-columns: repeat(auto-fit, #{vw_sp(352)});
+    grid-row-gap: $gap-sp;
+    grid-column-gap: $gap-sp;
+    padding: $gap-sp * 0.5;
+    width: calc((#{vw_sp(352)} * 4) + (#{$gap-sp} * 3));
+  }
+}
+
+.archive-item {
+  position: relative;
+  width: vw(220);
+  height: vw(300);
+  border-radius: 6px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translate(0, 9999px);
+
+  @include mixins.sp() {
+    width: vw_sp(352);
+    height: vw_sp(528);
+  }
+}
+
+.archive-item:nth-of-type(even) {
+  margin: vw(-190) 0 0 0;
+
+  @include mixins.sp() {
+    margin: vw_sp(-300) 0 0 0;
+  }
+}
+
+// SPで余が出ないように消しておく
+.archive-item:nth-of-type(17),
+.archive-item:nth-of-type(18) {
+  @include mixins.sp() {
+    display: none;
+  }
+}
+
+.archive-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.archive-textarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  z-index: 1;
+  pointer-events: none;
+
+  @include mixins.sp() {
+    padding: 14px;
+  }
+}
+
+.archive-circle {
+  display: block;
+  font-size: 36px;
+  text-indent: -4px;
+  line-height: 1;
+
+  @include mixins.sp() {
+    font-size: 28px;
+  }
+}
+
+.archive-fulltitle {
+  display: block;
+  margin: 0 0 2px 0;
+  font-size: 20px;
+  font-family: fonts.$helvetica;
+  line-height: 1.2;
+
+  @include mixins.sp() {
+    font-size: 16px;
+  }
+}
+
+.archive-index {
+  display: block;
+  font-size: 20px;
+  font-family: fonts.$helvetica;
+  line-height: 1.2;
+
+  @include mixins.sp() {
+    font-size: 16px;
+  }
+}
+
+.archive-shorttitle {
+  position: absolute;
+  bottom: 26px;
+  left: 20px;
+  width: 100%;
+  font-size: 120px;
+  font-family: 'Six Caps', sans-serif;
+
+  @include mixins.sp() {
+    bottom: 18px;
+    left: 14px;
+    font-size: 76px;
+  }
+}
+
+.archive-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.archive-canvas {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+</style>
+
 <template>
   <div class="archive js-hold-target">
     <ul ref="ArchiveList" class="archive-list">
@@ -24,11 +194,9 @@ import archives from '@/assets/json/archive.json'
 export default {
   name: 'Archive',
 
-  data() {
-    return {
-      archives: archives,
-    }
-  },
+  data: () => ({
+    archives,
+  }),
 
   head() {
     return {
@@ -67,43 +235,21 @@ export default {
 
   watch: {
     openningEnd() {
-      // update
-      this.setWrapPosition()
-
-      this.crateMesh()
-
-      setTimeout(() => {
-        this.$gsap.ticker.add(this.updatePosition)
-        this.onOpening()
-      }, 100)
-
       setTimeout(() => {
         // スクロール可能にする
         if (this.$SITECONFIG.isTouch) this.$backfaceScroll(true)
         this.$asscroll.enable({ reset: true })
-        this.$asscroll.disable()
       }, 1200)
     },
     imageLoaded() {
       if (this.imageLoaded) {
+        // アクセス時はopenningEndが発火するので、処理を返す
         if (!this.openningEnd) return
 
         this.$store.commit('mouse/loadend')
         // スクロール可能にする
         if (this.$SITECONFIG.isTouch) this.$backfaceScroll(true)
-
         this.$asscroll.enable({ reset: true })
-        this.$asscroll.disable()
-
-        // update
-        this.setWrapPosition()
-
-        this.crateMesh()
-
-        setTimeout(() => {
-          this.raf = this.$gsap.ticker.add(this.updatePosition)
-          this.onOpening()
-        }, 100)
       }
     },
   },
@@ -190,6 +336,23 @@ export default {
         this.$store.commit('imageLoaded/loaded')
       })
     })
+
+    this.mesh = new Mesh(this.$refs.ArchiveCanvas)
+    this.glElements = new GlElements()
+    this.stage = new Stage()
+
+    this.stage.add(this.mesh)
+    this.stage.add(this.glElements)
+
+    this.glElements.init(this.$refs.ArchiveItem)
+
+    this.images = ImagesLoaded(this.$refs.ArchiveList, { background: true })
+    this.images.on('progress', (instance, image) => {
+      this.glElements.progress(image)
+    })
+    this.images.on('always', (instance) => {
+      this.$store.commit('imageLoaded/load')
+    })
   },
 
   beforeDestroy() {
@@ -205,34 +368,22 @@ export default {
     window.removeEventListener('keyup', this.onKeyUp)
     window.removeEventListener('keydown', this.onKeyDown)
     this.$gsap.ticker.remove(this.updatePosition)
-    this.stage._destroy()
-    this.stage = null
-    for (let i = 0; i < this.medias.length; i++) {
-      this.meshArray[i]._destroy()
-      this.meshArray[i] = null
-    }
+    this.stage.remove(this.mesh)
+    this.stage.remove(this.glElements)
+    this.mesh.destroy()
+    this.glElements.destroy()
+    this.stage.destroy()
+    this.images.destroy()
+    this.mesh = null
     this.glElements = null
+    this.stage = null
+    this.images = null
     this.$preDefaultEvent(false)
     this.$asscroll.disable()
     this.$store.commit('imageLoaded/init')
   },
 
   methods: {
-    crateMesh() {
-      this.stage = new Stage(this.$refs.ArchiveCanvas)
-      this.stage.init()
-
-      this.meshArray = []
-
-      this.glElements = new GlElements(this.$refs.ArchiveItem)
-      this.glElements.init()
-
-      this.glElements.optionList.forEach((item, i) => {
-        this.meshArray[i] = new Mesh(this.stage, item, this.$SITECONFIG)
-        this.meshArray[i].init()
-      })
-    },
-
     setWrapPosition() {
       this.wrapperRect = this.wrapper.getBoundingClientRect()
 
@@ -291,9 +442,9 @@ export default {
         const strengthX = ((this.x.current - this.x.target) / window.innerWidth) * 1.8
         const strengthY = ((this.y.current - this.y.target) / window.innerWidth) * 1.8
         const rotateValue = (strengthX + strengthY) / 16.0
-        this.meshArray[i]._setStrength(strengthX, strengthY)
-        this.meshArray[i]._setRotate(rotateValue)
-        this.meshArray[i].onRaf()
+        this.mesh._setStrength(strengthX, strengthY)
+        this.mesh._setRotate(rotateValue)
+        this.mesh.onRaf()
       }
     },
     onTouchDown(e) {
@@ -401,7 +552,9 @@ export default {
       this.stage.onResize()
 
       for (let i = 0; i < this.medias.length; i++) {
-        this.meshArray[i].onResize()
+        this.mesh._setStrength(0, 0)
+        this.mesh._setRotate(0)
+        this.mesh.onResize()
       }
     },
     onOpening() {
@@ -437,172 +590,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-$gap: 60px;
-$gap-sp: 26px;
-
-.archive {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: $darkBlack;
-}
-
-.archive-cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: $darkBlack;
-  z-index: 100;
-  pointer-events: none;
-}
-
-.archive * {
-  user-select: none;
-}
-
-.archive-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, #{vw(220)});
-  grid-row-gap: $gap;
-  grid-column-gap: $gap;
-  position: relative;
-  width: calc((#{vw(220)} * 6) + (#{$gap} * 5));
-  padding: $gap * 0.5;
-  box-sizing: content-box;
-  z-index: 1;
-
-  @include sp() {
-    grid-template-columns: repeat(auto-fit, #{vw_sp(352)});
-    grid-row-gap: $gap-sp;
-    grid-column-gap: $gap-sp;
-    padding: $gap-sp * 0.5;
-    width: calc((#{vw_sp(352)} * 4) + (#{$gap-sp} * 3));
-  }
-}
-
-.archive-item {
-  position: relative;
-  width: vw(220);
-  height: vw(300);
-  border-radius: 6px;
-  overflow: hidden;
-  opacity: 0;
-  transform: translate(0, 9999px);
-
-  @include sp() {
-    width: vw_sp(352);
-    height: vw_sp(528);
-  }
-}
-
-.archive-item:nth-of-type(even) {
-  margin: vw(-190) 0 0 0;
-
-  @include sp() {
-    margin: vw_sp(-300) 0 0 0;
-  }
-}
-
-// SPで余が出ないように消しておく
-.archive-item:nth-of-type(17),
-.archive-item:nth-of-type(18) {
-  @include sp() {
-    display: none;
-  }
-}
-
-.archive-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.archive-textarea {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  z-index: 1;
-  pointer-events: none;
-
-  @include sp() {
-    padding: 14px;
-  }
-}
-
-.archive-circle {
-  display: block;
-  font-size: 36px;
-  text-indent: -4px;
-  line-height: 1;
-
-  @include sp() {
-    font-size: 28px;
-  }
-}
-
-.archive-fulltitle {
-  display: block;
-  margin: 0 0 2px 0;
-  font-size: 20px;
-  font-family: $helvetica;
-  line-height: 1.2;
-
-  @include sp() {
-    font-size: 16px;
-  }
-}
-
-.archive-index {
-  display: block;
-  font-size: 20px;
-  font-family: $helvetica;
-  line-height: 1.2;
-
-  @include sp() {
-    font-size: 16px;
-  }
-}
-
-.archive-shorttitle {
-  position: absolute;
-  bottom: 26px;
-  left: 20px;
-  width: 100%;
-  font-size: 120px;
-  font-family: 'Six Caps', sans-serif;
-
-  @include sp() {
-    bottom: 18px;
-    left: 14px;
-    font-size: 76px;
-  }
-}
-
-.archive-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  opacity: 1;
-  pointer-events: none;
-}
-
-.archive-canvas {
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-</style>

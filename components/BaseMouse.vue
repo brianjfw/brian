@@ -1,3 +1,111 @@
+<style lang="scss" scoped>
+:root {
+  --viewportHeight: 100vh;
+}
+
+.mouse {
+  position: fixed;
+  top: 9px;
+  left: 6px;
+  width: 20px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(40px, calc(var(--viewportHeight) - 80px)) scale(0);
+}
+
+.mouse-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -18px;
+  right: -38px;
+  width: 44px;
+  height: 14px;
+  padding: 1px 0 0 0;
+  background-color: colors.$white;
+  color: colors.$black;
+  font-size: 10px;
+  border-radius: 8px;
+  transform: scale(0);
+}
+
+.mouse-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -18px;
+  right: -38px;
+  width: 64px;
+  height: 14px;
+  padding: 1px 0 0 0;
+  background-color: colors.$white;
+  color: colors.$black;
+  font-size: 10px;
+  border-radius: 8px;
+  transform: scale(0);
+}
+
+.mouse-action-wrapper,
+.mouse-loading-wrapper {
+  position: relative;
+  overflow: hidden;
+  transform: rotate(8deg);
+}
+
+.mouse-action-block,
+.mouse-loading-block {
+  display: inline-block;
+  transform: translateY(10px);
+}
+
+.is-loading .mouse-loading-dot {
+  animation: loadingFade $base-duration $colorAndOpacity-easing infinite;
+}
+
+.mouse-loading-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.mouse-loading-dot:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.mouse-loading-dot:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes loadingFade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.mouse-img-click {
+  position: absolute;
+  top: -26px;
+  left: -14px;
+  width: 44px;
+  transform: scale(0);
+}
+
+.mouse-img-hold {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scale(1.3);
+  opacity: 0;
+}
+</style>
+
 <template>
   <div ref="MouseArea" class="mouse">
     <span ref="MouseAction" class="mouse-action"
@@ -235,111 +343,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="scss">
-:root {
-  --viewportHeight: 100vh;
-}
-
-.mouse {
-  position: fixed;
-  top: 9px;
-  left: 6px;
-  width: 20px;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0;
-  transform: translate(40px, calc(var(--viewportHeight) - 80px)) scale(0);
-}
-
-.mouse-action {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: -18px;
-  right: -38px;
-  width: 44px;
-  height: 14px;
-  padding: 1px 0 0 0;
-  background-color: $white;
-  color: $black;
-  font-size: 10px;
-  border-radius: 8px;
-  transform: scale(0);
-}
-
-.mouse-loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: -18px;
-  right: -38px;
-  width: 64px;
-  height: 14px;
-  padding: 1px 0 0 0;
-  background-color: $white;
-  color: $black;
-  font-size: 10px;
-  border-radius: 8px;
-  transform: scale(0);
-}
-
-.mouse-action-wrapper,
-.mouse-loading-wrapper {
-  position: relative;
-  overflow: hidden;
-  transform: rotate(8deg);
-}
-
-.mouse-action-block,
-.mouse-loading-block {
-  display: inline-block;
-  transform: translateY(10px);
-}
-
-.is-loading .mouse-loading-dot {
-  animation: loadingFade $base-duration $colorAndOpacity-easing infinite;
-}
-
-.mouse-loading-dot:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.mouse-loading-dot:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.mouse-loading-dot:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-@keyframes loadingFade {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.mouse-img-click {
-  position: absolute;
-  top: -26px;
-  left: -14px;
-  width: 44px;
-  transform: scale(0);
-}
-
-.mouse-img-hold {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: scale(1.3);
-  opacity: 0;
-}
-</style>

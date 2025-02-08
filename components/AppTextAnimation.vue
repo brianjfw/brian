@@ -1,7 +1,33 @@
+<style lang="scss" scoped>
+
+.app-text-animation {
+  display: block;
+  pointer-events: none;
+  user-select: none;
+
+  @include state.sp() {
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+.app-text-animation-wrapper {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.app-text-animation-block {
+  display: inline-block;
+  opacity: 0;
+  white-space: nowrap;
+}
+</style>
+
 <template>
   <span ref="root" class="app-text-animation">
     <span ref="wrapper" class="app-text-animation-wrapper">
-      <span ref="block" class="app-text-animation-block">{{ text }}</span>
+      <span ref="block" class="app-text-animation-block">{{ computedText }}</span>
     </span>
   </span>
 </template>
@@ -15,11 +41,12 @@ export default {
    * state : 親コンポーネントから監視されているアニメーションの状態管理用のprops
    * pcAnimation : PCでアニメーションさせるか、させないかを決める
    * spAnimation : SPでアニメーションさせるか、させないかを決める
+   * modifier : クラスを追加するためのプロパティ
    * */
   props: {
     text: {
-      type: String,
-      required: true,
+      type: [String, Array],
+      default: '',
     },
     rotate: {
       type: Number,
@@ -40,6 +67,27 @@ export default {
     pcAnimation: {
       type: Boolean,
       default: true,
+    },
+    modifier: {
+      type: String,
+      default: '',
+    },
+  },
+
+  computed: {
+    computedText() {
+      if (Array.isArray(this.text)) {
+        return this.text.join(' ');
+      }
+      return this.text;
+    },
+    classes() {
+      return {
+        [`text-animation--${this.modifier}`]: this.modifier,
+        'text-animation--active': this.state === 'active',
+        'text-animation--enter': this.state === 'enter',
+        'text-animation--leave': this.state === 'leave',
+      }
     },
   },
 
@@ -171,28 +219,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.app-text-animation {
-  display: block;
-  pointer-events: none;
-  user-select: none;
-
-  @include sp() {
-    position: relative;
-    overflow: hidden;
-  }
-}
-
-.app-text-animation-wrapper {
-  display: inline-block;
-  position: relative;
-  overflow: hidden;
-}
-
-.app-text-animation-block {
-  display: inline-block;
-  opacity: 0;
-  white-space: nowrap;
-}
-</style>

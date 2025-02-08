@@ -1,8 +1,12 @@
+@use '../constants/color.scss' as colors;
+@use '../constants/font.scss' as fonts;
+@use '../functions/mixins' as mixins;
+
 body {
-  background-color: $darkBlack;
-  color: $white;
+  background-color: colors.$darkBlack;
+  color: colors.$white;
   font-size: 16px;
-  font-family: $helvetica;
+  font-family: fonts.$helvetica;
   font-feature-settings: "palt";
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -19,15 +23,15 @@ body {
 }
 
 *::selection {
-  background: $darkBlack;
-  color: $white;
+  background: colors.$darkBlack;
+  color: colors.$white;
 }
 
 .l-container {
   width: 100%;
   padding: 0 40px;
 
-  @include sp() {
+  @include mixins.sp() {
     padding: 0 vw_sp(20);
   }
 }
@@ -36,3 +40,14 @@ canvas{
   display: block;
   margin: 0 auto;
 }
+
+a {
+  color: colors.$blue;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* Add more global styles here */

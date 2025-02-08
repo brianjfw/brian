@@ -1,3 +1,9 @@
+<style lang="scss" scoped>
+.works {
+  overflow: hidden;
+}
+</style>
+
 <template>
   <div class="works">
     <!-- ページによって色を変更する -->
@@ -134,9 +140,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.works {
-  overflow: hidden;
-}
-</style>

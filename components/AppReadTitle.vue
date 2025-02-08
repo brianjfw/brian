@@ -1,58 +1,17 @@
-<template>
-  <span class="app-read-title" :class="`app-read-title--${modifier}`">
-    <span v-for="(char, index) of text" :key="index" class="app-read-title-wrapper" :class="`app-read-title-wrapper-0${index}`">
-      <AppTextAnimation :state="state" :start="start + index * 0.12" :rotate="$BASEROTATE.right" :text="char" :sp-animation="spAnimation" />
-    </span>
-  </span>
-</template>
-
-<script>
-export default {
-  /**
-   * text : 中身のテキスト、配列で渡ってくる
-   * start : 数値分アニメーションをdelayさせる
-   * modifier : 見た目を変更するクラス
-   * state : 親コンポーネントから監視されているアニメーションの状態管理用のprops
-   * spAnimation : SPでアニメーションさせるか、させないかを決める
-   * */
-  props: {
-    text: {
-      type: Array,
-      required: true,
-    },
-    start: {
-      type: Number,
-      default: 0,
-    },
-    modifier: {
-      type: String,
-      default: '',
-    },
-    state: {
-      type: String,
-      default: '',
-    },
-    spAnimation: {
-      type: Boolean,
-      default: true,
-    },
-  },
-}
-</script>
-
 <style lang="scss" scoped>
+
 .app-read-title {
   display: block;
   font-size: 12px;
-  font-family: $helvetica;
+  font-family: fonts.$helvetica;
   letter-spacing: 0.02em;
   line-height: 1.04;
 
-  @include tab-vertical() {
+  @include mixins.tab-vertical() {
     font-size: 10px;
   }
 
-  @include sp() {
+  @include state.sp() {
     font-size: 10px;
   }
 }
@@ -65,12 +24,12 @@ export default {
     text-indent: -2px;
     line-height: 0.79;
 
-    @include tab-vertical() {
+    @include mixins.tab-vertical() {
       font-size: 30px;
       text-indent: -1.6px;
     }
 
-    @include sp() {
+    @include mixins.sp() {
       display: inline-block;
       margin: 0 0 0 -4.5px;
       font-size: 28px;
@@ -87,7 +46,7 @@ export default {
     text-indent: -2px;
     line-height: 0.79;
 
-    @include sp() {
+    @include mixins.sp() {
       font-size: 28px;
       text-indent: 0;
       line-height: 1;
@@ -99,7 +58,7 @@ export default {
   font-size: 14px;
   text-align: right;
 
-  @include sp() {
+  @include state.sp() {
     font-size: 10px;
   }
 
@@ -109,7 +68,7 @@ export default {
     font-size: 36px;
     line-height: 0.79;
 
-    @include sp() {
+    @include mixins.sp() {
       font-size: 28px;
       text-indent: 0;
       line-height: 0.86;
@@ -125,13 +84,13 @@ export default {
     text-indent: -2px;
     line-height: 0.8;
 
-    @include tab-vertical() {
+    @include mixins.tab-vertical() {
       margin: 0 0 3px 0;
       font-size: 28px;
       text-indent: -1px;
     }
 
-    @include sp() {
+    @include mixins.sp() {
       margin: 0 0 3px 0;
       font-size: 28px;
       text-indent: -1.5px;
@@ -141,11 +100,11 @@ export default {
   & .app-read-title-wrapper-01 {
     font-size: 20px;
 
-    @include tab-vertical() {
+    @include mixins.tab-vertical() {
       font-size: 16px;
     }
 
-    @include sp() {
+    @include state.sp() {
       font-size: 10px;
     }
   }
@@ -157,7 +116,7 @@ export default {
     text-indent: -2px;
     line-height: 0.79;
 
-    @include sp() {
+    @include mixins.sp() {
       display: inline-block;
       margin: 0 0 0 -4.5px;
       font-size: 28px;
@@ -168,21 +127,21 @@ export default {
   & .app-read-title-wrapper-01 {
     font-size: 14px;
 
-    @include sp() {
+    @include state.sp() {
       font-size: 10px;
     }
   }
 }
 
 .app-read-title--about-project-section {
-  color: $black;
+  color: colors.$black;
 
   & .app-read-title-wrapper-00 {
     font-size: 36px;
     text-indent: -2px;
     line-height: 0.79;
 
-    @include sp() {
+    @include mixins.sp() {
       display: inline-block;
       margin: 0 0 0 -4.5px;
       font-size: 28px;
@@ -194,7 +153,7 @@ export default {
   & .app-read-title-wrapper-02 {
     font-size: 14px;
 
-    @include sp() {
+    @include state.sp() {
       font-size: 10px;
     }
   }
@@ -203,7 +162,7 @@ export default {
 .app-read-title--works-section {
   font-size: 14px;
 
-  @include sp() {
+  @include state.sp() {
     font-size: 10px;
     line-height: 1.1;
   }
@@ -213,7 +172,7 @@ export default {
     text-indent: -2px;
     line-height: 0.79;
 
-    @include sp() {
+    @include mixins.sp() {
       display: inline-block;
       margin: 0 0 0 -4.5px;
       font-size: 26px;
@@ -275,3 +234,38 @@ export default {
 }
 /* stylelint-enable */
 </style>
+
+<template>
+  <span class="app-read-title" :class="`app-read-title--${modifier}`">
+    <span v-for="(char, index) of text" :key="index" class="app-read-title-wrapper" :class="`app-read-title-wrapper-0${index}`">
+      <AppTextAnimation :state="state" :start="start + index * 0.12" :rotate="$BASEROTATE.right" :text="char" :sp-animation="spAnimation" />
+    </span>
+  </span>
+</template>
+
+<script>
+export default {
+  props: {
+    text: {
+      type: Array,
+      required: true,
+    },
+    start: {
+      type: Number,
+      default: 0,
+    },
+    modifier: {
+      type: String,
+      default: '',
+    },
+    state: {
+      type: String,
+      default: '',
+    },
+    spAnimation: {
+      type: Boolean,
+      default: true,
+    },
+  },
+}
+</script>

@@ -95,7 +95,8 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '~/assets/scss/global.scss'
+    // '@/assets/scss/style.scss',
+    // '~/assets/scss/global.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -122,16 +123,20 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    'nuxt-webfontloader',
     '@nuxtjs/style-resources',
+    'nuxt-webfontloader',
   ],
 
   styleResources: {
     scss: [
-      './assets/scss/variables.scss',
-      './assets/scss/mixins.scss',
-      './assets/scss/global.scss'
-    ]
+      '~/assets/scss/global.scss',
+      '~/assets/scss/constants/_color.scss',
+      '~/assets/scss/constants/_font.scss',
+      '~/assets/scss/constants/_animation.scss',
+      '~/assets/scss/constants/_break-points.scss',
+      '~/assets/scss/functions/_function.scss',
+      '~/assets/scss/functions/_mixins.scss'
+    ],
   },
 
   webfontloader: {
@@ -145,7 +150,7 @@ export default {
     transpile: [
       'three'
     ],
-    extend(config) {
+    extend(config, { isDev, isClient }) {
       config.module.rules.push({
         test: /\.(glsl|vs|fs|vert|frag)$/,
         exclude: /node_modules/,
@@ -156,11 +161,7 @@ export default {
 
   generate: {
     async routes() {
-      const generates = []
-      db.projects.forEach((project) => {
-        generates.push({ route: `works/${project.id}` })
-      })
-      return generates
+      return ['/about']
     }
   }
 }

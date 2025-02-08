@@ -1,3 +1,106 @@
+<style lang="scss" scoped>
+
+.card-article {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 28px 18px;
+  background-color: colors.$white;
+  color: colors.$black;
+  border-radius: 14px;
+
+  @include state.sp() {
+    padding: 20px 16px;
+    border-radius: 7px;
+  }
+}
+
+.card-inner {
+  display: block;
+  position: relative;
+  height: 100%;
+}
+
+.card-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  line-height: 1;
+}
+
+.card-title-wrapper-01 {
+  display: block;
+  margin: 0 0 60px 0;
+
+  @include state.sp() {
+    margin: 0 0 40px 0;
+  }
+}
+
+.card-title-wrapper-01-block {
+  display: block;
+  font-size: 20px;
+  font-family: fonts.$helvetica;
+  line-height: 1.2;
+
+  @include state.sp() {
+    font-size: 17px;
+  }
+
+  &:first-of-type {
+    font-size: 36px;
+    text-indent: -4px;
+    line-height: 1;
+
+    @include state.sp() {
+      display: inline-block;
+      margin: 0 0 0 -4px;
+      font-size: 28px;
+      line-height: 0.9;
+      text-indent: 0;
+    }
+  }
+}
+
+.card-title-wrapper-02-block {
+  display: block;
+  width: 200px;
+  font-size: 12px;
+  font-family: fonts.$helvetica;
+  letter-spacing: 0.02em;
+  line-height: 1.24;
+
+  @include state.sp() {
+    width: 180px;
+    font-size: 10px;
+  }
+}
+
+.card-title-wrapper-03 {
+  position: absolute;
+  bottom: -11px;
+  left: 0;
+  width: 100%;
+  font-size: 120px;
+  font-family: fonts.$sixcaps;
+
+  @include state.sp() {
+    bottom: -5px;
+    font-size: 80px;
+  }
+}
+
+/* stylelint-disable */
+.is-windows .card-title-wrapper-01-block {
+  &:first-of-type {
+    position: relative;
+    left: -8px;
+  }
+}
+/* stylelint-enable */
+</style>
+
 <template>
   <div class="card-article">
     <component :is="setTagName" :url="setUrl" :index="setIndex" :color="setColor" class="card-link">
@@ -102,105 +205,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="scss">
-.card-article {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding: 28px 18px;
-  background-color: $white;
-  color: $black;
-  border-radius: 14px;
-
-  @include sp() {
-    padding: 20px 16px;
-    border-radius: 7px;
-  }
-}
-
-.card-inner {
-  display: block;
-  position: relative;
-  height: 100%;
-}
-
-.card-link {
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-align: left;
-  line-height: 1;
-}
-
-.card-title-wrapper-01 {
-  display: block;
-  margin: 0 0 60px 0;
-
-  @include sp() {
-    margin: 0 0 40px 0;
-  }
-}
-
-.card-title-wrapper-01-block {
-  display: block;
-  font-size: 20px;
-  font-family: $helvetica;
-  line-height: 1.2;
-
-  @include sp() {
-    font-size: 17px;
-  }
-
-  &:first-of-type {
-    font-size: 36px;
-    text-indent: -4px;
-    line-height: 1;
-
-    @include sp() {
-      display: inline-block;
-      margin: 0 0 0 -4px;
-      font-size: 28px;
-      line-height: 0.9;
-      text-indent: 0;
-    }
-  }
-}
-
-.card-title-wrapper-02-block {
-  display: block;
-  width: 200px;
-  font-size: 12px;
-  font-family: $helvetica;
-  letter-spacing: 0.02em;
-  line-height: 1.24;
-
-  @include sp() {
-    width: 180px;
-    font-size: 10px;
-  }
-}
-
-.card-title-wrapper-03 {
-  position: absolute;
-  bottom: -11px;
-  left: 0;
-  width: 100%;
-  font-size: 120px;
-  font-family: $sixcaps;
-
-  @include sp() {
-    bottom: -5px;
-    font-size: 80px;
-  }
-}
-
-/* stylelint-disable */
-.is-windows .card-title-wrapper-01-block {
-  &:first-of-type {
-    position: relative;
-    left: -8px;
-  }
-}
-/* stylelint-enable */
-</style>

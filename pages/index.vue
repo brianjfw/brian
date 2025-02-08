@@ -1,3 +1,19 @@
+<style lang="scss" scoped>
+
+.index {
+  overflow: hidden;
+}
+
+.hero-and-about {
+  position: relative;
+  overflow: hidden;
+
+  @include state.sp() {
+    // Styles for small screens
+  }
+}
+</style>
+
 <template>
   <div class="index">
     <div class="hero-and-about">
@@ -93,14 +109,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.index {
-  overflow: hidden;
-}
-
-.hero-and-about {
-  position: relative;
-  overflow: hidden;
-}
-</style>

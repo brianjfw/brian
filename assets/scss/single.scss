@@ -1,9 +1,7 @@
-//constants
-@import './constants/animation.scss';
-@import './constants/break-points.scss';
-@import './constants/color.scss';
-@import './constants/font.scss';
+@use './constants/animation.scss';
+@use './constants/break-points.scss';
+@use './constants/color.scss';
+@use './constants/font.scss';
 
-//functions
-@import './functions/function';
-@import './functions/mixins';
+@use './functions/function';
+@use './functions/mixins';

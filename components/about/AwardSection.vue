@@ -1,3 +1,167 @@
+<style lang="scss" scoped>
+
+.award {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.award-bg {
+  position: relative;
+  padding: 0 0 vw(600) 0;
+  background-color: colors.$darkBlack;
+
+  @include mixins.tab-vertical() {
+    width: vw(840);
+  }
+}
+
+.award-inner {
+  padding: 152px 40px;
+
+  @include mixins.sp() {
+    padding: 63px vw_sp(20);
+  }
+}
+
+.award-card-area {
+  position: fixed;
+  top: 0;
+  left: 150px;
+  width: 293px;
+  height: 400px;
+  pointer-events: none;
+  z-index: 3;
+
+  @include mixins.tab-vertical() {
+    width: vw(840);
+  }
+}
+
+.award-card-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
+  z-index: 10;
+}
+
+.award-title-read-area {
+  display: block;
+  margin: 0 0 36px 0;
+
+  @include mixins.sp() {
+    margin: 0 0 40px 0;
+  }
+}
+
+.award-list-wrapper {
+  margin: 0 0 40px 0;
+}
+
+.award-list {
+  width: vw(1000);
+
+  @include mixins.tab-vertical() {
+    width: vw(840);
+  }
+
+  @include mixins.sp() {
+    width: 100%;
+  }
+}
+
+.award-item {
+  display: flex;
+  position: relative;
+  padding: 15px 0;
+  color: $gray;
+
+  @include mixins.sp() {
+    display: block;
+    padding: 18px 0;
+  }
+}
+
+.award-list-bottom-line {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 1px;
+  z-index: 1;
+}
+
+.award-group {
+  position: relative;
+  top: 2px;
+  flex-shrink: 0;
+  width: vw(238);
+  color: $white;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+
+  @include mixins.tab-vertical() {
+    width: vw(218);
+    font-size: 10px;
+  }
+
+  @include mixins.sp() {
+    top: auto;
+    width: auto;
+    margin: 0 0 10px 0;
+    font-size: 10px;
+  }
+}
+
+.award-title {
+  flex-shrink: 0;
+  width: vw(440);
+  font-size: 60px;
+  font-family: $sixcaps;
+  letter-spacing: 0.02em;
+
+  @include mixins.tab-vertical() {
+    width: vw(360);
+    font-size: 32px;
+  }
+
+  @include mixins.sp() {
+    width: auto;
+    margin: 0 0 8px 0;
+    font-size: vw_sp(100);
+  }
+}
+
+.award-rank {
+  flex-shrink: 0;
+  font-size: 60px;
+  font-family: $sixcaps;
+  letter-spacing: 0.02em;
+
+  @include mixins.tab-vertical() {
+    font-size: 32px;
+  }
+
+  @include mixins.sp() {
+    width: auto;
+    font-size: vw_sp(100);
+  }
+}
+
+.award-total-item {
+  color: $gray;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+
+  &:not(:last-of-type) {
+    margin: 0 0 4px 0;
+  }
+}
+</style>
+
+
 <template>
   <div ref="Award" class="award">
     <div ref="AwardCardArea" class="award-card-area">
@@ -260,157 +424,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.award {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.award-bg {
-  position: relative;
-  padding: 0 0 vw(600) 0;
-  background-color: $darkBlack;
-}
-
-.award-inner {
-  padding: 152px 40px;
-
-  @include sp() {
-    padding: 63px vw_sp(20);
-  }
-}
-
-.award-card-area {
-  position: fixed;
-  top: 0;
-  left: 150px;
-  width: 293px;
-  height: 400px;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.award-card-item {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
-  z-index: 10;
-}
-
-.award-title-read-area {
-  display: block;
-  margin: 0 0 36px 0;
-
-  @include sp() {
-    margin: 0 0 40px 0;
-  }
-}
-
-.award-list-wrapper {
-  margin: 0 0 40px 0;
-}
-
-.award-list {
-  width: vw(1000);
-
-  @include tab-vertical() {
-    width: vw(840);
-  }
-
-  @include sp() {
-    width: 100%;
-  }
-}
-
-.award-item {
-  display: flex;
-  position: relative;
-  padding: 15px 0;
-  color: $gray;
-
-  @include sp() {
-    display: block;
-    padding: 18px 0;
-  }
-}
-
-.award-list-bottom-line {
-  display: flex;
-  position: relative;
-  width: 100%;
-  height: 1px;
-  z-index: 1;
-}
-
-.award-group {
-  position: relative;
-  top: 2px;
-  flex-shrink: 0;
-  width: vw(238);
-  color: $white;
-  font-size: 14px;
-  letter-spacing: 0.02em;
-
-  @include tab-vertical() {
-    width: vw(218);
-    font-size: 10px;
-  }
-
-  @include sp() {
-    top: auto;
-    width: auto;
-    margin: 0 0 10px 0;
-    font-size: 10px;
-  }
-}
-
-.award-title {
-  flex-shrink: 0;
-  width: vw(440);
-  font-size: 60px;
-  font-family: $sixcaps;
-  letter-spacing: 0.02em;
-
-  @include tab-vertical() {
-    width: vw(360);
-    font-size: 32px;
-  }
-
-  @include sp() {
-    width: auto;
-    margin: 0 0 8px 0;
-    font-size: vw_sp(100);
-  }
-}
-
-.award-rank {
-  flex-shrink: 0;
-  font-size: 60px;
-  font-family: $sixcaps;
-  letter-spacing: 0.02em;
-
-  @include tab-vertical() {
-    font-size: 32px;
-  }
-
-  @include sp() {
-    width: auto;
-    font-size: vw_sp(100);
-  }
-}
-
-.award-total-item {
-  color: $gray;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-
-  &:not(:last-of-type) {
-    margin: 0 0 4px 0;
-  }
-}
-</style>

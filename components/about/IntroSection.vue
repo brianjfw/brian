@@ -1,3 +1,212 @@
+<style lang="scss" scoped>
+:root {
+  --viewportWidth: 100vw;
+  --viewportHeight: 100vh;
+}
+
+.intro {
+  position: relative;
+  z-index: 1;
+
+  @include state.sp() {
+    overflow: hidden;
+  }
+}
+
+.intro-container {
+  position: relative;
+  height: 5500px;
+  margin: vw(600) 0 0 0;
+
+  @include state.sp() {
+    margin: vw_sp(380) 0 0 0;
+  }
+}
+
+.intro-spacer-01 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2000px;
+  pointer-events: none;
+}
+
+.intro-spacer-02 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4000px;
+  pointer-events: none;
+}
+
+.intro-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--viewportHeight, 100vh) !important;
+}
+
+.intro-read-text {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: vw(1758);
+  height: vw(280);
+  margin: auto 0;
+  color: colors.$darkPink;
+  font-size: vw(280);
+  font-family: fonts.$sixcaps;
+  white-space: nowrap;
+  line-height: 1;
+  transform: translateX(vw(1280));
+
+  @include state.sp() {
+    width: vw_sp(2604);
+    height: vw_sp(365);
+    font-size: vw_sp(420);
+    transform: translateX(vw_sp(750));
+  }
+}
+
+.intro-bg {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: vw(54);
+  height: vw(245);
+  margin: auto;
+  border-radius: vw(22);
+  overflow: hidden;
+  backface-visibility: hidden;
+  transform: translate(vw(-48), vw(8));
+  opacity: 0;
+  pointer-events: none;
+  will-change: width, height;
+
+  @include state.sp {
+    width: vw_sp(81);
+    height: vw_sp(365);
+    border-radius: vw(36);
+    transform: translate(vw_sp(121), vw_sp(39));
+  }
+
+  // & img {
+  //   position: absolute;
+  //   top: 0;
+  //   right: 0;
+  //   bottom: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: calc(100% + 700px);
+  //   margin: auto;
+  //   object-fit: cover;
+  // }
+}
+
+.intro-bg-wrapper {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 700px);
+
+  & canvas {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+}
+
+.intro-bg-canvas {
+  display: block;
+  position: absolute;
+  top: -350px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.intro-bg-clip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--viewportWidth, 100vw);
+  height: var(--viewportHeight, 100vh);
+  will-change: transform;
+}
+
+.intro-title {
+  position: fixed;
+  top: 50%;
+  right: 158px;
+  transform: translate3d(0, -50%, 0);
+  color: #eae0cc;
+  font-size: vmin(128);
+  font-family: $sixcaps;
+
+  @include state.sp {
+    top: calc(50% - 20px);
+    right: 23px;
+    font-size: vmin(170);
+  }
+}
+
+.intro-title-wrapper-01,
+.intro-title-wrapper-sp-01 {
+  text-align: right;
+}
+
+.intro-title-read-area {
+  position: absolute;
+  top: 0;
+  left: 3px;
+  color: $white;
+}
+
+.intro-note {
+  position: absolute;
+  bottom: 34px;
+  right: 158px;
+  left: 40px;
+  color: #eae0cc;
+  font-size: 12px;
+  text-indent: 180px;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+
+  @include state.sp {
+    right: 0;
+    bottom: 40px;
+    left: 0;
+    width: 100%;
+    padding: 0 20px;
+    font-size: 10px;
+  }
+}
+
+.intro-note-text {
+  display: block;
+}
+
+.intro-note-text-01 {
+  margin: 0 0 0 185px;
+}
+</style>
+
+
 <template>
   <div class="intro">
     <div ref="IntroContainer" class="intro-container">
@@ -338,211 +547,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-:root {
-  --viewportWidth: 100vw;
-  --viewportHeight: 100vh;
-}
-
-.intro {
-  position: relative;
-  z-index: 1;
-
-  @include sp() {
-    overflow: hidden;
-  }
-}
-
-.intro-container {
-  position: relative;
-  height: 5500px;
-  margin: vw(600) 0 0 0;
-
-  @include sp() {
-    margin: vw_sp(380) 0 0 0;
-  }
-}
-
-.intro-spacer-01 {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2000px;
-  pointer-events: none;
-}
-
-.intro-spacer-02 {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 4000px;
-  pointer-events: none;
-}
-
-.intro-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: var(--viewportHeight, 100vh) !important;
-}
-
-.intro-read-text {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: vw(1758);
-  height: vw(280);
-  margin: auto 0;
-  color: $darkPink;
-  font-size: vw(280);
-  font-family: $sixcaps;
-  white-space: nowrap;
-  line-height: 1;
-  transform: translateX(vw(1280));
-
-  @include sp() {
-    width: vw_sp(2604);
-    height: vw_sp(365);
-    font-size: vw_sp(420);
-    transform: translateX(vw_sp(750));
-  }
-}
-
-.intro-bg {
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: vw(54);
-  height: vw(245);
-  margin: auto;
-  border-radius: vw(22);
-  overflow: hidden;
-  backface-visibility: hidden;
-  transform: translate(vw(-48), vw(8));
-  opacity: 0;
-  pointer-events: none;
-  will-change: width, height;
-
-  @include sp() {
-    width: vw_sp(81);
-    height: vw_sp(365);
-    border-radius: vw(36);
-    transform: translate(vw_sp(121), vw_sp(39));
-  }
-
-  // & img {
-  //   position: absolute;
-  //   top: 0;
-  //   right: 0;
-  //   bottom: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: calc(100% + 700px);
-  //   margin: auto;
-  //   object-fit: cover;
-  // }
-}
-
-.intro-bg-wrapper {
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: calc(100% + 700px);
-
-  & canvas {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-  }
-}
-
-.intro-bg-canvas {
-  display: block;
-  position: absolute;
-  top: -350px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.intro-bg-clip {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: var(--viewportWidth, 100vw);
-  height: var(--viewportHeight, 100vh);
-  will-change: transform;
-}
-
-.intro-title {
-  position: fixed;
-  top: 50%;
-  right: 158px;
-  transform: translate3d(0, -50%, 0);
-  color: #eae0cc;
-  font-size: vmin(128);
-  font-family: $sixcaps;
-
-  @include sp() {
-    top: calc(50% - 20px);
-    right: 23px;
-    font-size: vmin(170);
-  }
-}
-
-.intro-title-wrapper-01,
-.intro-title-wrapper-sp-01 {
-  text-align: right;
-}
-
-.intro-title-read-area {
-  position: absolute;
-  top: 0;
-  left: 3px;
-  color: $white;
-}
-
-.intro-note {
-  position: absolute;
-  bottom: 34px;
-  right: 158px;
-  left: 40px;
-  color: #eae0cc;
-  font-size: 12px;
-  text-indent: 180px;
-  line-height: 1.2;
-  letter-spacing: 0.02em;
-
-  @include sp() {
-    right: 0;
-    bottom: 40px;
-    left: 0;
-    width: 100%;
-    padding: 0 20px;
-    font-size: 10px;
-  }
-}
-
-.intro-note-text {
-  display: block;
-}
-
-.intro-note-text-01 {
-  margin: 0 0 0 185px;
-}
-</style>

@@ -1,3 +1,158 @@
+<style lang="scss" scoped>
+
+:root {
+  --viewportWidth: 100vw;
+  --viewportHeight: 100vh;
+}
+
+/////////////////////// PC STYLE //////////////////////////
+.hero-bg {
+  position: relative;
+  height: var(--viewportHeight, 100vh);
+
+  @include mixins.sp() {
+    height: var(--viewportHeight, 100vh);
+  }
+}
+
+.hero-inner {
+  padding: 93px vw_sp(20) 0;
+}
+
+.hero-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+
+  & picture,
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+
+    @include mixins.tab-vertical() {
+      object-position: right;
+    }
+
+    @include mixins.sp() {
+      object-position: center;
+    }
+  }
+}
+
+.hero-title {
+  position: absolute;
+  top: calc(50.2% + #{vmin(86)});
+  left: 80px;
+  transform: translate3d(0, -50%, 0);
+  width: vmin(792);
+  font-size: vmin(128);
+  font-family: fonts.$sixcaps;
+  line-height: 1.04;
+}
+
+.hero-title-read {
+  position: relative;
+}
+
+.hero-title-wrapper-block {
+  display: block;
+  margin: 0 0 37px 0;
+}
+
+.hero-title-wrapper-01 {
+  text-align: right;
+}
+
+.hero-title-read-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.hero-title-line {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: vmin(230);
+  margin: 0 0 36px 0;
+}
+
+.hero-desc {
+  font-size: 12px;
+  font-family: $helvetica;
+}
+///////////////////////////////////////////////////////////
+
+/////////////////////// SP STYLE //////////////////////////
+.hero-title-sp {
+  margin: 0 0 23px 0;
+  font-size: vw_sp(120);
+  font-family: fonts.$sixcaps;
+  line-height: 1.1;
+  border-bottom: solid 1px;
+}
+
+.hero-title-wrapper-block-sp {
+  display: block;
+  margin: 0 0 26px 0;
+}
+
+.hero-title-wrapper-sp {
+  display: block;
+  white-space: nowrap;
+
+  &:first-of-type {
+    text-align: right;
+  }
+}
+
+.hero-desc-wrapper-sp {
+  display: block;
+}
+
+.hero-desc-sp {
+  font-size: 10px;
+  font-family: $helvetica;
+  line-height: 1.21;
+}
+
+.hero-textarea-sp {
+  position: absolute;
+  bottom: 39px;
+  left: 21px;
+}
+
+.hero-index-sp {
+  margin: 0 0 32px 1px;
+  font-size: 10px;
+  font-family: $helvetica;
+  line-height: 1.1;
+}
+
+.hero-index-sp-01 {
+  display: block;
+  font-size: 26px;
+  text-indent: -4px;
+}
+
+// .is-android .hero-index-sp-01 {
+//   position: relative;
+//   left: -4px;
+// }
+
+.hero-full-title-sp {
+  font-size: 108px;
+  font-family: fonts.$sixcaps;
+}
+///////////////////////////////////////////////////////////
+</style>
+
 <template>
   <div ref="Hero" class="hero">
     <div ref="HeroBg" class="hero-bg">
@@ -158,157 +313,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-:root {
-  --viewportWidth: 100vw;
-  --viewportHeight: 100vh;
-}
-
-/////////////////////// PC STYLE //////////////////////////
-.hero-bg {
-  position: relative;
-  height: var(--viewportHeight, 100vh);
-
-  @include sp() {
-    height: var(--viewportHeight, 100vh);
-  }
-}
-
-.hero-inner {
-  padding: 93px vw_sp(20) 0;
-}
-
-.hero-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  user-select: none;
-
-  & picture,
-  & img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-
-    @include tab-vertical() {
-      object-position: right;
-    }
-
-    @include sp() {
-      object-position: center;
-    }
-  }
-}
-
-.hero-title {
-  position: absolute;
-  top: calc(50.2% + #{vmin(86)});
-  left: 80px;
-  transform: translate3d(0, -50%, 0);
-  width: vmin(792);
-  font-size: vmin(128);
-  font-family: $sixcaps;
-  line-height: 1.04;
-}
-
-.hero-title-read {
-  position: relative;
-}
-
-.hero-title-wrapper-block {
-  display: block;
-  margin: 0 0 37px 0;
-}
-
-.hero-title-wrapper-01 {
-  text-align: right;
-}
-
-.hero-title-read-area {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.hero-title-line {
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: vmin(230);
-  margin: 0 0 36px 0;
-}
-
-.hero-desc {
-  font-size: 12px;
-  font-family: $helvetica;
-}
-///////////////////////////////////////////////////////////
-
-/////////////////////// SP STYLE //////////////////////////
-.hero-title-sp {
-  margin: 0 0 23px 0;
-  font-size: vw_sp(120);
-  font-family: $sixcaps;
-  line-height: 1.1;
-  border-bottom: solid 1px;
-}
-
-.hero-title-wrapper-block-sp {
-  display: block;
-  margin: 0 0 26px 0;
-}
-
-.hero-title-wrapper-sp {
-  display: block;
-  white-space: nowrap;
-
-  &:first-of-type {
-    text-align: right;
-  }
-}
-
-.hero-desc-wrapper-sp {
-  display: block;
-}
-
-.hero-desc-sp {
-  font-size: 10px;
-  font-family: $helvetica;
-  line-height: 1.21;
-}
-
-.hero-textarea-sp {
-  position: absolute;
-  bottom: 39px;
-  left: 21px;
-}
-
-.hero-index-sp {
-  margin: 0 0 32px 1px;
-  font-size: 10px;
-  font-family: $helvetica;
-  line-height: 1.1;
-}
-
-.hero-index-sp-01 {
-  display: block;
-  font-size: 26px;
-  text-indent: -4px;
-}
-
-// .is-android .hero-index-sp-01 {
-//   position: relative;
-//   left: -4px;
-// }
-
-.hero-full-title-sp {
-  font-size: 108px;
-  font-family: $sixcaps;
-}
-///////////////////////////////////////////////////////////
-</style>

@@ -1,3 +1,70 @@
+<style lang="scss" scoped>
+
+.circle-bg {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 142vmax;
+  height: 142vmax;
+  pointer-events: none;
+
+  @include mixins.tab() {
+    width: 150vmax;
+    height: 150vmax;
+  }
+
+  @include state.sp() {
+    left: 50%;
+    width: 140vmax;
+    height: 140vmax;
+  }
+}
+
+.circle-bg-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: scale(0);
+}
+
+//modifier
+
+.circle-bg-index-contact {
+  top: 0;
+  width: 160vmax;
+  height: 160vmax;
+  transform: translate3d(-50%, 0, 0);
+
+  @include mixins.tab() {
+    width: 180vmax;
+    height: 180vmax;
+  }
+
+  @include state.sp() {
+    left: 50%;
+    width: 195vmax;
+    height: 375vmax;
+  }
+}
+
+.circle-bg-element-index-contact {
+  background-color: colors.$thinPink;
+}
+
+.circle-bg-element-about-intro {
+  background-color: colors.$thinPink;
+}
+
+.circle-bg-element-about-project {
+  background-color: colors.$skinColor;
+}
+</style>
+
 <template>
   <span class="circle-bg" :class="`circle-bg-${modifier}`"
     ><span
@@ -55,69 +122,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="scss">
-.circle-bg {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 45%;
-  transform: translate3d(-50%, -50%, 0);
-  width: 142vmax;
-  height: 142vmax;
-  pointer-events: none;
-
-    @include tab() {
-    width: 150vmax;
-    height: 150vmax;
-  }
-
-  @include sp() {
-    left: 50%;
-    width: 140vmax;
-    height: 140vmax;
-  }
-}
-
-.circle-bg-element {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  transform: scale(0);
-}
-
-//modifier
-
-.circle-bg-index-contact {
-  top: 0;
-  width: 160vmax;
-  height: 160vmax;
-  transform: translate3d(-50%, 0, 0);
-
-  @include tab() {
-    width: 180vmax;
-    height: 180vmax;
-  }
-
-  @include sp() {
-    left: 50%;
-    width: 195vmax;
-    height: 375vmax;
-  }
-}
-
-.circle-bg-element-index-contact {
-  background-color: $thinPink;
-}
-
-.circle-bg-element-about-intro {
-  background-color: $thinPink;
-}
-
-.circle-bg-element-about-project {
-  background-color: $skinColor;
-}
-</style>

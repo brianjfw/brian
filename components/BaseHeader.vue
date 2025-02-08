@@ -1,3 +1,100 @@
+<style lang="scss" scoped>
+
+.header-logo-text {
+  display: inline-block;
+  transition: transform $base-duration $transform-easing;
+}
+
+.header-logo.is-op {
+  user-select: none;
+  pointer-events: none;
+}
+
+.is-op .header-logo-text {
+  transition-delay: 0s !important;
+}
+
+.header-logo-move-text {
+  transition-delay: $base-duration * 0.25;
+}
+
+.header-logo-move-text:nth-of-type(3) {
+  transform: translateX(-10px);
+}
+
+.header-logo-move-text:nth-of-type(5) {
+  transform: translateX(-24px);
+}
+
+.header-logo-move-text:nth-of-type(7) {
+  transform: translateX(-34.5px);
+}
+
+.header-logo-move-text:nth-of-type(9) {
+  transform: translateX(-49.6px);
+}
+
+.header-logo-move-text:nth-of-type(11) {
+  transform: translateX(-60px);
+}
+
+.is-top .header-logo-move-text {
+  transform: translateX(0);
+  transition-delay: 0s;
+}
+
+.header-logo-fade-text {
+  transform: translateY(-100%);
+  transition-delay: 0s;
+}
+
+.is-top .header-logo-fade-text {
+  transform: translateY(0);
+  transition-delay: $base-duration * 0.25;
+}
+
+.header-logo.is-top {
+  transition-delay: 0s;
+}
+
+.header-logo {
+  position: fixed;
+  top: 20px;
+  left: 40px;
+  z-index: 10;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width 0.01s linear;
+  transition-delay: $base-duration * 0.25;
+  cursor: pointer;
+
+  @include mixins.sp() {
+    top: 14px;
+    left: 20px;
+  }
+
+  & .header-link {
+    display: block;
+    color: $black;
+    font-size: 50px;
+    font-family: $sixcaps;
+    letter-spacing: 0.04em;
+
+    @include mixins.hover() {
+      & .header-logo-move-text {
+        transform: translateX(0);
+        transition-delay: 0s;
+      }
+
+      & .header-logo-fade-text {
+        transform: translateY(0);
+        transition-delay: $base-duration * 0.25;
+      }
+    }
+  }
+}
+</style>
+
 <template>
   <div ref="HeaderLogo" class="header-logo is-top is-op">
     <button class="header-link js-click-target" @click="onClickSameUrlReload">
@@ -140,105 +237,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-@use '../assets/scss/constants/animation.scss';
-@use '../assets/scss/constants/break-points.scss';
-@use '../assets/scss/constants/color.scss';
-@use '../assets/scss/constants/font.scss';
-@use '../assets/scss/functions/function';
-
-.header-logo-text {
-  display: inline-block;
-  transition: transform $base-duration $transform-easing;
-}
-
-.header-logo.is-op {
-  user-select: none;
-  pointer-events: none;
-}
-
-.is-op .header-logo-text {
-  transition-delay: 0s !important;
-}
-
-.header-logo-move-text {
-  transition-delay: $base-duration * 0.25;
-}
-
-.header-logo-move-text:nth-of-type(3) {
-  transform: translateX(-10px);
-}
-
-.header-logo-move-text:nth-of-type(5) {
-  transform: translateX(-24px);
-}
-
-.header-logo-move-text:nth-of-type(7) {
-  transform: translateX(-34.5px);
-}
-
-.header-logo-move-text:nth-of-type(9) {
-  transform: translateX(-49.6px);
-}
-
-.header-logo-move-text:nth-of-type(11) {
-  transform: translateX(-60px);
-}
-
-.is-top .header-logo-move-text {
-  transform: translateX(0);
-  transition-delay: 0s;
-}
-
-.header-logo-fade-text {
-  transform: translateY(-100%);
-  transition-delay: 0s;
-}
-
-.is-top .header-logo-fade-text {
-  transform: translateY(0);
-  transition-delay: $base-duration * 0.25;
-}
-
-.header-logo.is-top {
-  transition-delay: 0s;
-}
-
-.header-logo {
-  position: fixed;
-  top: 20px;
-  left: 40px;
-  z-index: 10;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: width 0.01s linear;
-  transition-delay: $base-duration * 0.25;
-  cursor: pointer;
-
-  @include sp() {
-    top: 14px;
-    left: 20px;
-  }
-
-  & .header-link {
-    display: block;
-    color: $black;
-    font-size: 50px;
-    font-family: $sixcaps;
-    letter-spacing: 0.04em;
-
-    @include hover() {
-      & .header-logo-move-text {
-        transform: translateX(0);
-        transition-delay: 0s;
-      }
-
-      & .header-logo-fade-text {
-        transform: translateY(0);
-        transition-delay: $base-duration * 0.25;
-      }
-    }
-  }
-}
-</style>

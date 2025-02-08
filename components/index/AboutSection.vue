@@ -1,3 +1,125 @@
+<style lang="scss" scoped>
+
+.about-bg {
+  position: relative;
+
+  @include state.sp() {
+    overflow: hidden;
+  }
+}
+
+.about-inner {
+  padding: 333px 0 568px 0;
+
+  @include mixins.tab-vertical() {
+    padding: 213px 0 448px 0;
+  }
+
+  @include state.sp() {
+    padding: 118px 0 340px;
+  }
+}
+
+.about-title {
+  position: relative;
+  width: vw(1090);
+  margin: 0 0 85px 0;
+  padding: 0 56px 0 40px;
+  color: colors.$darkBlue;
+  font-size: vw(80);
+  font-family: fonts.$sixcaps;
+  text-transform: uppercase;
+  line-height: 0.964;
+
+  @include mixins.tab {
+    width: vw(1070);
+    padding: 0 vw(56) 0 vw(40);
+    font-size: vw(76);
+    line-height: 1;
+  }
+
+  @include mixins.tab-vertical() {
+    width: vw(998);
+    font-size: vw(70);
+  }
+
+  @include state.sp() {
+    width: auto;
+    margin: 0 0 54px 0;
+    padding: 0 vw_sp(20);
+    font-size: vw_sp(120);
+    white-space: nowrap;
+  }
+}
+
+.about-title-read-area {
+  position: absolute;
+  top: -4px;
+  left: 42px;
+  color: colors.$white;
+
+  @include mixins.tab-vertical() {
+    left: vw(46);
+  }
+
+  @include state.sp() {
+    left: 9px;
+  }
+}
+
+.about-title-wrapper {
+  display: block;
+}
+
+.about-title-wrapper-01 {
+  // padding: 0 0 0 vw(156);
+  text-align: right;
+}
+
+.about-title-wrapper-04 {
+  padding: 0 vw(150) 0 0;
+}
+
+.about-title-wrapper-01-sp {
+  display: block;
+  text-align: right;
+}
+
+.about-read-text {
+  width: vw(1090);
+  color: colors.$darkBlue;
+  padding: 0 56px 0 40px;
+  font-size: 12px;
+  text-align: right;
+  letter-spacing: 0.02em;
+
+  @include mixins.tab {
+    padding: 0 vw(75) 0 vw(40);
+  }
+
+  @include mixins.tab-vertical() {
+    padding: 0 vw(160) 0 40px;
+  }
+
+  @include state.sp() {
+    width: calc(270px + #{vw_sp(20)});
+    margin: 0 0 0 auto;
+    padding: 0 vw_sp(20);
+    font-size: 10px;
+    line-height: 1.3;
+  }
+}
+
+.about-text-underline {
+  position: absolute;
+  bottom: -34px;
+  right: vw_sp(20);
+  background-color: colors.$darkBlue;
+  width: calc(100% - #{vw_sp(40)});
+  height: 1px;
+}
+</style>
+
 <template>
   <div class="about">
     <div class="about-bg">
@@ -95,124 +217,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="scss">
-.about-bg {
-  position: relative;
-
-  @include sp() {
-    overflow: hidden;
-  }
-}
-
-.about-inner {
-  padding: 333px 0 568px 0;
-
-  @include tab-vertical() {
-    padding: 213px 0 448px 0;
-  }
-
-  @include sp() {
-    padding: 118px 0 340px;
-  }
-}
-
-.about-title {
-  position: relative;
-  width: vw(1090);
-  margin: 0 0 85px 0;
-  padding: 0 56px 0 40px;
-  color: $darkBlue;
-  font-size: vw(80);
-  font-family: $sixcaps;
-  text-transform: uppercase;
-  line-height: 0.964;
-
-  @include tab {
-    width: vw(1070);
-    padding: 0 vw(56) 0 vw(40);
-    font-size: vw(76);
-    line-height: 1;
-  }
-
-  @include tab-vertical() {
-    width: vw(998);
-    font-size: vw(70);
-  }
-
-  @include sp() {
-    width: auto;
-    margin: 0 0 54px 0;
-    padding: 0 vw_sp(20);
-    font-size: vw_sp(120);
-    white-space: nowrap;
-  }
-}
-
-.about-title-read-area {
-  position: absolute;
-  top: -4px;
-  left: 42px;
-  color: $white;
-
-  @include tab-vertical() {
-    left: vw(46);
-  }
-
-  @include sp() {
-    left: 9px;
-  }
-}
-
-.about-title-wrapper {
-  display: block;
-}
-
-.about-title-wrapper-01 {
-  // padding: 0 0 0 vw(156);
-  text-align: right;
-}
-
-.about-title-wrapper-04 {
-  padding: 0 vw(150) 0 0;
-}
-
-.about-title-wrapper-01-sp {
-  display: block;
-  text-align: right;
-}
-
-.about-read-text {
-  width: vw(1090);
-  color: $darkBlue;
-  padding: 0 56px 0 40px;
-  font-size: 12px;
-  text-align: right;
-  letter-spacing: 0.02em;
-
-  @include tab {
-    padding: 0 vw(75) 0 vw(40);
-  }
-
-  @include tab-vertical() {
-    padding: 0 vw(160) 0 40px;
-  }
-
-  @include sp() {
-    width: calc(270px + #{vw_sp(20)});
-    margin: 0 0 0 auto;
-    padding: 0 vw_sp(20);
-    font-size: 10px;
-    line-height: 1.3;
-  }
-}
-
-.about-text-underline {
-  position: absolute;
-  bottom: -34px;
-  right: vw_sp(20);
-  background-color: $darkBlue;
-  width: calc(100% - #{vw_sp(40)});
-  height: 1px;
-}
-</style>

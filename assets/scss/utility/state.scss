@@ -1,7 +1,21 @@
+@use '../constants/break-points.scss' as break-points;
+
+// Forward rules must come first
+@forward '../functions/mixins'; // Forward the mixins
+// @forward './state'; // Forward the sp mixin
+
+$sp-breakpoint: break-points.$sp;
+
+@mixin sp() {
+  @media (max-width: #{$sp-breakpoint}) {
+    @content;
+  }
+}
+
 .pc-only{
   display: block;
 
-  @include sp(){
+  @media (max-width: #{$sp-breakpoint}){
     display: none;
   }
 }
@@ -9,7 +23,9 @@
 .sp-only{
   display: none;
 
-  @include sp(){
+  @media (max-width: #{$sp-breakpoint}){
     display: block;
   }
 }
+
+// You can add other state-related styles or variables here as needed

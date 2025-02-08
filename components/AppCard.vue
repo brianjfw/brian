@@ -1,3 +1,34 @@
+<style lang="scss" scoped>
+
+.app-card {
+  position: relative;
+}
+
+.app-card-wrapper {
+  width: 293px;
+  height: 400px;
+
+  @include state.sp() {
+    width: 212px;
+    height: 302px;
+  }
+}
+
+.app-card-wrapper-works {
+  width: 147px;
+  height: 220px;
+}
+
+.app-card-observer {
+  position: absolute;
+  top: -14px;
+  left: 0;
+  width: 293px;
+  height: 400px;
+  pointer-events: none;
+}
+</style>
+
 <template>
   <div ref="root" class="app-card">
     <div
@@ -72,7 +103,7 @@ export default {
     },
     name: {
       type: [Array, String],
-      default: null,
+      default: () => [],
     },
     title: {
       type: [Object, String],
@@ -163,6 +194,43 @@ export default {
   },
 
   beforeDestroy() {
+    if (this.iObserverTextSegment && this.$refs.cardRead && Array.isArray(this.$refs.cardRead) && this.$refs.cardRead.length > 0) {
+      try {
+        this.iObserverTextSegment.unobserve(this.$refs.cardRead[0])
+      } catch (error) {
+        console.warn('Error unobserving cardRead:', error)
+      }
+    }
+    if (this.iObserverLoopText && this.observe) {
+      try {
+        this.iObserverLoopText.unobserve(this.observe)
+      } catch (error) {
+        console.warn('Error unobserving observe:', error)
+      }
+    }
+
+    // Add these checks
+    if (this.iObserverFadeIn && this.observer) {
+      try {
+        this.iObserverFadeIn.unobserve(this.observer)
+      } catch (error) {
+        console.warn('Error unobserving observer:', error)
+      }
+    }
+
+    if (this.iObserverParallax && this.observer) {
+      try {
+        this.iObserverParallax.unobserve(this.observer)
+      } catch (error) {
+        console.warn('Error unobserving observer:', error)
+      }
+    }
+
+    this.iObserverTextSegment = null
+    this.iObserverLoopText = null
+    this.iObserverFadeIn = null
+    this.iObserverParallax = null
+
     // SPの時は任意(spAnimation = false)で処理を返す
     // デフォルトではSPもアニメーションする
     if (!this.spAnimation && this.$SITECONFIG.isMobile) return
@@ -275,33 +343,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.app-card {
-  position: relative;
-}
-
-.app-card-wrapper {
-  width: 293px;
-  height: 400px;
-
-  @include sp() {
-    width: 212px;
-    height: 302px;
-  }
-}
-
-.app-card-wrapper-works {
-  width: 147px;
-  height: 220px;
-}
-
-.app-card-observer {
-  position: absolute;
-  top: -14px;
-  left: 0;
-  width: 293px;
-  height: 400px;
-  pointer-events: none;
-}
-</style>

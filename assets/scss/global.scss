@@ -1,20 +1,13 @@
-//constants
-@import './constants/animation.scss';
-@import './constants/break-points.scss';
-@import './constants/color.scss';
-@import './constants/font.scss';
+@use './style.scss' as *;
+@use './constants/color.scss' as colors;
+@use './constants/font.scss' as fonts;
 
-//functions
-@import './functions/function';
-@import './functions/mixins';
+@use './functions/function';
+@use './functions/mixins' as mixins;
 
-// reset
-@import './reset/sanitize';
-@import './reset/reset';
-@import './reset/sanitize-extra';
+@use './reset/sanitize';
+@use './reset/reset';
+@use './reset/sanitize-extra';
 
-//utility
-@import './utility/state';
-
-//global
-@import './global/base';
+@use './global/base';
+@use './utility/state' as state;

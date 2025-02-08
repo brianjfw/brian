@@ -1,3 +1,222 @@
+<style lang="scss" scoped>
+
+:root {
+  --viewportWidth: 100vw;
+  --viewportHeight: 100vh;
+  --viewportSpHeight: 100vh;
+}
+
+.project {
+  position: relative;
+  height: 3500px;
+  z-index: 1;
+}
+
+.project-wrapper {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--viewportHeight, 100vh) !important;
+  background-color: colors.$darkBlack;
+
+  @include mixins.sp() {
+    height: var(--viewportSpHeight, 100vh) !important;
+  }
+}
+
+.project-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+
+  & canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.project-inner {
+  position: relative;
+  width: 100%;
+  padding: 0 160px 0 40px;
+  z-index: 1;
+
+  @include mixins.sp() {
+    padding: 0 vw_sp(20);
+  }
+}
+
+.project-contents {
+  margin: -90px 0 0 0;
+
+  @include mixins.sp() {
+    margin: 0;
+  }
+}
+
+.project-title-read-area {
+  margin: 0 0 32px 0;
+
+  @include mixins.sp() {
+    margin: 0 0 35px 0;
+  }
+}
+
+.project-title-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: vw(200);
+  margin: 0 40px 0 0;
+
+  @include mixins.sp() {
+    height: vw_sp(200);
+  }
+}
+
+.project-list {
+  position: absolute;
+  top: auto;
+  left: auto;
+  overflow: hidden;
+  z-index: 1;
+
+  &.is-text-animation-end {
+    overflow: visible;
+  }
+}
+
+.project-item-wrapper-translate {
+  display: flex;
+}
+
+.project-item-circle {
+  position: absolute;
+  top: 50%;
+  right: vw(-60);
+  transform: translate3d(0, -50%, 0);
+  width: vw(20);
+  height: vw(20);
+  border-radius: 50%;
+  background-color: $black;
+  pointer-events: none;
+  transition: transform $half-base-duration $transform-easing;
+  z-index: 1;
+
+  @include mixins.sp() {
+    right: vw_sp(-72);
+    width: vw_sp(20);
+    height: vw_sp(20);
+  }
+}
+
+.project-item-wraper {
+  display: block;
+  position: relative;
+}
+
+.project-item-img-wrapper {
+  position: absolute;
+  top: vw(-30);
+  width: vw(300);
+  height: vw(220);
+  transform: scale(0);
+  pointer-events: none;
+  transition: transform $half-base-duration $transform-easing;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  z-index: 10;
+}
+
+.project-item-img {
+  display: block;
+  transform: rotateX(180deg);
+  transition: transform $half-base-duration $transform-easing;
+  transform-style: preserve-3d;
+
+  & img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+}
+
+.project-item-img-wrapper-01 {
+  left: vw(-320);
+}
+
+.is-current-hover .project-item-img-wrapper-01 {
+  transform: scale(1) rotate(-8deg);
+}
+
+.project-item-img-wrapper-02 {
+  right: vw(-320);
+}
+
+.is-current-hover .project-item-img-wrapper-02 {
+  transform: scale(1) rotate(8deg);
+}
+
+.is-current-hover .project-item-img {
+  transform: rotateX(0deg);
+}
+
+.project-item {
+  position: relative;
+  flex-shrink: 0;
+  color: $black;
+  font-size: vw(140);
+  font-family: $sixcaps;
+  white-space: nowrap;
+  perspective: 1000px;
+  transition: opacity $half-base-duration $colorAndOpacity-easing;
+
+  &.is-hover {
+    opacity: 0.5;
+  }
+
+  &.is-overlay {
+    z-index: 10;
+  }
+
+  @include mixins.sp() {
+    font-size: vw_sp(160);
+  }
+
+  &:not(:last-of-type) {
+    margin: 0 vw(100) 0 0;
+
+    @include mixins.sp() {
+      margin: 0 vw_sp(130) 0 0;
+    }
+  }
+
+  &:last-of-type {
+    & .project-item-circle {
+      display: none;
+    }
+  }
+}
+
+.project-card-item-inner {
+  background-color: colors.$darkBlack;
+}
+</style>
+
+
 <template>
   <div ref="Project" class="project">
     <div ref="ProjectWrapper" class="project-wrapper">
@@ -312,216 +531,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-:root {
-  --viewportWidth: 100vw;
-  --viewportHeight: 100vh;
-  --viewportSpHeight: 100vh;
-}
-
-.project {
-  position: relative;
-  height: 3500px;
-  z-index: 1;
-}
-
-.project-wrapper {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: var(--viewportHeight, 100vh) !important;
-  background-color: $darkBlack;
-
-  @include sp() {
-    height: var(--viewportSpHeight, 100vh) !important;
-  }
-}
-
-.project-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-
-  & canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.project-inner {
-  position: relative;
-  width: 100%;
-  padding: 0 160px 0 40px;
-  z-index: 1;
-
-  @include sp() {
-    padding: 0 vw_sp(20);
-  }
-}
-
-.project-contents {
-  margin: -90px 0 0 0;
-
-  @include sp() {
-    margin: 0;
-  }
-}
-
-.project-title-read-area {
-  margin: 0 0 32px 0;
-
-  @include sp() {
-    margin: 0 0 35px 0;
-  }
-}
-
-.project-title-wrapper {
-  display: flex;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  height: vw(200);
-  margin: 0 40px 0 0;
-
-  @include sp() {
-    height: vw_sp(200);
-  }
-}
-
-.project-list {
-  position: absolute;
-  top: auto;
-  left: auto;
-  overflow: hidden;
-  z-index: 1;
-
-  &.is-text-animation-end {
-    overflow: visible;
-  }
-}
-
-.project-item-wrapper-translate {
-  display: flex;
-}
-
-.project-item-circle {
-  position: absolute;
-  top: 50%;
-  right: vw(-60);
-  transform: translate3d(0, -50%, 0);
-  width: vw(20);
-  height: vw(20);
-  border-radius: 50%;
-  background-color: $black;
-  pointer-events: none;
-  transition: transform $half-base-duration $transform-easing;
-  z-index: 1;
-
-  @include sp() {
-    right: vw_sp(-72);
-    width: vw_sp(20);
-    height: vw_sp(20);
-  }
-}
-
-.project-item-wraper {
-  display: block;
-  position: relative;
-}
-
-.project-item-img-wrapper {
-  position: absolute;
-  top: vw(-30);
-  width: vw(300);
-  height: vw(220);
-  transform: scale(0);
-  pointer-events: none;
-  transition: transform $half-base-duration $transform-easing;
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
-  z-index: 10;
-}
-
-.project-item-img {
-  display: block;
-  transform: rotateX(180deg);
-  transition: transform $half-base-duration $transform-easing;
-  transform-style: preserve-3d;
-
-  & img {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-}
-
-.project-item-img-wrapper-01 {
-  left: vw(-320);
-}
-
-.is-current-hover .project-item-img-wrapper-01 {
-  transform: scale(1) rotate(-8deg);
-}
-
-.project-item-img-wrapper-02 {
-  right: vw(-320);
-}
-
-.is-current-hover .project-item-img-wrapper-02 {
-  transform: scale(1) rotate(8deg);
-}
-
-.is-current-hover .project-item-img {
-  transform: rotateX(0deg);
-}
-
-.project-item {
-  position: relative;
-  flex-shrink: 0;
-  color: $black;
-  font-size: vw(140);
-  font-family: $sixcaps;
-  white-space: nowrap;
-  perspective: 1000px;
-  transition: opacity $half-base-duration $colorAndOpacity-easing;
-
-  &.is-hover {
-    opacity: 0.5;
-  }
-
-  &.is-overlay {
-    z-index: 10;
-  }
-
-  @include sp() {
-    font-size: vw_sp(160);
-  }
-
-  &:not(:last-of-type) {
-    margin: 0 vw(100) 0 0;
-
-    @include sp() {
-      margin: 0 vw_sp(130) 0 0;
-    }
-  }
-
-  &:last-of-type {
-    & .project-item-circle {
-      display: none;
-    }
-  }
-}
-</style>

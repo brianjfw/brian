@@ -1,3 +1,10 @@
+<style lang="scss" scoped>
+
+.about {
+  overflow: hidden;
+}
+</style>
+
 <template>
   <div class="about">
     <AboutMainVisualSection />
@@ -103,9 +110,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.about {
-  overflow: hidden;
-}
-</style>

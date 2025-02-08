@@ -1,3 +1,182 @@
+<style lang="scss" scoped>
+.app-bounce-line {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  pointer-events: auto;
+
+  @include state.sp() {
+    display: none;
+  }
+}
+
+.app-bounce-line svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.app-bounce-line path {
+  stroke: colors.$black;
+  stroke-width: 2;
+}
+
+.app-bounce-line--index-hero {
+  top: vw(-106);
+  left: 0;
+  stroke: colors.$black;
+
+  @include state.sp() {
+    top: vw_sp(-122);
+  }
+}
+
+.app-bounce-line--index-about {
+  top: vw(190);
+  left: 40px;
+  width: calc(100% - 56px - 40px);
+  stroke: colors.$darkBlue;
+
+  @include mixins.tab {
+    top: vw(220);
+    left: vw(40);
+    width: calc(100% - #{vw(56)} - 40px);
+  }
+}
+
+.app-bounce-line--index-project-01 {
+  top: auto;
+  bottom: vw(90);
+  left: 40px;
+  width: calc(100% - 200px);
+  stroke: colors.$black;
+
+  @include state.sp() {
+    bottom: vw_sp(90);
+    left: 20px;
+    width: calc(100% - 40px);
+  }
+}
+
+.app-bounce-line--index-project-02 {
+  top: auto;
+  bottom: vw(-90);
+  left: 40px;
+  width: calc(100% - 200px);
+  stroke: colors.$black;
+
+  @include state.sp() {
+    bottom: vw_sp(-98);
+    left: 20px;
+    width: calc(100% - 40px);
+  }
+}
+
+.app-bounce-line--about-hero {
+  top: vw(-106);
+  left: 0;
+  stroke: colors.$black;
+
+  @include state.sp() {
+    top: vw_sp(-122);
+  }
+}
+
+.app-bounce-line--about-award {
+  top: vw(-100);
+  left: 0;
+  width: 100%;
+  height: vw(200);
+  stroke: colors.$gray;
+  transform: scaleX(1);
+}
+
+.app-bounce-line--about-award-last {
+  top: vw(-100);
+  left: 0;
+  width: 100%;
+  height: vw(200);
+  stroke: colors.$gray;
+  transform: scaleX(1);
+}
+
+.app-bounce-line--about-project-01 {
+  top: vw(-98);
+  left: 0;
+  width: calc(100% + 4px);
+  stroke: colors.$black;
+
+  @include state.sp() {
+    top: vw_sp(-98);
+    left: 0;
+    width: 100%;
+  }
+}
+
+.app-bounce-line--about-project-02 {
+  top: auto;
+  bottom: vw(-98);
+  left: 0;
+  width: calc(100% + 4px);
+  stroke: colors.$black;
+
+  @include state.sp() {
+    bottom: vw_sp(-98);
+    left: 0;
+    width: 100%;
+  }
+}
+
+.app-bounce-line--works {
+  top: auto;
+  bottom: vmin(148);
+  background-color: inherit;
+}
+
+.app-bounce-line--works-next-01 {
+  top: vw(-96);
+  left: 0;
+  width: calc(100%);
+
+  @include state.sp() {
+    top: vw_sp(-96);
+    left: 0;
+    width: 100%;
+  }
+}
+
+.app-bounce-line--works-next-02 {
+  top: auto;
+  bottom: vw(-96);
+  left: 0;
+  width: calc(100%);
+
+  @include state.sp() {
+    bottom: vw_sp(-96);
+    left: 0;
+    width: 100%;
+  }
+}
+
+.app-bounce-line--works-info {
+  top: vw(-110);
+  left: 0;
+  width: calc(100%);
+  height: vw(200);
+  transform: scaleX(1);
+
+  @include state.sp() {
+    left: 0;
+    width: 100%;
+  }
+}
+</style>
+
+
 <template>
   <svg
     ref="svg"
@@ -141,172 +320,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.app-bounce-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: scaleX(0);
-  z-index: 1;
-
-  & path {
-    fill: none;
-    pointer-events: none;
-  }
-}
-
-//modifier
-
-.app-bounce-line--index-hero {
-  position: absolute;
-  top: vw(-100);
-  left: 0;
-  stroke: $white;
-
-  @include sp() {
-    top: vw_sp(-124);
-  }
-}
-
-.app-bounce-line--index-about {
-  top: vw(190);
-  left: 40px;
-  width: calc(100% - 56px - 40px);
-  stroke: $darkBlue;
-
-  @include tab {
-    top: vw(220);
-    left: vw(40);
-    width: calc(100% - #{vw(56)} - 40px);
-  }
-}
-
-.app-bounce-line--index-project-01 {
-  top: auto;
-  bottom: vw(90);
-  left: 40px;
-  width: calc(100% - 200px);
-  stroke: $black;
-
-  @include sp() {
-    bottom: vw_sp(90);
-    left: 20px;
-    width: calc(100% - 40px);
-  }
-}
-
-.app-bounce-line--index-project-02 {
-  top: auto;
-  bottom: vw(-90);
-  left: 40px;
-  width: calc(100% - 200px);
-  stroke: $black;
-
-  @include sp() {
-    bottom: vw_sp(-98);
-    left: 20px;
-    width: calc(100% - 40px);
-  }
-}
-
-.app-bounce-line--about-hero {
-  top: vw(-106);
-  left: 0;
-  stroke: $black;
-
-  @include sp() {
-    top: vw_sp(-122);
-  }
-}
-
-.app-bounce-line--about-award {
-  top: vw(-100);
-  left: 0;
-  width: 100%;
-  height: vw(200);
-  stroke: $gray;
-  transform: scaleX(1);
-}
-
-.app-bounce-line--about-award-last {
-  top: vw(-100);
-  left: 0;
-  width: 100%;
-  height: vw(200);
-  stroke: $gray;
-  transform: scaleX(1);
-}
-
-.app-bounce-line--about-project-01 {
-  top: vw(-98);
-  left: 0;
-  width: calc(100% + 4px);
-  stroke: $black;
-
-  @include sp() {
-    top: vw_sp(-98);
-    left: 0;
-    width: 100%;
-  }
-}
-
-.app-bounce-line--about-project-02 {
-  top: auto;
-  bottom: vw(-98);
-  left: 0;
-  width: calc(100% + 4px);
-  stroke: $black;
-
-  @include sp() {
-    bottom: vw_sp(-98);
-    left: 0;
-    width: 100%;
-  }
-}
-
-.app-bounce-line--works {
-  top: auto;
-  bottom: vmin(148);
-  background-color: inherit;
-}
-
-.app-bounce-line--works-next-01 {
-  top: vw(-96);
-  left: 0;
-  width: calc(100%);
-
-  @include sp() {
-    top: vw_sp(-96);
-    left: 0;
-    width: 100%;
-  }
-}
-
-.app-bounce-line--works-next-02 {
-  top: auto;
-  bottom: vw(-96);
-  left: 0;
-  width: calc(100%);
-
-  @include sp() {
-    bottom: vw_sp(-96);
-    left: 0;
-    width: 100%;
-  }
-}
-
-.app-bounce-line--works-info {
-  top: vw(-110);
-  left: 0;
-  width: calc(100%);
-  height: vw(200);
-  transform: scaleX(1);
-
-  @include sp() {
-    left: 0;
-    width: 100%;
-  }
-}
-</style>

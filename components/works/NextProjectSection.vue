@@ -1,3 +1,129 @@
+<style lang="scss" scoped>
+
+.next-inner {
+  width: 100%;
+  padding: 0 160px 0 40px;
+
+  @include mixins.sp() {
+    padding: 0 vw_sp(20);
+  }
+}
+
+.next-contents {
+  position: relative;
+  margin: 160px 0 0 0;
+  padding: 212px 0 290px;
+
+  @include mixins.sp() {
+    margin: 0;
+  }
+}
+
+.next-title-read-area {
+  margin: 0 0 34px 0;
+
+  @include mixins.sp() {
+    margin: 0 0 36px 0;
+  }
+}
+
+.next-loop-title-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: vw(200);
+  font-size: vw(140);
+  font-family: fonts.$sixcaps;
+
+  @include mixins.sp() {
+    height: vw_sp(202);
+    font-size: vw_sp(160);
+  }
+}
+
+.next-loop-title-btn {
+  width: 100%;
+}
+
+.next-loop-title {
+  position: absolute;
+  top: auto;
+  left: -80px;
+  font-family: fonts.$sixcaps;
+}
+
+.next-loop-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 0;
+  height: 0;
+  z-index: 10;
+
+  @include mixins.sp() {
+    top: 55%;
+    left: calc(50% - #{vw_sp(100)});
+  }
+}
+
+.next-loop-card-mtrust {
+  @include mixins.sp() {
+    top: 59%;
+    left: calc(50% - #{vw_sp(350)});
+  }
+}
+
+.next-loop-card-ketakuma {
+  @include mixins.sp() {
+    top: 57%;
+    left: calc(50% - #{vw_sp(130)});
+  }
+}
+
+.next-loop-card-redandgreen {
+  @include mixins.sp() {
+    top: 61%;
+    left: calc(50% - #{vw_sp(370)});
+  }
+}
+
+.next-loop-card-asovision {
+  @include mixins.sp() {
+    left: calc(50% - #{vw_sp(80)});
+  }
+}
+
+.next-loop-card-basta {
+  @include mixins.sp() {
+    top: 58%;
+    left: calc(50% - #{vw_sp(250)});
+  }
+}
+
+.next-loop-card-frontier {
+  @include mixins.sp() {
+    top: 61%;
+    left: calc(50% - #{vw_sp(400)});
+  }
+}
+
+.next-loop-card-yakudoh {
+  @include mixins.sp() {
+    top: 61%;
+    left: calc(50% - #{vw_sp(-40)});
+  }
+}
+
+.next-backbtn {
+  padding: 0 0 20px 0;
+  font-size: 14px;
+  text-align: center;
+  font-family: $helvetica;
+}
+</style>
+
 <template>
   <div ref="Next" class="next">
     <div class="next-inner">
@@ -99,127 +225,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.next-inner {
-  width: 100%;
-  padding: 0 160px 0 40px;
-
-  @include sp() {
-    padding: 0 vw_sp(20);
-  }
-}
-
-.next-contents {
-  position: relative;
-  margin: 160px 0 0 0;
-  padding: 212px 0 290px;
-
-  @include sp() {
-    margin: 0;
-  }
-}
-
-.next-title-read-area {
-  margin: 0 0 34px 0;
-
-  @include sp() {
-    margin: 0 0 36px 0;
-  }
-}
-
-.next-loop-title-wrapper {
-  display: flex;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  height: vw(200);
-  font-size: vw(140);
-  font-family: $sixcaps;
-
-  @include sp() {
-    height: vw_sp(202);
-    font-size: vw_sp(160);
-  }
-}
-
-.next-loop-title-btn {
-  width: 100%;
-}
-
-.next-loop-title {
-  position: absolute;
-  top: auto;
-  left: -80px;
-}
-
-.next-loop-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate3d(-50%, -50%, 0);
-  width: 0;
-  height: 0;
-  z-index: 10;
-
-  @include sp() {
-    top: 55%;
-    left: calc(50% - #{vw_sp(100)});
-  }
-}
-
-.next-loop-card-mtrust {
-  @include sp() {
-    top: 59%;
-    left: calc(50% - #{vw_sp(350)});
-  }
-}
-
-.next-loop-card-ketakuma {
-  @include sp() {
-    top: 57%;
-    left: calc(50% - #{vw_sp(130)});
-  }
-}
-
-.next-loop-card-redandgreen {
-  @include sp() {
-    top: 61%;
-    left: calc(50% - #{vw_sp(370)});
-  }
-}
-
-.next-loop-card-asovision {
-  @include sp() {
-    left: calc(50% - #{vw_sp(80)});
-  }
-}
-
-.next-loop-card-basta {
-  @include sp() {
-    top: 58%;
-    left: calc(50% - #{vw_sp(250)});
-  }
-}
-
-.next-loop-card-frontier {
-  @include sp() {
-    top: 61%;
-    left: calc(50% - #{vw_sp(400)});
-  }
-}
-
-.next-loop-card-yakudoh {
-  @include sp() {
-    top: 61%;
-    left: calc(50% - #{vw_sp(-40)});
-  }
-}
-
-.next-backbtn {
-  padding: 0 0 20px 0;
-  font-size: 14px;
-  text-align: center;
-  font-family: $helvetica;
-}
-</style>

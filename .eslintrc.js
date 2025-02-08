@@ -9,7 +9,7 @@ module.exports = {
     requireConfigFile: false
   },
   extends: [
-    '@nuxtjs/eslint-config-typescript',
+    '@nuxtjs/eslint-config',
     'prettier',
     'plugin:prettier/recommended',
     'plugin:nuxt/recommended'

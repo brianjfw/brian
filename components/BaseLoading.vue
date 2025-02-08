@@ -1,3 +1,71 @@
+<style lang="scss" scoped>
+.loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 20px;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.loading-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -18px;
+  right: -38px;
+  width: 94px;
+  height: 16px;
+  padding: 1px 0 0 0;
+  background-color: colors.$white;
+  color: #302c1a;
+  font-size: 12px;
+  border-radius: 8px;
+  transform: scale(0);
+}
+
+.loading-wrapper {
+  position: relative;
+  overflow: hidden;
+  transform: rotate(8deg);
+}
+
+.loading-block {
+  display: inline-block;
+  transform: translateY(10px);
+}
+
+.is-loading .loading-dot {
+  animation: loadingFade $base-duration $colorAndOpacity-easing infinite;
+}
+
+.loading-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes loadingFade {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+</style>
+
 <template>
   <div ref="root" class="loading">
     <span ref="inner" class="loading-inner">
@@ -74,71 +142,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="scss">
-.loading {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate3d(-50%, -50%, 0);
-  width: 20px;
-  z-index: 100;
-  pointer-events: none;
-}
-
-.loading-inner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: -18px;
-  right: -38px;
-  width: 94px;
-  height: 16px;
-  padding: 1px 0 0 0;
-  background-color: $white;
-  color: #302c1a;
-  font-size: 12px;
-  border-radius: 8px;
-  transform: scale(0);
-}
-
-.loading-wrapper {
-  position: relative;
-  overflow: hidden;
-  transform: rotate(8deg);
-}
-
-.loading-block {
-  display: inline-block;
-  transform: translateY(10px);
-}
-
-.is-loading .loading-dot {
-  animation: loadingFade $base-duration $colorAndOpacity-easing infinite;
-}
-
-.loading-dot:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.loading-dot:nth-child(2) {
-  animation-delay: 0.1s;
-}
-
-.loading-dot:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-@keyframes loadingFade {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-</style>

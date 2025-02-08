@@ -1,3 +1,328 @@
+<style lang="scss" scoped>
+
+:root {
+  --viewportWidth: 100vw;
+  --viewportHeight: 100vh;
+}
+
+.hambergerMenu {
+  position: fixed;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  width: 110px;
+  height: calc(100% - 20px);
+  margin: auto 0;
+  transform: translateX(120px);
+  z-index: 11;
+
+  @include state.sp() {
+    top: 10px;
+    right: 20px;
+    bottom: auto;
+    width: 60px;
+    height: 60px;
+  }
+
+  &.is-disable {
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.hambergerMenu-overlay-01 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #dfded9;
+  border-radius: 10px;
+  pointer-events: none;
+  transform-origin: right;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 2px 35px 16px 5px rgb(24 23 13 / 20%);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity $base-duration $colorAndOpacity-easing;
+  }
+
+  @include state.sp() {
+    top: 22px;
+    left: calc(-100vw + 60px + 20px);
+    width: 100vw;
+    height: calc(var(--viewportHeight, 100vh) - 32px);
+    border-radius: 10px;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+}
+
+.hambergerMenu.is-open .hambergerMenu-overlay-01 {
+  &::before {
+    opacity: 1;
+  }
+}
+
+.hambergerMenu-overlay-02 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 510px;
+  height: 100%;
+  background-color: #bcbbb4;
+  border-radius: 10px;
+  pointer-events: none;
+  transform-origin: right;
+  transform: scaleX(0);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 35px 60px 50px 20px rgb(24 23 13 / 50%);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @include state.sp() {
+    top: 42px;
+    right: -10px;
+    width: calc(100vw - 20px);
+    height: calc(var(--viewportHeight) - 52px - 20px);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+}
+
+.hambergerMenu-contents {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 510px;
+  height: 100%;
+  padding: 50px 26px 50px 16px;
+  overflow-y: scroll;
+  opacity: 0;
+  pointer-events: none;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #89877c;
+    border-radius: 10px;
+  }
+
+  @include state.sp() {
+    right: 0;
+    width: 100%;
+    padding: 38px 8px;
+  }
+}
+
+.hambergerMenu-title {
+  position: relative;
+  margin: 0 0 36px 0;
+  color: #302c1a;
+  font-size: 120px;
+  font-family: fonts.$sixcaps;
+  letter-spacing: -0.002em;
+  z-index: 2;
+
+  @include state.sp() {
+    margin: 0 0 46px 0;
+    font-size: vw_sp(216);
+  }
+}
+
+.hambergerMenu-section-title {
+  position: relative;
+  margin: 0 0 36px 0;
+  z-index: 2;
+
+  @include state.sp() {
+    margin: 0 0 34px 0;
+  }
+}
+
+.hambergerMenu-title-wrapper-01 {
+  display: block;
+  cursor: pointer;
+}
+
+.hambergerMenu-title-wrapper-02 {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.hambergerMenu-item {
+  position: relative;
+  overflow: hidden;
+
+  &:not(:last-of-type) {
+    margin: 0 0 20px 0;
+
+    @include state.sp() {
+      margin: 0 0 17px 0;
+    }
+  }
+}
+
+.hambergerMenu-item-wrapper {
+  transform: translateY(180px);
+}
+
+.hambergerMenu-item-link {
+  display: flex;
+  align-items: center;
+}
+
+.hambergerMenu-item-title {
+  display: block;
+  margin: -12px 0 20px 0;
+  color: #302c1a;
+  font-size: 56px;
+  font-family: fonts.$sixcaps;
+  text-align: center;
+
+  @include state.sp() {
+    margin: 0 0 12px 0;
+    font-size: vw_sp(96);
+  }
+}
+
+.hambergerMenu-item-desc {
+  display: block;
+  color: #302c1a;
+  font-size: 10px;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.hambergerMenu-item-img {
+  position: relative;
+  flex-shrink: 0;
+  width: 180px;
+  height: 180px;
+  margin: 0 20px 0 0;
+  overflow: hidden;
+  border-radius: 14px;
+
+  @include state.sp() {
+    width: vw_sp(215);
+    height: vw_sp(215);
+    border-radius: 4px;
+  }
+
+  & img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.hambergerMenu-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.is-disable .hambergerMenu-btn {
+  pointer-events: none;
+  user-select: none;
+}
+
+.hambergerMenu-hover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: colors.$white;
+  transition: transform $base-duration * 0.25 $transform-easing;
+  border-radius: inherit;
+
+  @include mixins.hover() {
+    transform: scale(0.9, 0.98);
+
+    @include state.sp() {
+      transform: scale(1, 1);
+    }
+  }
+}
+
+.hambergerMenu.is-open .hambergerMenu-hover {
+  @include mixins.hover() {
+    transform: scale(1.1, 1.1);
+
+    @include state.sp() {
+      transform: scale(1, 1);
+    }
+  }
+}
+
+.hambergerMenu-openarea {
+  position: relative;
+  width: 37px;
+  height: 13px;
+
+  @include state.sp() {
+    width: 26px;
+    height: 13px;
+  }
+}
+
+.hambergerMenu-openarea-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: colors.$black;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.hambergerMenu-openarea-line-01 {
+  top: 0;
+}
+
+.hambergerMenu-openarea-line-02 {
+  bottom: 0;
+}
+</style>
+
 <template>
   <div
     ref="HambergerMenu"
@@ -42,7 +367,7 @@
                   </span>
                 </AppPageTransitionBg>
                 <!--アーカイブページ以外の時-->
-                <AppPageTransitionImage v-else :url="`/works/${data.id}`" :index="index" class="hambergerMenu-item-link">
+                <AppPageTransitionImage v-else :url="`/works/${data.id}`" :index="index" :type="'your-desired-type'" class="hambergerMenu-item-link">
                   <span class="hambergerMenu-item-img">
                     <picture>
                       <img :src="`${data.hambergerMenuImg.url}`" :width="`${data.hambergerMenuImg.width}`" :height="`${data.hambergerMenuImg.height}`" :alt="`${data.id}`" />
@@ -477,327 +802,3 @@ export default {
   },
 }
 </script>
-
-<style scoped lang="scss">
-:root {
-  --viewportWidth: 100vw;
-  --viewportHeight: 100vh;
-}
-
-.hambergerMenu {
-  position: fixed;
-  top: 0;
-  right: 10px;
-  bottom: 0;
-  width: 110px;
-  height: calc(100% - 20px);
-  margin: auto 0;
-  transform: translateX(120px);
-  z-index: 11;
-
-  @include sp() {
-    top: 10px;
-    right: 20px;
-    bottom: auto;
-    width: 60px;
-    height: 60px;
-  }
-
-  &.is-disable {
-    pointer-events: none;
-    user-select: none;
-  }
-}
-
-.hambergerMenu-overlay-01 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #dfded9;
-  border-radius: 10px;
-  pointer-events: none;
-  transform-origin: right;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-shadow: inset 2px 35px 16px 5px rgb(24 23 13 / 20%);
-    border-radius: 10px;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity $base-duration $colorAndOpacity-easing;
-  }
-
-  @include sp() {
-    top: 22px;
-    left: calc(-100vw + 60px + 20px);
-    width: 100vw;
-    height: calc(var(--viewportHeight, 100vh) - 32px);
-    border-radius: 10px;
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-}
-
-.hambergerMenu.is-open .hambergerMenu-overlay-01 {
-  &::before {
-    opacity: 1;
-  }
-}
-
-.hambergerMenu-overlay-02 {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 510px;
-  height: 100%;
-  background-color: #bcbbb4;
-  border-radius: 10px;
-  pointer-events: none;
-  transform-origin: right;
-  transform: scaleX(0);
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    box-shadow: inset 35px 60px 50px 20px rgb(24 23 13 / 50%);
-    border-radius: 10px;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  @include sp() {
-    top: 42px;
-    right: -10px;
-    width: calc(100vw - 20px);
-    height: calc(var(--viewportHeight) - 52px - 20px);
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-}
-
-.hambergerMenu-contents {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 510px;
-  height: 100%;
-  padding: 50px 26px 50px 16px;
-  overflow-y: scroll;
-  opacity: 0;
-  pointer-events: none;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #89877c;
-    border-radius: 10px;
-  }
-
-  @include sp() {
-    right: 0;
-    width: 100%;
-    padding: 38px 8px;
-  }
-}
-
-.hambergerMenu-title {
-  position: relative;
-  margin: 0 0 36px 0;
-  color: #302c1a;
-  font-size: 120px;
-  font-family: $sixcaps;
-  letter-spacing: -0.002em;
-  z-index: 2;
-
-  @include sp() {
-    margin: 0 0 46px 0;
-    font-size: vw_sp(216);
-  }
-}
-
-.hambergerMenu-section-title {
-  position: relative;
-  margin: 0 0 36px 0;
-  z-index: 2;
-
-  @include sp() {
-    margin: 0 0 34px 0;
-  }
-}
-
-.hambergerMenu-title-wrapper-01 {
-  display: block;
-  cursor: pointer;
-}
-
-.hambergerMenu-title-wrapper-02 {
-  display: inline-block;
-  cursor: pointer;
-}
-
-.hambergerMenu-item {
-  position: relative;
-  overflow: hidden;
-
-  &:not(:last-of-type) {
-    margin: 0 0 20px 0;
-
-    @include sp() {
-      margin: 0 0 17px 0;
-    }
-  }
-}
-
-.hambergerMenu-item-wrapper {
-  transform: translateY(180px);
-}
-
-.hambergerMenu-item-link {
-  display: flex;
-  align-items: center;
-}
-
-.hambergerMenu-item-title {
-  display: block;
-  margin: -12px 0 20px 0;
-  color: #302c1a;
-  font-size: 56px;
-  font-family: $sixcaps;
-  text-align: center;
-
-  @include sp() {
-    margin: 0 0 12px 0;
-    font-size: vw_sp(96);
-  }
-}
-
-.hambergerMenu-item-desc {
-  display: block;
-  color: #302c1a;
-  font-size: 10px;
-  line-height: 1.3;
-  letter-spacing: 0.02em;
-  text-align: center;
-}
-
-.hambergerMenu-item-img {
-  position: relative;
-  flex-shrink: 0;
-  width: 180px;
-  height: 180px;
-  margin: 0 20px 0 0;
-  overflow: hidden;
-  border-radius: 14px;
-
-  @include sp() {
-    width: vw_sp(215);
-    height: vw_sp(215);
-    border-radius: 4px;
-  }
-
-  & img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.hambergerMenu-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.is-disable .hambergerMenu-btn {
-  pointer-events: none;
-  user-select: none;
-}
-
-.hambergerMenu-hover {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: $white;
-  transition: transform $base-duration * 0.25 $transform-easing;
-  border-radius: inherit;
-
-  @include hover() {
-    transform: scale(0.9, 0.98);
-
-    @include sp() {
-      transform: scale(1, 1);
-    }
-  }
-}
-
-.hambergerMenu.is-open .hambergerMenu-hover {
-  @include hover() {
-    transform: scale(1.1, 1.1);
-
-    @include sp() {
-      transform: scale(1, 1);
-    }
-  }
-}
-
-.hambergerMenu-openarea {
-  position: relative;
-  width: 37px;
-  height: 13px;
-
-  @include sp() {
-    width: 26px;
-    height: 13px;
-  }
-}
-
-.hambergerMenu-openarea-line {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background-color: $black;
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-.hambergerMenu-openarea-line-01 {
-  top: 0;
-}
-
-.hambergerMenu-openarea-line-02 {
-  bottom: 0;
-}
-</style>

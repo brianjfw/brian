@@ -1,3 +1,91 @@
+<style lang="scss" scoped>
+
+.contents-loop-title-wrapper {
+  position: relative;
+  padding: vw(286) 0 vw(242);
+
+  @include mixins.sp() {
+    padding: 194px 0 190px;
+  }
+}
+
+.contents-loop-title {
+  position: relative;
+  font-size: vw(140);
+  font-family: fonts.$sixcaps;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+
+  @include mixins.sp() {
+    font-size: vw_sp(160);
+  }
+}
+
+.contents-loop-video {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  bottom: 0;
+  left: -120px;
+  width: vw(386 * 1.1);
+  height: vw(241 * 1.1);
+  margin: auto;
+  z-index: 10;
+  transform: translateZ(200px);
+
+  @include mixins.sp() {
+    top: 0;
+    left: 0;
+    width: vw_sp(669);
+    height: vw_sp(418);
+    transform: none;
+  }
+}
+
+.contents-loop-video-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  opacity: 0.3;
+}
+
+.contents-loop-video-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+
+  & video {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.contents-loop-card {
+  position: absolute;
+  top: vw(580);
+  right: vw(420);
+  width: 147px;
+  height: 200px;
+  z-index: 10;
+  transform: rotate(16deg);
+
+  @include mixins.sp() {
+    top: 520px;
+    right: 110px;
+  }
+}
+</style>
+
 <template>
   <div ref="ContentsLoopTitleWrapper" class="contents-loop-title-wrapper">
     <div ref="ContentsLoopTitle" class="contents-loop-title">
@@ -145,90 +233,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.contents-loop-title-wrapper {
-  position: relative;
-  padding: vw(286) 0 vw(242);
-
-  @include sp() {
-    padding: 194px 0 190px;
-  }
-}
-
-.contents-loop-title {
-  position: relative;
-  font-size: vw(140);
-  font-family: $sixcaps;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-
-  @include sp() {
-    font-size: vw_sp(160);
-  }
-}
-
-.contents-loop-video {
-  position: absolute;
-  top: 8px;
-  right: 0;
-  bottom: 0;
-  left: -120px;
-  width: vw(386 * 1.1);
-  height: vw(241 * 1.1);
-  margin: auto;
-  z-index: 10;
-  transform: translateZ(200px);
-
-  @include sp() {
-    top: 0;
-    left: 0;
-    width: vw_sp(669);
-    height: vw_sp(418);
-    transform: none;
-  }
-}
-
-.contents-loop-video-shadow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  opacity: 0.3;
-}
-
-.contents-loop-video-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-
-  & video {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-    object-position: center;
-  }
-}
-
-.contents-loop-card {
-  position: absolute;
-  top: vw(580);
-  right: vw(420);
-  width: 147px;
-  height: 200px;
-  z-index: 10;
-  transform: rotate(16deg);
-
-  @include sp() {
-    top: 520px;
-    right: 110px;
-  }
-}
-</style>

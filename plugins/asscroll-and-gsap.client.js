@@ -1,10 +1,10 @@
 import ASScroll from '@ashthornton/asscroll'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { CustomEase } from '../vendor/CustomEase'
-import { Draggable } from '../vendor/Draggable'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+import Draggable from 'gsap/Draggable'
+import CustomEase from 'gsap/CustomEase'
 import { InertiaPlugin } from '../vendor/InertiaPlugin'
-gsap.registerPlugin(CustomEase, Draggable, InertiaPlugin, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Draggable, CustomEase, InertiaPlugin);
 gsap.ticker.fps(60);
 
 const asscrollContainerEl = document.querySelector('.asscroll-container');
