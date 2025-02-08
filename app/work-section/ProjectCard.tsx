@@ -45,7 +45,7 @@ const ProjectCard = ({
           id % 2 === 0 ? "left-0 ml-8 lg:ml-14" : "right-0 mr-8 lg:mr-14"
         } mt-6 flex  items-center justify-center gap-4 lg:mt-10`}
       >
-        {available ? (
+        {/* {available ? (
           <>
             <Link
               href={github}
@@ -99,7 +99,7 @@ const ProjectCard = ({
               </h3>
             </div>
           </div>
-        )}
+        )} */}
       </div>
       <div
         className={`absolute text-white  ${
@@ -135,6 +135,11 @@ const ProjectCard = ({
             />
           ))}
         </div>
+        <Link href={`/projects/${id}`} aria-label={`View ${name} project`}>
+          <button className="mt-4 bg-[#e4ded7] text-[#0E1016] py-2 px-4 rounded-lg font-semibold hover:bg-[#c4c0b8] transition-colors duration-300">
+            Learn More
+          </button>
+        </Link>
       </div>
     </motion.div>
   );
