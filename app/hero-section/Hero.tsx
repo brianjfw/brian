@@ -4,7 +4,7 @@ import { monaSans } from "../fonts/monaSans";
 import { motion } from "framer-motion";
 import { imageAnimation, bodyAnimation } from "../animations/animations";
 import AnimatedWords from "../animations/AnimatedWords";
-import profile from "../../public/profile.webp";
+import heather from "../../public/heather.jpg";
 
 const Hero = () => {
   return (
@@ -97,7 +97,7 @@ const Hero = () => {
             variants={imageAnimation}
           >
             <Image
-              src={profile}
+              src={heather}
               priority
               alt="Victor's headshot"
               data-blobity-tooltip="Giga Chad"
