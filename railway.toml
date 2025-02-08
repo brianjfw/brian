@@ -1,12 +1,5 @@
 [build]
-  builder = "dockerfile"
+builder = "DOCKERFILE"
 
 [deploy]
-  start = "npm start"
-
-[deploy.locations]
-  fra = "fra"
-  sin = "sin"
-
-[deploy.envs]
-NODE_ENV = "production" 
+startCommand = "npm start" 

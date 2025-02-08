@@ -1,23 +1,23 @@
-# Use the official Node.js 16 image as the base image
-FROM node:16-alpine
+# Use the Node official image
+FROM node:lts
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
-# Copy the entire application code to the working directory
-COPY . .
+# Copy the rest of the application code
+COPY . ./
 
-# Build the Nuxt.js application
+# Build the Next.js application
 RUN npm run build
 
-# Expose the port that the Nuxt.js application will listen on
+# Expose the port Next.js listens on (default is 3000)
 EXPOSE 3000
 
-# Command to start the Nuxt.js application
-CMD ["npm", "start"]
+# Start the Next.js application
+CMD ["npm", "start"] 

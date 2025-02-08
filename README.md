@@ -1,31 +1,64 @@
-# hisamikurita-portfolio
+# Personal Portfolio Website — v1
 
-![](./static//images//ogp.webp)
+My name is Victor Williams, and I’m a front-end engineer and web designer based in Lagos, Nigeria. My passion lies in creating software that solves real-world problems and positively impacts people’s lives.
 
-## Technorogy
+I created this website to showcase my work. I’m always striving to create something unique and innovative. I love experimenting with new technologies and staying up-to-date with the latest trends in the tech world.
 
-### Front End
+## Tech Stack
 
-Framework : [Vue.js](https://jp.vuejs.org/index.html), [Nuxt.js](https://nuxtjs.org/)<br>
-Library : [Three.js](https://threejs.org/), [GSAP](https://greensock.com/gsap/), [ASSCROLL](https://github.com/ashthornton/asscroll), [imagesLoaded](https://imagesloaded.desandro.com/)
+**Client:** React, Next.js, TypeScript, TailwindCSS, Framer Motion, GSAP.
 
-### Back End
+**Hosting:** Vercel.
 
-Cms : [microCMS](https://microcms.io/)
+## Screenshots & Demo
 
-### HOSTING
+![App Screenshot](https://user-images.githubusercontent.com/84178696/228679118-47e63775-0635-42b2-8838-a80644ef612b.png)
 
-Hosting : [AWS Amplify](https://aws.amazon.com/jp/amplify/hosting/)
+![App Screenshot](https://user-images.githubusercontent.com/84178696/228673498-ad33b834-58b3-43e5-b184-b136d01c6e1a.png)
 
-## Overview
+![App Screenshot](https://user-images.githubusercontent.com/84178696/228675919-70180c2c-c888-423d-ae85-409ce4645b8b.png)
 
-This is the repository of [Hisami Kurita](https://hsmkrt1996.com/) portfolio. This site was created using Vue.js/Nuxt.js, but since this was my first attempt, there is a lot of redundant code that is not best practice. If you use it as a reference, please be very careful.
+[View Live Demo](https://folio-v1-victorcodess.vercel.app/)
 
-## Award
+## Run Locally
 
-- [Awwwwards SOTD & DEVAWARD](https://www.awwwards.com/sites/hisami-kurita-portfolio/)
-- [CSSDesignAwards WOTD](https://www.cssdesignawards.com/sites/hisami-kurita-portfolio/41510/)
-- [FWA FOTD](https://thefwa.com/cases/hisami-kurita-portfolio)
-- [Nominated for DEVELOPER OF THE YEAR 2022](https://annual.awwwards.com/developer-nominees/hisami-kurita-portfolio)
+Clone the project
 
-Thank You.
+```bash
+  git clone https://github.com/victorcodess/folio-v1
+```
+
+Go to the project directory
+
+```bash
+  cd folio-v1
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run dev
+```
+
+## Contributing & Usage
+
+This project is open source, and you are welcome to use the code or parts of the code for your own site. I encourage you to modify the theme and components to make it your own. However, please do not present any of the projects featured on this site as your own. The content of this portfolio is personal and represents real projects I’ve worked on.
+
+If you are using the site’s design largely unmodified, please credit me as the designer of the website.
+
+Incase you have any questions or concerns, please feel free to reach out to me on [Twitter.](https://twitter.com/victorwill__) I am always happy to help!
+
+
+## Feedback
+
+While I would not be accepting contributions or pull requests at this time, I appreciate your feedback on this project. If you have any suggestions or questions, please don’t hesitate to reach out to me on [Twitter.](https://twitter.com/victorwill__) Your feedback is valuable and will help me improve.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
