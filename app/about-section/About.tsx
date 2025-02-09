@@ -89,7 +89,7 @@ const About = () => {
             <AnimatedBody
               text={
                 <>
-                  Whether it's an experiment in digital{" "}
+                  Whether it&apos;s an experiment in digital{" "}
                   <span
                     className="font-bold"
                     style={{ color: getPastelColor(3, emphasizedWords.length) }}

@@ -27,7 +27,7 @@ const Hero = () => {
               className="hidden rounded-md border-2 border-[#e4ded7] py-2 px-4 text-[14px] font-semibold text-[#e4ded7] sm:block  md:text-[16px] lg:block"
               variants={bodyAnimation}
             >
-              LET'S CHAT
+              LET&apos;S CHAT
             </motion.button>
           </Link>
         </div>
