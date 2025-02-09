@@ -57,7 +57,7 @@ const ProjectShowcase: React.FC<ShowcaseProjectProps> = ({
             alt={name}
             width={1920} // Adjust as needed
             height={1080} // Adjust as needed
-            className="w-full h-auto object-cover"
+            className="w-full h-auto md:h-full md:w-auto object-cover"
           />
         </motion.div>
 

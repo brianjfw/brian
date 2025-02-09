@@ -100,7 +100,7 @@ const Hero = () => {
               src={heather}
               priority
               alt="Heather's headshot"
-              data-blobity-tooltip="I Like to Draw"
+              data-blobity-tooltip="I Am The Style"
               data-blobity-invert="false"
               className="w-[150px] aspect-square object-cover rounded-[16px] grayscale hover:grayscale-0 md:w-[200px] md:rounded-[32px] lg:w-[245px]"
             />
