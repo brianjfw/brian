@@ -4,7 +4,7 @@ import AnimatedWords2 from "../animations/AnimatedWords2";
 import { monaSans } from "../fonts/monaSans";
 import AnimatedBody from "../animations/AnimatedBody";
 import { motion } from "framer-motion";
-import hireMe from "../../public/hiremeoncontra-dark.webp";
+import shopEtsy from "../../public/etsy.png"; // Replace with your Etsy shop image
 import Image from "next/image";
 
 const Reviews = () => {
@@ -18,7 +18,7 @@ const Reviews = () => {
           style={`flex max-w-[500px] flex-col items-start text-left pr-5 ${monaSans.className} font-extrabold uppercase leading-[0.9em] text-[#e4ded7] sm:max-w-full sm:flex-row sm:items-center sm:justify-center sm:text-center lg:text-center text-[clamp(70px,14vw,155.04px)]`}
         />
         <AnimatedBody
-          text="Real Stories from Clients and Collaborators Who Have Experienced My Work Firsthand"
+          text="Real Stories from Clients and Customers Who Have Experienced My Strangeness Firsthand"
           className="w-[90%] text-center text-[14px] font-semibold uppercase sm:w-[500px] md:w-[550px] md:text-[16px]"
         />
       </div>
@@ -53,38 +53,13 @@ const Reviews = () => {
           amount: "some",
           once: true,
         }}
-        href="https://contra.com/victorwilliams"
+        href="https://www.etsy.com"
         target="_blank"
-        className="mt-10 mb-5 sm:mb-0 sm:mt-20"
+        className="mt-10 mb-5 sm:mb-0 sm:mt-20 flex items-center justify-center whitespace-nowrap"
       >
-        <Image src={hireMe} alt={"hire me"} className="w-full" />
+        <Image src={shopEtsy} alt={"Shop on Etsy"} className="w-full mr-2" />
+        Shop on Etsy
       </motion.a>
-
-      {/* <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{
-          opacity: 1,
-          y: 0,
-          transition: {
-            duration: 0.7,
-            delay: 0.1,
-            ease: [0.44, 0, 0.22, 0.99],
-          },
-        }}
-        viewport={{
-          amount: "some",
-          once: true,
-        }}
-        className="contra-hire-me-button mt-20"
-        data-analyticsUserId="f6264c4e-279b-4675-80e8-739c55eee53f"
-        data-theme="dark"
-        data-username="victorwilliams"
-      ></motion.div>
-      <script
-        async
-        src="https://contra.com/static/embed/sdk.js"
-        charSet="utf-8"
-      ></script> */}
     </section>
   );
 };

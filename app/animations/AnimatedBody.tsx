@@ -1,20 +1,23 @@
+"use client";
+
 import { useEffect } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { ReactNode } from "react";
 
-type AnimatedBodyProps = {
-  text: string;
+interface AnimatedBodyProps {
+  text: ReactNode;
   className?: string;
   wordSpace?: string;
   charSpace?: string;
-};
+}
 
-export default function AnimatedBody({
+const AnimatedBody: React.FC<AnimatedBodyProps> = ({
   text,
   className,
   wordSpace,
   charSpace,
-}: AnimatedBodyProps) {
+}) => {
   //   const text = "Animated Text"; // This would normally be passed into this component as a prop!
 
   const ctrls = useAnimation();
@@ -27,8 +30,7 @@ export default function AnimatedBody({
   useEffect(() => {
     if (inView) {
       ctrls.start("visible");
-    }
-    if (!inView) {
+    } else {
       ctrls.start("hidden");
     }
   }, [ctrls, inView]);
@@ -41,11 +43,11 @@ export default function AnimatedBody({
   const bodyAnimation = {
     hidden: {
       opacity: 0,
-      y: `1em`,
+      y: "1em",
     },
     visible: {
       opacity: 1,
-      y: `0em`,
+      y: "0em",
       transition: {
         delay: 0.1,
         duration: 1,
@@ -56,7 +58,7 @@ export default function AnimatedBody({
 
   return (
     <motion.p
-      aria-label={text}
+      aria-label={typeof text === 'string' ? text : undefined}
       role="heading"
       className={className}
       ref={ref}
@@ -68,4 +70,6 @@ export default function AnimatedBody({
       {text}
     </motion.p>
   );
-}
+};
+
+export default AnimatedBody;

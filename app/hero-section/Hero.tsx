@@ -19,34 +19,34 @@ const Hero = () => {
       <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
         <div>
           <Link
-            href="https://cal.com/victorwilliams/30min"
+            href="https://cal.com"
             target="_blank"
-            aria-label="BOOK A CALL"
+            aria-label="LET'S CHAT"
           >
             <motion.button
               className="hidden rounded-md border-2 border-[#e4ded7] py-2 px-4 text-[14px] font-semibold text-[#e4ded7] sm:block  md:text-[16px] lg:block"
               variants={bodyAnimation}
             >
-              BOOK A CALL
+              LET'S CHAT
             </motion.button>
           </Link>
         </div>
 
         <div className="flex gap-10 text-[#e4ded7] sm:gap-12 md:gap-14 lg:gap-14">
           <Link
-            href="https://github.com/victorcodess"
+            href="https://www.patreon.com/"
             target="_blank"
-            aria-label="View GitHub Profile"
+            aria-label="View Patreon Profile"
           >
             <motion.p
               className="text-[16px] font-bold text-[#e4ded7] md:text-[16px]"
               variants={bodyAnimation}
             >
-              GH
+              PT
             </motion.p>
           </Link>
           <Link
-            href="https://www.linkedin.com/in/victor-williams-chukwudi/"
+            href="https://www.linkedin.com/"
             target="_blank"
             aria-label="View LinkedIn Profile"
           >
@@ -58,7 +58,7 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://twitter.com/victorwill__"
+            href="https://twitter.com/"
             target="_blank"
             aria-label="View Twitter Profile"
           >
@@ -70,15 +70,15 @@ const Hero = () => {
             </motion.p>
           </Link>
           <Link
-            href="https://contra.com/victorwilliams"
+            href="https://www.pinterest.com/"
             target="_blank"
-            aria-label="View Contra Profile"
+            aria-label="View Pinterest Profile"
           >
             <motion.p
               className="text-[16px] font-bold text-[#e4ded7] md:text-[16px]"
               variants={bodyAnimation}
             >
-              CO
+              PI
             </motion.p>
           </Link>
         </div>
@@ -99,10 +99,10 @@ const Hero = () => {
             <Image
               src={heather}
               priority
-              alt="Victor's headshot"
-              data-blobity-tooltip="Giga Chad"
+              alt="Heather's headshot"
+              data-blobity-tooltip="I Like to Draw"
               data-blobity-invert="false"
-              className=" w-[150px] rounded-[16px] grayscale hover:grayscale-0 md:w-[200px] md:rounded-[32px] lg:w-[245px]"
+              className="w-[150px] aspect-square object-cover rounded-[16px] grayscale hover:grayscale-0 md:w-[200px] md:rounded-[32px] lg:w-[245px]"
             />
           </motion.div>
         </div>
@@ -118,16 +118,16 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="z-50 text-center text-[16px] font-medium text-[#e4ded7] md:text-[20px] lg:text-left">
-            Frontend Engineer and Web Designer, prev at{" "}
+          Discover the Beauty in the Uncanny. Browse my {" "}
             <Link
-              href="https://www.korahq.com/"
+              href="https://www.etsy.com/"
               target="_blank"
               className="underline underline-offset-2 hover:no-underline"
-              aria-label="Kora Website"
+              aria-label="Etsy Website"
             >
-              Kora,
+              Etsy
             </Link>{" "}
-            currently available for work.
+            or contact me for custom works.
           </p>
         </motion.div>
 
@@ -136,8 +136,7 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="text-right text-[16px] font-semibold text-[#e4ded7] md:text-[20px]">
-            Focused on interfaces and experiences, working remotely from Lagos,
-            Nigeria.
+          Explore a universe where surreal imagery meets refined craftsmanship.
           </p>
         </motion.div>
       </div>

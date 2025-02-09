@@ -1,23 +1,34 @@
+"use client"; // Added to mark this component as a Client Component
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { riseWithFade } from '../animations/animations'; // Assuming you have this
 import { monaSans } from '../fonts/monaSans';
-import AnimatedTitle from '../animations/AnimatedTitle';
-import AnimatedBody from '../animations/AnimatedBody';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the animated components with SSR disabled
+const AnimatedTitle = dynamic(() => import('../animations/AnimatedTitle'), { ssr: false });
+const AnimatedBody = dynamic(() => import('../animations/AnimatedBody'), { ssr: false });
 
 // Define a type for the project, similar to your ProjectProps
-type ShowcaseProjectProps = {
+export type ShowcaseProjectProps = {
   name: string;
   description: string;
   technologies: string[];
   github: string;
   demo: string;
-  image: any; // fix this later
+  image: string;
   available: boolean;
   id: number;
 };
+
+// async function getProject(id: number): Promise<ShowcaseProjectProps | undefined> {
+//   const res = await fetch('/data/projects.json');
+//   const projects: ShowcaseProjectProps[] = await res.json();
+//   return projects.find((project) => project.id === id);
+// }
 
 const ProjectShowcase: React.FC<ShowcaseProjectProps> = ({
   name,
@@ -84,7 +95,7 @@ const ProjectShowcase: React.FC<ShowcaseProjectProps> = ({
         {/* Links to GitHub and Live Demo */}
         <motion.div variants={riseWithFade} className="flex justify-center gap-8">
           <Link
-            href={github}
+            href="https://www.etsy.com"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#e4ded7] text-[#0E1016] py-3 px-6 rounded-lg font-semibold hover:bg-[#c4c0b8] transition-colors duration-300"
@@ -93,7 +104,7 @@ const ProjectShowcase: React.FC<ShowcaseProjectProps> = ({
           </Link>
           {available && (
             <Link
-              href={demo}
+              href="https://www.etsy.com"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#e4ded7] text-[#0E1016] py-3 px-6 rounded-lg font-semibold hover:bg-[#c4c0b8] transition-colors duration-300"

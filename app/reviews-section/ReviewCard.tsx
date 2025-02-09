@@ -49,7 +49,7 @@ const BlogCard = ({
         {testimonial}
       </p>
 
-      <div className="flex gap-3 sm:absolute sm:bottom-[28px] sm:left-[28px]">
+      <div className="flex items-center gap-3 sm:absolute sm:bottom-[28px] sm:left-[28px]">
         <Image
           src={profileImg}
           alt={"title"}
@@ -61,9 +61,6 @@ const BlogCard = ({
           <h3 className="w-[176px] text-[23px] font-bold uppercase leading-[20.7px] tracking-[-0.46056px] text-[#e4ded7]">
             {abbreviateName(name)}
           </h3>
-          <p className="text-sm font-[500] leading-[16px] text-[#95979D]">
-            {role} @ {company}
-          </p>
         </div>
       </div>
     </motion.div>

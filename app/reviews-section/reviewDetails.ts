@@ -17,52 +17,52 @@ export type reviewProps = {
 
 export const reviewDetails = [
   {
-    name: "Samuel Alex",
-    role: "Product Designer",
-    company: "Umoja Linn",
+    name: "Maya T.",
+    role: "",
+    company: "",
     profileImg: alex,
     testimonial:
-      "Victor is seriously one of the best frontend developers I've ever worked with. He's incredibly talented, super easy to work with, and always goes above and beyond.",
+      "Heather’s work transports you to another realm—where every stroke and sculpture speaks a language of its own. I left her gallery feeling both unsettled and comforted, like I’d glimpsed the raw poetry of life.",
   },
   {
-    name: "Jeremiah Oloyede",
-    role: "Founder",
-    company: "Crown Branding Agency",
+    name: "Jordan R.",
+    role: "",
+    company: "",
     profileImg: jerry,
     testimonial:
-      "Victor's work is truly outstanding, and I can't recommend him enough! He completely transformed our branding agency's website. Since launch, we've seen a significant jump in website traffic and, crucially, conversions.",
+      "Visiting Heather’s exhibit was a revelation. Her art is a brilliant collision of the eerie and the elegant, challenging my perceptions and sparking a newfound curiosity about the world.",
   },
   {
-    name: "Mauro Reis",
-    role: "CEO",
-    company: "Meuclone Digital",
+    name: "Alex P.",
+    role: "",
+    company: "",
     profileImg: mauro,
     testimonial:
-      "Outstanding professional, developed our startup's website and delivered it in a very short time and with high quality.",
+      "I’ve experienced countless art shows, but Heather Hudson’s creations are unlike any other. Her immersive installations draw you in, inviting a dialogue between the fantastical and the familiar.",
   },
   {
-    name: "Umar Abdullahi",
-    role: "Head of Engineering",
-    company: "Mono",
+    name: "Taylor S.",
+    role: "",
+    company: "",
     profileImg: umar,
     testimonial:
-      "Victor is hardworking and has great sense of ownership. He was able to contribute in engineering excellent user interfaces and user experiences at Mono. I’m confident he will be a great asset to any engineering team.",
+      "Heather’s multimedia pieces are a masterful exploration of emotion and texture. Each work is a journey that provokes deep thought and leaves a lasting impression on the soul.",
   },
   {
-    name: "Olamide Sholanke",
-    role: "Senior Frontend Engineer",
-    company: "Mono",
+    name: "Casey M.",
+    role: "",
+    company: "",
     profileImg: olamide,
     testimonial:
-      "I had the pleasure of working with Victor on a frontend development project at Mono, and I highly recommend him. He consistently delivered high-quality code, and brought a proactive and creative approach to problem-solving.",
+      "The way Heather blends physical art with abstract vision is truly captivating. Her work turns ordinary moments into an extraordinary dance of shadows, colors, and emotions.",
   },
   {
-    name: "Alan Franciskovic",
-    role: "Sales Specialist",
-    company: "Croatia Osiguranje d.d",
+    name: "Riley K.",
+    role: "",
+    company: "",
     profileImg: alan,
     testimonial:
-      "Very talented and amazing freelancer. Very easy to communicate with, pleasure to work with. Outstanding attention to detail, and works as fast as possible while also delivering amazing work.",
+      "Every piece of Heather’s art feels like a personal invitation to explore the mysteries of beauty and the dark. I left her exhibit inspired, reflective, and eager to see what comes next.",
   },
   
 ];
