@@ -4,12 +4,14 @@ import { useEffect } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { ReactNode } from "react";
+import React from "react";
 
 interface AnimatedBodyProps {
   text: ReactNode;
   className?: string;
   wordSpace?: string;
   charSpace?: string;
+  style?: React.CSSProperties;
 }
 
 const AnimatedBody: React.FC<AnimatedBodyProps> = ({
@@ -17,6 +19,7 @@ const AnimatedBody: React.FC<AnimatedBodyProps> = ({
   className,
   wordSpace,
   charSpace,
+  style,
 }) => {
   //   const text = "Animated Text"; // This would normally be passed into this component as a prop!
 
@@ -66,6 +69,7 @@ const AnimatedBody: React.FC<AnimatedBodyProps> = ({
       initial="hidden"
       animate={ctrls}
       variants={bodyAnimation}
+      style={style}
     >
       {text}
     </motion.p>

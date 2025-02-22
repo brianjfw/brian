@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     siteName: "www.heatherhudsonart.com",
     images: [
       {
-        url: "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
+        url: "/heather.jpg",
         width: 1200,
         height: 630,
         alt: "Heather Hudson - Artist",
@@ -55,9 +55,7 @@ export const metadata: Metadata = {
       "Heather Hudson is a multimedia artist and content creator. Browse her Etsy shop or contact her for custom works.",
     creator: "heatherhudsonart",
     creatorId: "1243720976552144897",
-    images: [
-      "https://user-images.githubusercontent.com/84178696/228620835-e3cc5c9b-72fc-4f54-a628-407ef7b650f5.png",
-    ],
+    images: ["/heather.jpg"],
   },
   robots: {
     index: true,

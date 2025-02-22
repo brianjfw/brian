@@ -3,20 +3,23 @@
 import { useEffect } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import React from "react";
 
-type AnimatedTitleProps = {
+interface AnimatedTitleProps {
   text: string;
-  className: string;
-  wordSpace: string;
-  charSpace: string;
+  className?: string;
+  wordSpace?: string;
+  charSpace?: string;
+  style?: React.CSSProperties;
   delay?: number;
-};
+}
 
 const AnimatedTitle: React.FC<AnimatedTitleProps> = ({
   text,
   className,
   wordSpace,
   charSpace,
+  style,
 }) => {
   //   const text = "Animated Text"; // This would normally be passed into this component as a prop!
 
@@ -56,7 +59,7 @@ const AnimatedTitle: React.FC<AnimatedTitleProps> = ({
   };
 
   return (
-    <h2 aria-label={text} role="heading" className={className}>
+    <h2 aria-label={text} role="heading" className={className} style={style}>
       {text.split(" ").map((word, wordIndex) => (
         <motion.span
           ref={ref}
