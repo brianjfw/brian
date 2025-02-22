@@ -9,6 +9,9 @@ const syne = Syne({
   subsets: ["latin"],
   display: "block",
   weight: ["400", "500", "600", "700", "800"],
+  fallback: ['system-ui', 'arial'],
+  preload: true,
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -104,10 +107,24 @@ type RootLayoutProps = {
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  if (typeof window !== 'undefined') {
+    window.onerror = (msg, url, lineNo, columnNo, error) => {
+      console.error('Global error:', {
+        message: msg,
+        url,
+        lineNo,
+        columnNo,
+        error: error?.stack
+      });
+      return false;
+    };
+  }
+
   return (
     <html lang="en">
       <head>
-        {/* Add any additional head elements here */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
         className={`${syne.className} scroll-smooth scrollbar-thin scrollbar-track-[#0E1016] scrollbar-thumb-[#212531]`}
