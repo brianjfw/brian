@@ -7,7 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 
 const syne = Syne({
   subsets: ["latin"],
-  display: "block",
+  display: "swap",
   weight: ["400", "500", "600", "700", "800"],
   fallback: ['system-ui', 'arial'],
   preload: true,
@@ -118,13 +118,22 @@ export default function RootLayout({ children }: RootLayoutProps) {
       });
       return false;
     };
+
+    // Add unhandled promise rejection handler
+    window.addEventListener('unhandledrejection', (event) => {
+      console.error('Unhandled promise rejection:', {
+        reason: event.reason,
+        stack: event.reason?.stack
+      });
+    });
   }
 
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+        <link rel="manifest" href="/site.webmanifest" crossOrigin="use-credentials" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body
         className={`${syne.className} scroll-smooth scrollbar-thin scrollbar-track-[#0E1016] scrollbar-thumb-[#212531]`}
