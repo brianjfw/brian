@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Syne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -27,13 +28,13 @@ export const metadata: Metadata = {
     ],
     other: [
       {
-        rel: 'mask-icon',
+        rel: 'icon',
         url: '/android-chrome-192x192.png',
         sizes: '192x192',
         type: 'image/png'
       },
       {
-        rel: 'mask-icon',
+        rel: 'icon',
         url: '/android-chrome-512x512.png',
         sizes: '512x512',
         type: 'image/png'
@@ -111,8 +112,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={`${syne.className} scroll-smooth scrollbar-thin scrollbar-track-[#0E1016] scrollbar-thumb-[#212531]`}
       >
-        {children}
-        <Analytics />
+        <ErrorBoundary>
+          {children}
+          <Analytics />
+        </ErrorBoundary>
       </body>
     </html>
   );
