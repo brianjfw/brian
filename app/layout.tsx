@@ -134,6 +134,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
         <link rel="manifest" href="/site.webmanifest" crossOrigin="use-credentials" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="p:domain_verify" content="312fae9ed0c5f259581e802822936bee"/>
       </head>
       <body
         className={`${syne.className} scroll-smooth scrollbar-thin scrollbar-track-[#0E1016] scrollbar-thumb-[#212531]`}
