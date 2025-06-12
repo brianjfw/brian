@@ -5,6 +5,7 @@ import { Syne } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Script from "next/script";
+import Image from "next/image";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -150,7 +151,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           `}
         </Script>
         <noscript>
-          <img height="1" width="1" style={{display: "none"}} alt=""
+          <Image height={1} width={1} style={{display: "none"}} alt=""
             src="https://ct.pinterest.com/v3/?event=init&tid=2613495101560&noscript=1" />
         </noscript>
         {/* end Pinterest Tag */}

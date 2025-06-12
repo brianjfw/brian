@@ -75,7 +75,7 @@ const About = () => {
                   >
                     {emphasizedWords[3]}
                   </span>
-                  , I architect and engineer comprehensive solutions from concept to code. However, I believe powerful technology must be intuitive. That's why I integrate every feature with a sharp focus on{" "}
+                  , I architect and engineer comprehensive solutions from concept to code. However, I believe powerful technology must be intuitive. That&apos;s why I integrate every feature with a sharp focus on{" "}
                   <span
                     className="font-bold"
                     style={{ color: getPastelColor(4, emphasizedWords.length) }}
