@@ -16,11 +16,11 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "Heather Hudson - Artist",
+  title: "Brian F Wilson - Artist",
   description:
-    "Heather Hudson is a multimedia artist and content creator. Browse her Etsy shop or contact her for custom works.",
+    "Brian F Wilson is a multimedia artist and content creator. Browse his Etsy shop or contact him for custom works.",
   generator: "Next.js",
-  applicationName: "Heather Hudson",
+  applicationName: "Brian F Wilson",
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -62,9 +62,9 @@ export const metadata: Metadata = {
   ],
   colorScheme: "dark",
   openGraph: {
-    title: "Heather Hudson - Artist",
+    title: "Brian F Wilson - Artist",
     description:
-      "Heather Hudson is a multimedia artist and content creator. Browse her Etsy shop or contact her for custom works.",
+      "Brian F Wilson is a multimedia artist and content creator. Browse his Etsy shop or contact him for custom works.",
     url: "https://www.heatherhudsonart.com/",
     siteName: "www.heatherhudsonart.com",
     images: [
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
         url: "/heather.jpg",
         width: 1200,
         height: 630,
-        alt: "Heather Hudson - Artist",
+        alt: "Brian F Wilson - Artist",
       },
     ],
     locale: "en-US",
@@ -80,9 +80,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Heather Hudson - Artist",
+    title: "Brian F Wilson - Artist",
     description:
-      "Heather Hudson is a multimedia artist and content creator. Browse her Etsy shop or contact her for custom works.",
+      "Brian F Wilson is a multimedia artist and content creator. Browse his Etsy shop or contact him for custom works.",
     creator: "heatherhudsonart",
     creatorId: "1243720976552144897",
     images: ["/heather.jpg"],

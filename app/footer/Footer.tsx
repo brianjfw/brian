@@ -15,7 +15,7 @@ const Footer = () => {
         <AnimatedBody text={`Copyright ${year}`} className={"m-0 p-0"} />
         <div className="flex flex-col sm:flex-row  sm:gap-1 md:gap-2">
           <AnimatedBody
-            text={"Designed by Heather in California."}
+            text={"Designed by Brian in Canada."}
             className={"m-0 p-0"}
           />
         </div>

@@ -1,7 +1,7 @@
 {
-  "name": "Heather Hudson - Artist",
-  "short_name": "Heather Hudson",
-  "description": "Heather Hudson is a multimedia artist and content creator. Browse her Etsy shop or contact her for custom works.",
+  "name": "Brian F Wilson - Product Leader & Tech Entrepreneur",
+  "short_name": "Brian F Wilson",
+  "description": "Portfolio of Brian F Wilson, a results-driven Product Leader and Tech Entrepreneur with 6+ years of experience in AI innovation, full-stack development, and UX/UI design. Explore projects including Crescent AI and other innovative solutions.",
   "start_url": "/",
   "icons": [
     {
@@ -21,5 +21,9 @@
   "background_color": "#0E1016",
   "display": "standalone",
   "orientation": "portrait",
-  "scope": "/"
+  "scope": "/",
+  "categories": ["technology", "business", "portfolio", "product"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false
 } 

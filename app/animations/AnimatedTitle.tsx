@@ -20,6 +20,7 @@ const AnimatedTitle: React.FC<AnimatedTitleProps> = ({
   wordSpace,
   charSpace,
   style,
+  delay = 0,
 }) => {
   //   const text = "Animated Text"; // This would normally be passed into this component as a prop!
 
@@ -33,14 +34,17 @@ const AnimatedTitle: React.FC<AnimatedTitleProps> = ({
   useEffect(() => {
     if (inView) {
       ctrls.start("visible");
-    } else {
-      ctrls.start("hidden");
     }
   }, [ctrls, inView]);
 
   const wordAnimation = {
     hidden: {},
-    visible: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.02,
+        delayChildren: delay,
+      },
+    },
   };
 
   const characterAnimation = {
@@ -52,7 +56,7 @@ const AnimatedTitle: React.FC<AnimatedTitleProps> = ({
       opacity: 1,
       y: "0em",
       transition: {
-        duration: 0.7,
+        duration: 0.5,
         ease: [0.2, 0.65, 0.3, 0.9],
       },
     },
@@ -68,10 +72,6 @@ const AnimatedTitle: React.FC<AnimatedTitleProps> = ({
           initial="hidden"
           animate={ctrls}
           variants={wordAnimation}
-          transition={{
-            delayChildren: wordIndex * 0.15,
-            staggerChildren: 0.03,
-          }}
           className={`inline-block whitespace-nowrap ${wordSpace}`}
         >
           {word.split("").map((character, charIndex) => (

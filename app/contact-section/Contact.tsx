@@ -11,7 +11,7 @@ import heartIcon from "../../public/heart icon.png";
 const Contact = () => {
   return (
     <motion.section
-      className="relative z-10 flex h-[95vh] w-full items-center justify-center overflow-hidden bg-[#0E1016] bg-cover bg-center py-16 md:h-[80vh] md:py-20 lg:h-[90vh] lg:pt-0 lg:pb-28 3xl:h-[75vh]"
+      className="relative z-10 flex h-[95vh] w-full items-center justify-center overflow-hidden bg-[#0E1016] bg-cover bg-center py-12 md:h-[80vh] md:py-16 lg:h-[90vh] lg:pt-0 lg:pb-28 3xl:h-[75vh]"
       id="contact"
       initial="initial"
       animate="animate"
@@ -43,16 +43,16 @@ const Contact = () => {
                 "-mb-1 inline-block overflow-hidden pt-1 sm:-mb-2 md:-mb-3 lg:-mb-4"
               }
             />
-            <div className="bor der mt-5 flex w-[298px] items-center gap-1 md:w-[335px] md:gap-2.5">
+            <div className="bor der mt-5 flex items-center gap-1 md:gap-2.5">
               <Link
-                href="https://etsy.com"
+                href="mailto:brianfenwickwilson@gmail.com"
                 target="_blank"
                 aria-label="Send me an email"
-                className="bor der mt-1 w-[147px] flex-1 underline underline-offset-2 hover:no-underline sm:mt-2 sm:w-[170px] md:mt-3 lg:mt-4"
+                className="bor der mt-1 flex-none px-6 py-2 min-w-[140px] text-center underline underline-offset-2 hover:no-underline sm:mt-2 md:mt-3 lg:mt-4"
               >
                 <AnimatedBody
-                  text={"Send me an email"}
-                  className={"bor der w-[190px] pr-[40px] md:w-[170px] md:pr-0"}
+                  text={"Email Me"}
+                  className={"whitespace-nowrap"}
                 />
               </Link>
               <AnimatedBody
@@ -62,14 +62,14 @@ const Contact = () => {
                 }
               />
               <Link
-                href="https://cal.com/"
+                href="sms:+12504427098"
                 target="_blank"
-                aria-label="Send me an email"
-                className="bor der mt-1 w-[110px] flex-1 underline underline-offset-2 hover:no-underline sm:mt-2 sm:w-[147px] md:mt-3 md:-ml-[3px] md:w-[120px] lg:mt-4"
+                aria-label="Send me a text message"
+                className="bor der mt-1 flex-none px-6 py-2 min-w-[140px] text-center underline underline-offset-2 hover:no-underline sm:mt-2 md:mt-3 md:-ml-[3px] lg:mt-4"
               >
                 <AnimatedBody
-                  text={"Book a call"}
-                  className={"w-[110px] md:w-[120px]"}
+                  text={"Text Me"}
+                  className={"whitespace-nowrap"}
                 />
               </Link>
             </div>
@@ -77,12 +77,12 @@ const Contact = () => {
 
           <div className="flex gap-10 text-[16px] font-bold text-[#e4ded7]  sm:gap-14 sm:text-[24px] md:gap-10 md:text-[16px] lg:gap-20 lg:text-[28px]">
             <Link
-              href="https://patreon.com/"
+              href="https://kairosera.com"
               target="_blank"
-              aria-label="View Patreon Profile"
+              aria-label="View Kairosera Website"
             >
               <AnimatedTitle
-                text={"PT"}
+                text={"CR"}
                 className={
                   "text-[16px] font-bold text-[#e4ded7] sm:text-[20px] md:text-[16px] lg:text-[28px]"
                 }
@@ -91,21 +91,7 @@ const Contact = () => {
               />
             </Link>
             <Link
-              href="https://www.linkedin.com/"
-              target="_blank"
-              aria-label="View LinkedIn Profile"
-            >
-              <AnimatedTitle
-                text={"LN"}
-                className={
-                  "text-[16px] font-bold text-[#e4ded7] sm:text-[20px] md:text-[16px] lg:text-[28px]"
-                }
-                wordSpace={"mr-[0.25em]"}
-                charSpace={"mr-[0.01em]"}
-              />
-            </Link>
-            <Link
-              href="https://twitter.com/"
+              href="https://x.com/automalien"
               target="_blank"
               aria-label="View Twitter Profile"
             >
@@ -119,12 +105,12 @@ const Contact = () => {
               />
             </Link>
             <Link
-              href="https://www.instagram.com/"
+              href="https://linkedin.com/in/brianjfw"
               target="_blank"
-              aria-label="View Instagram Profile"
+              aria-label="View LinkedIn Profile"
             >
               <AnimatedTitle
-                text={"IG"}
+                text={"LN"}
                 className={
                   "text-[16px] font-bold text-[#e4ded7] sm:text-[20px] md:text-[16px] lg:text-[28px]"
                 }
@@ -133,9 +119,9 @@ const Contact = () => {
               />
             </Link>
             <Link
-              href="https://www.youtube.com/"
+              href="https://www.youtube.com/watch?v=0UgCHIEwcxA"
               target="_blank"
-              aria-label="View Youtube Profile"
+              aria-label="View YouTube Video"
             >
               <AnimatedTitle
                 text={"YT"}
