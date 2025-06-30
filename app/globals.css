@@ -35,5 +35,18 @@ body {
 }
 
 body {
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
+}
+
+@keyframes gradient-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-gradient-spin {
+  animation: gradient-spin 5s linear infinite;
 }

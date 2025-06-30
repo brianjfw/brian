@@ -14,22 +14,21 @@ const Hero = () => {
       initial="initial"
       animate="animate"
     >
-      <motion.div className="absolute left-0 top-0 right-0 bottom-0 h-full w-full bg-[#0E1016] mix-blend-color"></motion.div>
+      <motion.div className="absolute left-0 top-0 right-0 bottom-0 h-full w-full bg-[#12182B] mix-blend-color"></motion.div>
 
       <div className="absolute top-10 flex justify-between sm:w-[90%] lg:max-w-[1440px]">
         <div>
-          <Link
-            href="mailto:brianfenwickwilson@gmail.com"
-            target="_blank"
-            aria-label="Contact via Email"
+          <a
+            href="#pricing"
+            aria-label="Scroll to Pricing Section"
           >
             <motion.button
               className="hidden rounded-md border-2 border-[#e4ded7] py-2 px-4 text-[14px] font-semibold text-[#e4ded7] sm:block md:text-[16px] lg:block"
               variants={bodyAnimation}
             >
-              CONTACT ME
+              Get Started
             </motion.button>
-          </Link>
+          </a>
         </div>
 
         <div className="flex gap-10 text-[#e4ded7] sm:gap-12 md:gap-14 lg:gap-14">
@@ -112,7 +111,7 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="z-50 text-center text-[16px] font-medium text-[#e4ded7] md:text-[20px] lg:text-left">
-            Vancouver, BC | (250) 442-7098 | brianfenwickwilson@gmail.com
+            Smarter websites. Custom AI. Real business results.
           </p>
         </motion.div>
 
@@ -121,7 +120,7 @@ const Hero = () => {
           variants={bodyAnimation}
         >
           <p className="text-right text-[16px] font-semibold text-[#e4ded7] md:text-[20px]">
-            Product Leader & Entrepreneur | AI, UX/UI, Full-Stack Development
+            Web Developer, Designer & AI Consultant for Small Business Growth
           </p>
         </motion.div>
       </div>

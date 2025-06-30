@@ -17,9 +17,9 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "Brian F Wilson - Artist",
+  title: "Brian F Wilson - Web Developer & AI Consultant",
   description:
-    "Brian F Wilson is a multimedia artist and content creator. Browse his Etsy shop or contact him for custom works.",
+    "Brian F Wilson is a web developer, designer, and AI consultant helping small businesses grow with technology, automation, and strategic design.",
   generator: "Next.js",
   applicationName: "Brian F Wilson",
   icons: {
@@ -48,32 +48,33 @@ export const metadata: Metadata = {
   },
   manifest: '/site.webmanifest',
   keywords: [
-    "artist",
-    "artist portfolio",
-    "artist website",
-    "artist shop",
-    "artist contact",
-    "artist Etsy",
-    "artist shop",
-    "artist contact",
-    "artist Etsy",
-    "artist shop",
-    "artist contact",
-    "artist Etsy",  
+    "web developer",
+    "ai consultant",
+    "web design",
+    "small business technology",
+    "automation",
+    "seo",
+    "custom ai",
+    "brian wilson",
+    "digital strategy",
+    "website development",
+    "business automation",
+    "growth partner",
+    "lead generation"
   ],
   colorScheme: "dark",
   openGraph: {
-    title: "Brian F Wilson - Artist",
+    title: "Brian F Wilson - Web Developer & AI Consultant",
     description:
-      "Brian F Wilson is a multimedia artist and content creator. Browse his Etsy shop or contact him for custom works.",
-    url: "https://www.heatherhudsonart.com/",
-    siteName: "www.heatherhudsonart.com",
+      "Brian F Wilson is a web developer, designer, and AI consultant helping small businesses grow with technology, automation, and strategic design.",
+    url: "https://www.brianfwilson.com/",
+    siteName: "brianfwilson.com",
     images: [
       {
-        url: "/heather.jpg",
+        url: "/hero.jpg",
         width: 1200,
         height: 630,
-        alt: "Brian F Wilson - Artist",
+        alt: "Brian F Wilson - Web Developer & AI Consultant",
       },
     ],
     locale: "en-US",
@@ -81,12 +82,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Brian F Wilson - Artist",
+    title: "Brian F Wilson - Web Developer & AI Consultant",
     description:
-      "Brian F Wilson is a multimedia artist and content creator. Browse his Etsy shop or contact him for custom works.",
-    creator: "heatherhudsonart",
-    creatorId: "1243720976552144897",
-    images: ["/heather.jpg"],
+      "Brian F Wilson is a web developer, designer, and AI consultant helping small businesses grow with technology, automation, and strategic design.",
+    creator: "brianfwilson",
+    images: ["/hero.jpg"],
   },
   robots: {
     index: true,

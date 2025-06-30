@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import React from "react";
+import React, { ReactNode } from "react";
 
 interface AnimatedTitleProps {
-  text: string;
+  text: string | ReactNode;
   className?: string;
   wordSpace?: string;
   charSpace?: string;
@@ -63,29 +63,31 @@ const AnimatedTitle: React.FC<AnimatedTitleProps> = ({
   };
 
   return (
-    <h2 aria-label={text} role="heading" className={className} style={style}>
-      {text.split(" ").map((word, wordIndex) => (
-        <motion.span
-          ref={ref}
-          key={wordIndex}
-          aria-hidden="true"
-          initial="hidden"
-          animate={ctrls}
-          variants={wordAnimation}
-          className={`inline-block whitespace-nowrap ${wordSpace}`}
-        >
-          {word.split("").map((character, charIndex) => (
+    <h2 aria-label={typeof text === 'string' ? text : undefined} role="heading" className={className} style={style}>
+      {typeof text === 'string'
+        ? text.split(" ").map((word, wordIndex) => (
             <motion.span
+              ref={ref}
+              key={wordIndex}
               aria-hidden="true"
-              key={charIndex}
-              variants={characterAnimation}
-              className={`inline-block ${charSpace}`}
+              initial="hidden"
+              animate={ctrls}
+              variants={wordAnimation}
+              className={`inline-block mb-0 ${wordSpace}`}
             >
-              {character}
+              {word.split("").map((character, charIndex) => (
+                <motion.span
+                  aria-hidden="true"
+                  key={charIndex}
+                  variants={characterAnimation}
+                  className={`inline-block mb-0 ${charSpace}`}
+                >
+                  {character}
+                </motion.span>
+              ))}
             </motion.span>
-          ))}
-        </motion.span>
-      ))}
+          ))
+        : text}
     </h2>
   );
 };

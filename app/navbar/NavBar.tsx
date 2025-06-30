@@ -56,6 +56,17 @@ const NavBar = () => {
       </Link>
 
       <Link
+        href="#pricing"
+        data-blobity-magnetic="false"
+        onClick={handleScroll}
+        aria-label="Scroll to Pricing Section"
+      >
+        <h4 className="rounded py-2 px-2 sm:px-4 text-[12px] sm:text-[14px] md:py-1 md:px-4">
+          Pricing
+        </h4>
+      </Link>
+
+      <Link
         href="#contact"
         data-blobity-magnetic="false"
         onClick={handleScroll}

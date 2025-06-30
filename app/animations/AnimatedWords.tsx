@@ -52,11 +52,17 @@ const AnimatedWords: React.FC<AnimatedWordsProps> = ({ title, style }) => {
     },
   };
 
-  // Function to generate pastel HSL color
-  const getPastelColor = (index: number, total: number) => {
-    const hue = (index * 360) / total;
-    return `hsl(${hue}, 70%, 80%)`; // Adjusted saturation and lightness for pastel look
-  };
+  // Theme highlight colors from PricingTable.tsx
+  const highlightColors = [
+    '#F9A8D4', // pink
+    '#60A5FA', // blue
+    '#C4B5FD', // purple
+    '#6EE7B7', // green
+    '#FDBA74', // orange
+    '#F0ABFC', // fuchsia
+    '#5EEAD4', // teal
+    '#FDE68A', // yellow
+  ];
 
   // Global letter index for calculating the highlight (across words)
   let globalLetterIndex = 0;
@@ -82,8 +88,8 @@ const AnimatedWords: React.FC<AnimatedWordsProps> = ({ title, style }) => {
               {word.split("").map((letter, letterIndex) => {
                 const currentIndex = globalLetterIndex;
                 globalLetterIndex++;
-                // Compute a unique highlight color for this letter using HSL
-                const highlightColor = getPastelColor(currentIndex, totalLetters);
+                // Use theme highlight color for this letter
+                const highlightColor = highlightColors[currentIndex % highlightColors.length];
                 return (
                   <motion.span
                     key={letterIndex}

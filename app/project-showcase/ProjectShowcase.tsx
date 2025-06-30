@@ -42,7 +42,7 @@ const ProjectShowcase: React.FC<ShowcaseProjectProps> = ({
 }) => {
   return (
     <motion.section
-      className="relative z-10 flex w-full flex-col items-center justify-center bg-[#0E1016] text-[#e4ded7] py-16 md:py-24 lg:py-32"
+      className="relative z-10 flex w-full flex-col items-center justify-center bg-[#12182B] text-[#e4ded7] py-16 md:py-24 lg:py-32"
       initial="initial"
       animate="animate"
     >

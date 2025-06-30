@@ -63,7 +63,7 @@ const AnimatedBody: React.FC<AnimatedBodyProps> = ({
     <motion.p
       aria-label={typeof text === 'string' ? text : undefined}
       role="heading"
-      className={className}
+      className={`mb-0 ${className || ''}`}
       ref={ref}
       aria-hidden="true"
       initial="hidden"

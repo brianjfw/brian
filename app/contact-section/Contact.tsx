@@ -11,7 +11,7 @@ import heartIcon from "../../public/heart icon.png";
 const Contact = () => {
   return (
     <motion.section
-      className="relative z-10 flex h-[95vh] w-full items-center justify-center overflow-hidden bg-[#0E1016] bg-cover bg-center py-12 md:h-[80vh] md:py-16 lg:h-[90vh] lg:pt-0 lg:pb-28 3xl:h-[75vh]"
+      className="relative z-10 flex h-[95vh] w-full items-center justify-center overflow-hidden bg-[#12182B] bg-cover bg-center py-12 md:h-[80vh] md:py-16 lg:h-[90vh] lg:pt-0 lg:pb-28 3xl:h-[75vh]"
       id="contact"
       initial="initial"
       animate="animate"
@@ -37,7 +37,9 @@ const Contact = () => {
           <div className=" flex w-[350px] max-w-[90%] flex-col items-end text-right text-[14px] font-semibold uppercase text-[#e4ded7] sm:w-[350px] sm:text-[14px] md:w-[310px] md:items-start md:text-left md:text-[16px] lg:w-[420px] lg:text-[16px]">
             <AnimatedBody
               text={
-                "Got a question, proposal, project, or want to work together on something?"
+                <>
+                  Got a question, proposal, project, or want to work together on something?
+                </>
               }
               className={
                 "-mb-1 inline-block overflow-hidden pt-1 sm:-mb-2 md:-mb-3 lg:-mb-4"
@@ -55,23 +57,14 @@ const Contact = () => {
                   className={"whitespace-nowrap"}
                 />
               </Link>
-              <AnimatedBody
-                text={"or"}
-                className={
-                  "bor der -mb-1 ml-2 inline-block overflow-hidden sm:-mb-2 md:-ml-[8px] md:-mb-3 lg:-mb-4"
-                }
-              />
-              <Link
-                href="sms:+12504427098"
-                target="_blank"
-                aria-label="Send me a text message"
-                className="bor der mt-1 flex-none px-6 py-2 min-w-[140px] text-center underline underline-offset-2 hover:no-underline sm:mt-2 md:mt-3 md:-ml-[3px] lg:mt-4"
+              <span
+                className="bor der mt-1 flex-none px-6 py-2 min-w-[140px] text-center underline underline-offset-2 sm:mt-2 md:mt-3 md:-ml-[3px] lg:mt-4"
               >
                 <AnimatedBody
-                  text={"Text Me"}
+                  text={"Vancouver, BC"}
                   className={"whitespace-nowrap"}
                 />
-              </Link>
+              </span>
             </div>
           </div>
 
