@@ -67,7 +67,7 @@ class ErrorBoundary extends Component<Props, State> {
               </button>
               <button
                 onClick={() => {
-                  window.location.href = '/';
+                  window.location.href = process.env.NODE_ENV === 'production' ? '/brian/' : '/';
                 }}
                 className="px-4 py-2 border border-white text-white rounded hover:bg-white/10 transition-colors"
               >

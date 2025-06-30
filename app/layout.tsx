@@ -16,6 +16,8 @@ const syne = Syne({
   adjustFontFallback: true,
 });
 
+const basePath = process.env.NODE_ENV === 'production' ? '/brian' : '';
+
 export const metadata: Metadata = {
   title: "Brian F Wilson - Web Developer & AI Consultant",
   description:
@@ -24,29 +26,29 @@ export const metadata: Metadata = {
   applicationName: "Brian F Wilson",
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/favicon-16x16.jpg', sizes: '16x16', type: 'image/jpeg' },
-      { url: '/favicon-32x32.jpg', sizes: '32x32', type: 'image/jpeg' },
+      { url: `${basePath}/favicon.ico` },
+      { url: `${basePath}/favicon-16x16.jpg`, sizes: '16x16', type: 'image/jpeg' },
+      { url: `${basePath}/favicon-32x32.jpg`, sizes: '32x32', type: 'image/jpeg' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: `${basePath}/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' },
     ],
     other: [
       {
         rel: 'icon',
-        url: '/android-chrome-192x192.png',
+        url: `${basePath}/android-chrome-192x192.png`,
         sizes: '192x192',
         type: 'image/png'
       },
       {
         rel: 'icon',
-        url: '/android-chrome-512x512.png',
+        url: `${basePath}/android-chrome-512x512.png`,
         sizes: '512x512',
         type: 'image/png'
       },
     ],
   },
-  manifest: '/site.webmanifest',
+  manifest: `${basePath}/site.webmanifest`,
   keywords: [
     "web developer",
     "ai consultant",
@@ -134,8 +136,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
-        <link rel="manifest" href="/site.webmanifest" crossOrigin="use-credentials" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href={`${basePath}/site.webmanifest`} crossOrigin="use-credentials" />
+        <link rel="apple-touch-icon" href={`${basePath}/apple-touch-icon.png`} />
         <meta name="p:domain_verify" content="312fae9ed0c5f259581e802822936bee"/>
         {/* Pinterest Tag */}
         <Script id="pinterest-tag" strategy="afterInteractive">
