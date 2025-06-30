@@ -35,14 +35,14 @@ const About = () => {
             <AnimatedBody
               text={
                 <>
-                  My approach is unique because I operate at the <span style={{ color: '#F0ABFC' }}>intersection</span> of business strategy, design, and AI engineering. I don't just build websites; I build digital storefronts designed to <span style={{ color: '#6EE7B7' }}>convert</span>. I don't just create chatbots; I build custom AI co-pilots that become your most efficient employee. My goal isn't just to complete a project—it's to deliver a system that directly saves you time and increases your revenue.
+                  My approach is unique because I operate at the <span style={{ color: '#F0ABFC' }}>intersection</span> of business strategy, design, and AI engineering. I don&#39;t just build websites; I build digital storefronts designed to <span style={{ color: '#6EE7B7' }}>convert</span>. I don&#39;t just create chatbots; I build custom AI co-pilots that become your most efficient employee. My goal isn&#39;t just to complete a project—it&#39;s to deliver a system that directly saves you time and increases your revenue.
                 </>
               }
             />
              <AnimatedBody
               text={
                 <>
-                  Whether it's establishing your foundational brand online, automating your operations with AI, or partnering for long-term growth, my work is a direct investment in your business's <span style={{ color: '#FDBA74' }}>autonomy</span> and <span style={{ color: '#FDE68A' }}>success</span>. Let's build your advantage.
+                  Whether it&#39;s establishing your foundational brand online, automating your operations with AI, or partnering for long-term growth, my work is a direct investment in your business&#39;s <span style={{ color: '#FDBA74' }}>autonomy</span> and <span style={{ color: '#FDE68A' }}>success</span>. Let&#39;s build your advantage.
                 </>
               }
             />
