@@ -1,3 +1,5 @@
+const isGithubPages = process.env.NODE_ENV === 'production';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -40,6 +42,8 @@ const nextConfig = {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
   },
+  basePath: isGithubPages ? '/brian' : '',
+  assetPrefix: isGithubPages ? '/brian/' : '',
 };
 
 module.exports = nextConfig;
